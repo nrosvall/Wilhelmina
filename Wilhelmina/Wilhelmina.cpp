@@ -6,7 +6,10 @@
 #include <qstandardpaths.h>
 #include <qdir.h>
 #include <quuid.h>
-
+#include "MasterPasswordDialog.h"
+#include <windows.h>
+#include <wincrypt.h>
+#include <qtimer.h>
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -25,16 +28,30 @@ Wilhelmina::~Wilhelmina()
     
 }
 
+void Wilhelmina::ProtectMasterPassphrase() {
+    //CryptProtectMemory(&m_MasterPassword, m_MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
+}
+
+void Wilhelmina::UnProtectMasterPassphrase() {
+    //CryptUnprotectMemory(&m_MasterPassword, m_MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
+}
+
 void Wilhelmina::showEvent(QShowEvent* ev)
 {
     QMainWindow::showEvent(ev);
-    showEventHelper();
+    QTimer::singleShot(0, this, SLOT(firstRun()));
 }
 
-void Wilhelmina::showEventHelper()
+void Wilhelmina::firstRun()
 {
     if (!QDir(m_DataPath).exists()) {
-
+        MasterPasswordDialog dlg(true, this);
+        if (dlg.exec() == QDialog::Accepted) {
+            m_MasterPassword = dlg.GetPassphrase();
+        }
+        else {
+            QApplication::quit();
+        }
     }
 }
 
@@ -43,6 +60,10 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
     CustomListWidgetItem* ci =  static_cast<CustomListWidgetItem *>(item);
 
     QString id = ci->getID();
+
+    QJsonObject obj = m_Entries.GetJObject(id);
+
+    qDebug() << obj.value("title").toString();
 
     int i = 0;
 }

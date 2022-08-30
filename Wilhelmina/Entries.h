@@ -13,7 +13,7 @@ private:
 public:
 	void AddEntry(QString title, QString user, QString password, QString url, QString notes, QString ID);
 	bool Encrypt(QString &password);
-	QJsonObject GetObject(QString ID);
+	QJsonObject GetJObject(QString ID);
 	Entries();
 	~Entries();
 

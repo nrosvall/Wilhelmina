@@ -49,14 +49,23 @@
     <ClCompile Include="CustomListWidgetItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MasterPasswordDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AddNewEntry.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="MasterPasswordDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AddNewEntry.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MasterPasswordDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

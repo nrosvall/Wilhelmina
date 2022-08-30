@@ -24,7 +24,7 @@ bool Entries::Encrypt(QString &password) {
 	return true;
 }
 
-QJsonObject Entries::GetObject(QString ID) {
+QJsonObject Entries::GetJObject(QString ID) {
 	for (const auto obj : m_EntryArray) {
 		if (obj.toObject().value("ID") == ID)
 			return obj.toObject();

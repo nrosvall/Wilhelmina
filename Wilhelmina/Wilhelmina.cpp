@@ -6,6 +6,7 @@
 #include <qstandardpaths.h>
 #include <qdir.h>
 #include <quuid.h>
+#include <qmessagebox.h>
 #include "MasterPasswordDialog.h"
 #include <windows.h>
 #include <wincrypt.h>
@@ -39,19 +40,28 @@ void Wilhelmina::UnProtectMasterPassphrase() {
 void Wilhelmina::showEvent(QShowEvent* ev)
 {
     QMainWindow::showEvent(ev);
-    QTimer::singleShot(0, this, SLOT(firstRun()));
+    QTimer::singleShot(0, this, SLOT(PostStart()));
 }
 
-void Wilhelmina::firstRun()
+void Wilhelmina::PostStart()
 {
     if (!QDir(m_DataPath).exists()) {
         MasterPasswordDialog dlg(true, this);
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
+            if (!QDir().mkpath(m_DataPath)) {
+                QMessageBox box(this);
+                box.setText("Unable to create path " + m_DataPath + ". Abort.");
+                box.exec();
+                QApplication::quit();
+            }
         }
         else {
             QApplication::quit();
         }
+    }
+    else {
+        //We have our data path, do we have any encrypted data?
     }
 }
 
@@ -81,7 +91,7 @@ void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString passwo
 }
 
 void Wilhelmina::addNewEntry() {
-    AddNewEntry dlg;
+    AddNewEntry dlg(this);
 
     if (dlg.exec() == QDialog::Accepted) {
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());

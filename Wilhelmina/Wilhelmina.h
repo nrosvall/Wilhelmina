@@ -28,5 +28,5 @@ private:
 public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);
-    void firstRun();
+    void PostStart();
 };

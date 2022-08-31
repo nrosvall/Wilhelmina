@@ -1,4 +1,5 @@
 #include "Entries.h"
+#include "Crypto.h"
 
 Entries::Entries() {
 	m_EntriesDoc = new QJsonDocument();
@@ -20,8 +21,15 @@ void Entries::AddEntry(QString title, QString user, QString password, QString ur
 	m_EntryArray.push_back(jObj);
 }
 
-bool Entries::Encrypt(QString &password) {
-	return true;
+bool Entries::Encrypt(QString &master_passphrase) {
+	Crypto crypto;
+	Key key;
+	bool ok;
+	key = crypto.generate_key(master_passphrase.toLocal8Bit(), nullptr, &ok);
+
+	int i = 0;
+
+	return ok;
 }
 
 QJsonObject Entries::GetJObject(QString ID) {

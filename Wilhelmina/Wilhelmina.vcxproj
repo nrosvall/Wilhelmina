@@ -55,12 +55,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <IncludePath>C:\Program Files\OpenSSL-Win64\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib"</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -96,6 +97,7 @@
     <QtUic Include="Wilhelmina.ui" />
     <QtMoc Include="Wilhelmina.h" />
     <ClCompile Include="AddNewEntry.cpp" />
+    <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="CustomListWidgetItem.cpp" />
     <ClCompile Include="Entries.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
@@ -106,6 +108,7 @@
     <QtMoc Include="AddNewEntry.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Crypto.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <ClInclude Include="Entries.h" />
     <QtMoc Include="MasterPasswordDialog.h" />

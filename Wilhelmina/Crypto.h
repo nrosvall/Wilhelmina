@@ -16,8 +16,6 @@ public:
     int encryptData(unsigned char* plaintext,
                     int plaintext_len,
                     unsigned char* key,
-                    unsigned char* iv,
-                    int iv_len,
                     unsigned char* ciphertext,
                     unsigned char* tag);
 

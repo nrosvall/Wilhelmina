@@ -6,6 +6,7 @@
 
 const int KEY_SIZE = 32;
 const int SALT_SIZE = 64;
+const int IV_SIZE = 12;
 
 
 //Generate key from passphrase. If oldsalt is NULL, new salt is created.
@@ -57,14 +58,14 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
 int Crypto::encryptData( unsigned char* plaintext,
                          int plaintext_len,
                          unsigned char* key,
-                         unsigned char* iv,
-                         int iv_len,
                          unsigned char* ciphertext,
                          unsigned char* tag) {
 
     EVP_CIPHER_CTX* ctx;
     int len;
     int ciphertext_len;
+    unsigned char* iv = NULL;
+
 
     if (!(ctx = EVP_CIPHER_CTX_new()))
         return -1;
@@ -74,7 +75,10 @@ int Crypto::encryptData( unsigned char* plaintext,
         return -1;
     }
 
-    if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, iv_len, NULL)) {
+    iv = (unsigned char*)malloc(IV_SIZE * sizeof(char)); //TODO: Error check
+    RAND_bytes(iv, IV_SIZE);
+
+    if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL)) {
         EVP_CIPHER_CTX_free(ctx);
         return -1;
     }

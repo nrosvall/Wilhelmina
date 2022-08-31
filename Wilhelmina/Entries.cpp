@@ -24,12 +24,24 @@ void Entries::AddEntry(QString title, QString user, QString password, QString ur
 bool Entries::Encrypt(QString &master_passphrase) {
 	Crypto crypto;
 	Key key;
-	bool ok;
-	key = crypto.generate_key(master_passphrase.toLocal8Bit(), nullptr, &ok);
+	bool keyOk;
+	key = crypto.generate_key(master_passphrase.toLocal8Bit(), nullptr, &keyOk);
+	int ret = -1;
 
-	int i = 0;
+	if (keyOk) {
+		m_rootEntry.insert("Entries", m_EntryArray);
+		m_EntriesDoc->setObject(m_rootEntry);
+		QByteArray plainBytes = m_EntriesDoc->toJson();
 
-	return ok;
+		unsigned char* cipher = (unsigned char*)malloc(plainBytes.length());
+		unsigned char* tag = (unsigned char*)malloc(16 * sizeof(char));
+
+		ret = crypto.encryptData((unsigned char*)plainBytes.data(), plainBytes.length(), (unsigned char*)key.data, cipher, tag);
+
+		//After encryption clear plainbytes and the key
+	}
+
+	return ret > 0;
 }
 
 QJsonObject Entries::GetJObject(QString ID) {

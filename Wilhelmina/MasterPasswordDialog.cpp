@@ -25,6 +25,8 @@ MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, QWidget* paren
 		ui.label_MasterPassphraseAgain->setVisible(false);
 	}
 
+	this->SetCanReject(true);
+
 	PassphraseFieldChanged();
 }
 
@@ -49,5 +51,26 @@ void MasterPasswordDialog::PassphraseFieldChanged() {
 		else
 			ui.okButton->setEnabled(true);
 	}
+}
+
+void MasterPasswordDialog::keyPressEvent(QKeyEvent *e)
+{
+	if (e->key() == Qt::Key_Escape && !m_canReject)
+		return;
+	
+	QDialog::keyPressEvent(e);
+}
+
+void MasterPasswordDialog::SetCanReject(bool status) {
+	m_canReject = status;
+}
+
+void MasterPasswordDialog::accept() {
+	QDialog::accept();
+}
+
+void MasterPasswordDialog::reject() {
+	if (m_canReject)
+		QDialog::reject();
 }
 

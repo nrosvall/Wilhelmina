@@ -12,10 +12,6 @@
 #include <wincrypt.h>
 #include <qtimer.h>
 
-
-//#include <locale.h>
-//#include <codecvt>
-
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -27,15 +23,6 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
 
-    
-    
-    
-   // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t >, wchar_t > convert;
-    //std::string u8CopyPath = convert.to_bytes(foo.toStdU16String());
-
-    int foo = 0;
-
-    
 }
 
 Wilhelmina::~Wilhelmina()
@@ -76,8 +63,11 @@ void Wilhelmina::PostStart()
     }
     else {
         //We have our data path, do we have any encrypted data?
-        QString foo("1q2w3e");
-        m_Entries.Encrypt(foo);
+        MasterPasswordDialog dlg(false, this);
+        dlg.SetCanReject(false);
+        if (dlg.exec() == QDialog::Accepted) {
+            m_MasterPassword = dlg.GetPassphrase();
+        }
     }
 }
 
@@ -90,6 +80,12 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
     QJsonObject obj = m_Entries.GetJObject(id);
 
     qDebug() << obj.value("title").toString();
+
+    int i = 0;
+}
+
+void Wilhelmina::encryptAndLock() {
+    m_Entries.Encrypt(m_MasterPassword);
 
     int i = 0;
 }

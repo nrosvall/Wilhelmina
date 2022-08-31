@@ -2,5 +2,7 @@
     <qresource prefix="/wilhelmina">
         <file>icons/plus.png</file>
         <file>icons/plus@2x.png</file>
+        <file>icons/lock.png</file>
+        <file>icons/lock@2x.png</file>
     </qresource>
 </RCC>

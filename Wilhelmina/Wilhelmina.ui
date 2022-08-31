@@ -108,6 +108,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
+   <addaction name="actionEncrypt"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -128,6 +129,21 @@
     <bool>false</bool>
    </property>
   </action>
+  <action name="actionEncrypt">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/lock.png</normaloff>:/wilhelmina/icons/lock.png</iconset>
+   </property>
+   <property name="text">
+    <string>Encrypt</string>
+   </property>
+   <property name="toolTip">
+    <string>Encrypt passwords</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -135,8 +151,8 @@
  </resources>
  <connections>
   <connection>
-   <sender>mainToolBar</sender>
-   <signal>actionTriggered(QAction*)</signal>
+   <sender>actionNew</sender>
+   <signal>triggered()</signal>
    <receiver>WilhelminaClass</receiver>
    <slot>addNewEntry()</slot>
    <hints>
@@ -150,9 +166,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionEncrypt</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>encryptAndLock()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
   <slot>listItemDoubleClicked()</slot>
+  <slot>encryptAndLock()</slot>
  </slots>
 </ui>

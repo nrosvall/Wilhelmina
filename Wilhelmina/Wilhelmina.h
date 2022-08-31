@@ -29,4 +29,5 @@ public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);
     void PostStart();
+    void encryptAndLock();
 };

@@ -1,7 +1,7 @@
 #include "MasterPasswordDialog.h"
 #include <qdialogbuttonbox.h>
 
-MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, QWidget* parent)
+MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, bool disableCancel, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -27,7 +27,12 @@ MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, QWidget* paren
 		ui.label_MasterPassphraseAgain->setVisible(false);
 	}
 
+	if (disableCancel)
+		ui.cancelButton->setEnabled(false);
+
 	this->SetCanReject(true);
+
+	ui.pushButtonExit->setEnabled(true);
 
 	PassphraseFieldChanged();
 }
@@ -74,5 +79,10 @@ void MasterPasswordDialog::accept() {
 void MasterPasswordDialog::reject() {
 	if (m_canReject)
 		QDialog::reject();
+}
+
+void MasterPasswordDialog::exitWilhelmina() {
+	m_canReject = true;
+	QApplication::quit();
 }
 

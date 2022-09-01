@@ -68,9 +68,7 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
 			file.write(tag.constData(), crypto.tagSize());
 			file.write((const char *)(cipher), ret);
 			file.close();
-
 		}
-		
 	}
 
 	return ret > 0;
@@ -81,7 +79,7 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	bool keyOk;
 	size_t ret = -1;
 	QFile file(dataPath + m_encryptedBlobFile);
-	file.open(QFile::ReadOnly);
+	file.open(QFile::ReadOnly); //TODO: Error check
 	
 	Crypto crypto;
 

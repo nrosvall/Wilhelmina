@@ -67,7 +67,7 @@ void Wilhelmina::PostStart()
         //We have our data path, do we have any encrypted data?
         if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
             if (m_MasterPassword.isEmpty()) {
-                MasterPasswordDialog dlg(false, this);
+                MasterPasswordDialog dlg(false, true, this);
                 dlg.SetCanReject(false);
                 if (dlg.exec() == QDialog::Accepted) {
                     m_MasterPassword = dlg.GetPassphrase();

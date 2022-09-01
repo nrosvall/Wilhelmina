@@ -118,6 +118,19 @@ QJsonObject Entries::GetJObject(QString ID) {
 	return QJsonObject();
 }
 
+void Entries::deleteItem(QString ID) {
+
+	QJsonObject tmpObj;
+
+	for (int i = 0; m_EntryArray.count(); i++) {
+		tmpObj = m_EntryArray.at(i).toObject();
+		if (tmpObj.value("ID") == ID) {
+			m_EntryArray.removeAt(i);
+			break;
+		}
+	}
+}
+
 QJsonArray& Entries::entryArray() {
 	return m_EntryArray;
 }

@@ -1,8 +1,12 @@
 <RCC>
     <qresource prefix="/wilhelmina">
-        <file>icons/plus.png</file>
-        <file>icons/plus@2x.png</file>
-        <file>icons/lock.png</file>
-        <file>icons/lock@2x.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/delete@2x.png</file>
+        <file>icons/new.png</file>
+        <file>icons/new@2x.png</file>
+        <file>icons/print.png</file>
+        <file>icons/print@2x.png</file>
+        <file>icons/protect.png</file>
+        <file>icons/protect@2x.png</file>
     </qresource>
 </RCC>

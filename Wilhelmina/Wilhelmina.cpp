@@ -22,7 +22,9 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     m_DataPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/";
     
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
+    connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
 
+    ui.actionDelete->setEnabled(false);
 }
 
 Wilhelmina::~Wilhelmina()
@@ -79,6 +81,11 @@ void Wilhelmina::PostStart()
     }
 }
 
+void Wilhelmina::listItemClicked(QListWidgetItem* item) {
+    if(item->isSelected())
+        ui.actionDelete->setEnabled(true);
+}
+
 void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
     
     CustomListWidgetItem* ci =  static_cast<CustomListWidgetItem *>(item);
@@ -128,13 +135,11 @@ void Wilhelmina::addNewEntry() {
     if (dlg.exec() == QDialog::Accepted) {
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
     }
+}
 
-    QJsonDocument doc;
-    //m_rootEntry.insert("Entries", m_EntryArray);
-
-    //doc.setObject(m_rootEntry);
-
-    QByteArray bytes = doc.toJson();
-
-    qDebug() << bytes;
+void Wilhelmina::deleteSelectedItem() {
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+    m_Entries.deleteItem(item->getID());
+    ui.listWidget->takeItem(ui.listWidget->currentRow());
+    ui.actionDelete->setEnabled(false);
 }

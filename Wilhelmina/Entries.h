@@ -19,6 +19,7 @@ public:
 	QJsonObject GetJObject(QString ID);
 	QString encryptedBlobFile();
 	QJsonArray& entryArray();
+	void deleteItem(QString ID);
 	Entries();
 	~Entries();
 

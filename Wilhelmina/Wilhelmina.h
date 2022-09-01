@@ -30,6 +30,8 @@ private:
 public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);
+    void listItemClicked(QListWidgetItem*);
     void PostStart();
     void encryptAndLock();
+    void deleteSelectedItem();
 };

@@ -81,9 +81,18 @@
     <property name="toolTipsVisible">
      <bool>true</bool>
     </property>
+   </widget>
+   <widget class="QMenu" name="menuEntries">
+    <property name="title">
+     <string>Entries</string>
+    </property>
     <addaction name="actionNew"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionEncrypt"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEntries"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
@@ -108,13 +117,14 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
+   <addaction name="actionDelete"/>
    <addaction name="actionEncrypt"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="Wilhelmina.qrc">
-     <normaloff>:/wilhelmina/icons/plus.png</normaloff>:/wilhelmina/icons/plus.png</iconset>
+     <normaloff>:/wilhelmina/icons/new.png</normaloff>:/wilhelmina/icons/new.png</iconset>
    </property>
    <property name="text">
     <string>New Entry...</string>
@@ -132,7 +142,7 @@
   <action name="actionEncrypt">
    <property name="icon">
     <iconset resource="Wilhelmina.qrc">
-     <normaloff>:/wilhelmina/icons/lock.png</normaloff>:/wilhelmina/icons/lock.png</iconset>
+     <normaloff>:/wilhelmina/icons/protect.png</normaloff>:/wilhelmina/icons/protect.png</iconset>
    </property>
    <property name="text">
     <string>Encrypt</string>
@@ -142,6 +152,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/delete.png</normaloff>:/wilhelmina/icons/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete an entry</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>
@@ -182,10 +207,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDelete</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>deleteSelectedItem()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
   <slot>listItemDoubleClicked()</slot>
   <slot>encryptAndLock()</slot>
+  <slot>deleteSelectedItem()</slot>
  </slots>
 </ui>

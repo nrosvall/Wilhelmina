@@ -2,13 +2,16 @@
 
 #include <QDialog>
 #include "ui_AddNewEntry.h"
+#include <qjsonobject.h>
 
 class AddNewEntry : public QDialog
 {
 	Q_OBJECT
 
 public:
-	AddNewEntry(QWidget *parent = nullptr);
+	AddNewEntry(QString title, bool isEdit, 
+				QJsonObject *obj, 
+				QWidget *parent = nullptr);
 	~AddNewEntry();
 	QString GetTitle();
 	QString GetUsername();
@@ -25,4 +28,5 @@ public slots:
 	void UserFieldChanged();
 	void TitleFieldChanged();
 	void PasswordFieldChanged();
+	void ShowPassword();
 };

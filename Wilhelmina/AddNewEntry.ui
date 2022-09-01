@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>463</width>
-    <height>313</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,9 +29,9 @@
    <property name="geometry">
     <rect>
      <x>12</x>
-     <y>12</y>
+     <y>10</y>
      <width>441</width>
-     <height>291</height>
+     <height>304</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -61,6 +61,13 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Username: </string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="lineEdit_Username">
       <property name="placeholderText">
@@ -71,10 +78,10 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Username: </string>
+       <string>Password: </string>
       </property>
      </widget>
     </item>
@@ -94,35 +101,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Password: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QPlainTextEdit" name="plainTextEditNotes">
-      <property name="placeholderText">
-       <string>Type any optional notes here</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Notes: </string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QPushButton" name="buttonGeneratePassword">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -138,17 +117,45 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>URL:</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="6" column="1">
      <widget class="QLineEdit" name="lineEdit_Url">
       <property name="placeholderText">
        <string>Type URL</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Notes: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPlainTextEdit" name="plainTextEditNotes">
+      <property name="placeholderText">
+       <string>Type any optional notes here</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QCheckBox" name="checkBoxShowPassword">
+      <property name="text">
+       <string>Show Password</string>
       </property>
      </widget>
     </item>
@@ -172,8 +179,8 @@
    <slot>GenerateNewPassword()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>164</x>
-     <y>107</y>
+     <x>185</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
      <x>242</x>
@@ -229,11 +236,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBoxShowPassword</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>AddNewEntryClass</receiver>
+   <slot>ShowPassword()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>-9</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>GenerateNewPassword()</slot>
   <slot>TitleFieldChanged()</slot>
   <slot>UserFieldChanged()</slot>
   <slot>PasswordFieldChanged()</slot>
+  <slot>ShowPassword()</slot>
  </slots>
 </ui>

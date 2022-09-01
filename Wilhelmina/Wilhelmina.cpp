@@ -17,8 +17,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
 {
     ui.setupUi(this);
     ui.lineEdit->setPlaceholderText("Type to search");
-    //ui.actionNew->setEnabled(false);
-
+   
     m_DataPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/";
     
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
@@ -93,14 +92,17 @@ void Wilhelmina::listItemClicked(QListWidgetItem* item) {
 void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
     
     CustomListWidgetItem* ci =  static_cast<CustomListWidgetItem *>(item);
-
     QString id = ci->getID();
-    
     QJsonObject obj = m_Entries.GetJObject(id);
 
-    qDebug() << obj.value("title").toString();
+    AddNewEntry dlg("View Entry", true, &obj, this);
 
-    int i = 0;
+    if (dlg.exec() == QDialog::Accepted) {
+        m_Entries.deleteItem(ci->getID());
+        ui.listWidget->removeItemWidget(item);
+        delete item;
+        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
+    }
 }
 
 void Wilhelmina::encryptAndLock() {
@@ -135,7 +137,7 @@ void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString passwo
 }
 
 void Wilhelmina::addNewEntry() {
-    AddNewEntry dlg(this);
+    AddNewEntry dlg("Add New Entry", false, nullptr, this);
 
     if (dlg.exec() == QDialog::Accepted) {
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
@@ -146,6 +148,7 @@ void Wilhelmina::deleteSelectedItem() {
     CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     m_Entries.deleteItem(item->getID());
     ui.listWidget->takeItem(ui.listWidget->currentRow());
+    delete item;
 }
 
 void Wilhelmina::listItemSelectionChanged() {

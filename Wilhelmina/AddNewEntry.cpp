@@ -1,7 +1,9 @@
 #include "AddNewEntry.h"
 #include <qdialogbuttonbox.h>
 
-AddNewEntry::AddNewEntry(QWidget *parent)
+AddNewEntry::AddNewEntry(QString title, bool isEdit,
+						QJsonObject *obj,
+						QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -12,9 +14,18 @@ AddNewEntry::AddNewEntry(QWidget *parent)
 	setWindowFlag(Qt::WindowSystemMenuHint, false);
 
 	this->setFixedSize(this->size());
-	
+	this->setWindowTitle(title);
+
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+	if (isEdit) {
+		ui.lineEdit_Title->setText(obj->value("title").toString());
+		ui.lineEdit_Username->setText(obj->value("user").toString());
+		ui.lineEdit_Password->setText(obj->value("password").toString());
+		ui.lineEdit_Url->setText(obj->value("url").toString());
+		ui.plainTextEditNotes->setPlainText(obj->value("notes").toString());
+	}
 
 	CheckFieldStatuses();
 }
@@ -64,4 +75,11 @@ void AddNewEntry::TitleFieldChanged() {
 
 void AddNewEntry::PasswordFieldChanged() {
 	CheckFieldStatuses();
+}
+
+void AddNewEntry::ShowPassword() {
+	if (ui.checkBoxShowPassword->isChecked())
+		ui.lineEdit_Password->setEchoMode(QLineEdit::Normal);
+	else
+		ui.lineEdit_Password->setEchoMode(QLineEdit::Password);
 }

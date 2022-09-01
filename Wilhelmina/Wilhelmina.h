@@ -34,4 +34,5 @@ public slots:
     void PostStart();
     void encryptAndLock();
     void deleteSelectedItem();
+    void listItemSelectionChanged();
 };

@@ -23,6 +23,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
+    connect(ui.listWidget, &QListWidget::itemSelectionChanged, this, &Wilhelmina::listItemSelectionChanged);
 
     ui.actionDelete->setEnabled(false);
 }
@@ -78,6 +79,9 @@ void Wilhelmina::PostStart()
                 }
             }
         }
+        else {
+            //TODO: Implement, what the program should do if there are no data file? Nothing?
+        }
     }
 }
 
@@ -103,6 +107,7 @@ void Wilhelmina::encryptAndLock() {
     if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
         m_MasterPassword.clear();
         ui.listWidget->clear();
+        this->showMinimized();
     }
 }
 
@@ -141,5 +146,9 @@ void Wilhelmina::deleteSelectedItem() {
     CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     m_Entries.deleteItem(item->getID());
     ui.listWidget->takeItem(ui.listWidget->currentRow());
-    ui.actionDelete->setEnabled(false);
+}
+
+void Wilhelmina::listItemSelectionChanged() {
+    if (ui.listWidget->selectedItems().count() == 0)
+        ui.actionDelete->setEnabled(false);
 }

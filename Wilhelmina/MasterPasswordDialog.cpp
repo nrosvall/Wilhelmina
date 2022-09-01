@@ -6,6 +6,8 @@ MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, QWidget* paren
 {
 	ui.setupUi(this);
 
+	//TODO: add exit button that closes the program
+
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
 	setWindowFlag(Qt::WindowTitleHint, true);

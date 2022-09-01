@@ -15,6 +15,7 @@ private:
 public:
     int encryptData(unsigned char* plaintext,
                     int plaintext_len,
+                    unsigned char* iv,
                     unsigned char* key,
                     unsigned char* ciphertext,
                     unsigned char* tag);
@@ -29,5 +30,10 @@ public:
                     unsigned char* plaintext);
 
     Key generate_key(const char* passphrase, char* old_salt, bool *ok);
+    void genData(unsigned char* in, int len);
+    int ivSize();
+    int keySize();
+    int saltSize();
+    int tagSize();
 };
 

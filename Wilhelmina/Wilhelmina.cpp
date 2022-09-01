@@ -63,10 +63,18 @@ void Wilhelmina::PostStart()
     }
     else {
         //We have our data path, do we have any encrypted data?
-        MasterPasswordDialog dlg(false, this);
-        dlg.SetCanReject(false);
-        if (dlg.exec() == QDialog::Accepted) {
-            m_MasterPassword = dlg.GetPassphrase();
+        if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
+            if (m_MasterPassword.isEmpty()) {
+                MasterPasswordDialog dlg(false, this);
+                dlg.SetCanReject(false);
+                if (dlg.exec() == QDialog::Accepted) {
+                    m_MasterPassword = dlg.GetPassphrase();
+
+                    if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                        populateViewFromEntries();
+                    }
+                }
+            }
         }
     }
 }
@@ -85,9 +93,25 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
 }
 
 void Wilhelmina::encryptAndLock() {
-    m_Entries.Encrypt(m_MasterPassword);
+    if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+        m_MasterPassword.clear();
+        ui.listWidget->clear();
+    }
+}
 
-    int i = 0;
+void Wilhelmina::populateViewFromEntries() {
+    for (auto oneEntry : m_Entries.entryArray()) {
+        QJsonObject entry = oneEntry.toObject();
+        AddEntryToView(entry.value("title").toString(), entry.value("ID").toString());
+    }
+}
+
+void Wilhelmina::AddEntryToView(QString title, QString ID) {
+    CustomListWidgetItem* item = new CustomListWidgetItem();
+    item->setText(title);
+    item->setID(ID);
+
+    ui.listWidget->addItem(item);
 }
 
 void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes) {
@@ -95,11 +119,7 @@ void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString passwo
     QString ID = QUuid::createUuid().toString();
     m_Entries.AddEntry(title, user, password, url, notes, ID);
     
-    CustomListWidgetItem *item = new CustomListWidgetItem();
-    item->setText(title);
-    item->setID(ID);
-
-    ui.listWidget->addItem(item);
+    AddEntryToView(title, ID);
 }
 
 void Wilhelmina::addNewEntry() {

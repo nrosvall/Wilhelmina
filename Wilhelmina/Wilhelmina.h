@@ -25,6 +25,8 @@ private:
     void AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes);
     void ProtectMasterPassphrase();
     void UnProtectMasterPassphrase();
+    void populateViewFromEntries();
+    void AddEntryToView(QString title, QString ID);
 public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);

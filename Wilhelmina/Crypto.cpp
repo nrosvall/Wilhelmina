@@ -7,7 +7,23 @@
 const int KEY_SIZE = 32;
 const int SALT_SIZE = 64;
 const int IV_SIZE = 12;
+const int TAG_SIZE = 16;
 
+int Crypto::ivSize() {
+    return IV_SIZE;
+}
+
+int Crypto::keySize() {
+    return KEY_SIZE;
+}
+
+int Crypto::saltSize() {
+    return SALT_SIZE;
+}
+
+int Crypto::tagSize() {
+    return TAG_SIZE;
+}
 
 //Generate key from passphrase. If oldsalt is NULL, new salt is created.
 //ok is set to true on success, false on failure
@@ -55,8 +71,13 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
     return key;
 }
 
+void Crypto::genData(unsigned char* in, int len) {
+    RAND_bytes(in, len);
+}
+
 int Crypto::encryptData( unsigned char* plaintext,
                          int plaintext_len,
+                         unsigned char* iv,
                          unsigned char* key,
                          unsigned char* ciphertext,
                          unsigned char* tag) {
@@ -64,8 +85,6 @@ int Crypto::encryptData( unsigned char* plaintext,
     EVP_CIPHER_CTX* ctx;
     int len;
     int ciphertext_len;
-    unsigned char* iv = NULL;
-
 
     if (!(ctx = EVP_CIPHER_CTX_new()))
         return -1;
@@ -74,9 +93,6 @@ int Crypto::encryptData( unsigned char* plaintext,
         EVP_CIPHER_CTX_free(ctx);
         return -1;
     }
-
-    iv = (unsigned char*)malloc(IV_SIZE * sizeof(char)); //TODO: Error check
-    RAND_bytes(iv, IV_SIZE);
 
     if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, IV_SIZE, NULL)) {
         EVP_CIPHER_CTX_free(ctx);
@@ -107,7 +123,7 @@ int Crypto::encryptData( unsigned char* plaintext,
     ciphertext_len += len;
 
     //Get our tag
-    if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, 16, tag)) {
+    if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, TAG_SIZE, tag)) {
         EVP_CIPHER_CTX_free(ctx);
         return -1;
     }
@@ -156,7 +172,7 @@ int Crypto::decryptData(unsigned char* ciphertext,
     plaintext_len = len;
 
     //Set our tag
-    if (!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, 16, tag)) {
+    if (!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_TAG, TAG_SIZE, tag)) {
         EVP_CIPHER_CTX_free(ctx);
         return -1;
     }

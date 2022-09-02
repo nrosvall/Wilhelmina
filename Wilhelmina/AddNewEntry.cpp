@@ -1,5 +1,7 @@
 #include "AddNewEntry.h"
 #include <qdialogbuttonbox.h>
+#include "PasswordGenerator.h"
+
 
 AddNewEntry::AddNewEntry(QString title, bool isEdit,
 						QJsonObject *obj,
@@ -34,8 +36,10 @@ AddNewEntry::~AddNewEntry()
 {}
 
 void AddNewEntry::GenerateNewPassword() {
-	//TODO: Actually implement this
-	ui.lineEdit_Password->setText("fooobar");
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	PasswordGenerator generator;
+	ui.lineEdit_Password->setText(generator.generatePassword(26));
+	QApplication::restoreOverrideCursor();
 }
 
 QString AddNewEntry::GetTitle() {

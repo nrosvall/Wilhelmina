@@ -15,9 +15,11 @@ public:
 
 protected:
     void showEvent(QShowEvent* ev);
+    void changeEvent(QEvent* ev);
+    void closeEvent(QCloseEvent* ev);
 
 private:
-    
+    void encryptOnWindowStateEvent();
     QString m_MasterPassword;
     Ui::WilhelminaClass ui;
     QString m_DataPath;
@@ -27,6 +29,7 @@ private:
     void UnProtectMasterPassphrase();
     void populateViewFromEntries();
     void AddEntryToView(QString title, QString ID);
+    bool m_IsEncrypted;
 public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);

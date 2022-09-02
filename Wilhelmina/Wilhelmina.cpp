@@ -28,6 +28,8 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionDelete->setEnabled(false);
     ui.actionCopyPassword->setEnabled(false);
     ui.actionCopyUsername->setEnabled(false);
+
+    m_IsEncrypted = false;
 }
 
 Wilhelmina::~Wilhelmina()
@@ -47,6 +49,48 @@ void Wilhelmina::showEvent(QShowEvent* ev)
 {
     QMainWindow::showEvent(ev);
     QTimer::singleShot(0, this, SLOT(PostActivate()));
+}
+
+void Wilhelmina::encryptOnWindowStateEvent() {
+    if (!m_IsEncrypted) {
+        if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+            m_MasterPassword.clear();
+            ui.listWidget->clear();
+            m_IsEncrypted = true;
+        }
+        else {
+            //TODO: Test this with some crazy data location
+            QMessageBox box;
+            box.setWindowTitle("Fatal error");
+            box.setText("Wilhelmina: Encryption failed. Do you have permission to write into the data location?");
+        }
+    }
+}
+
+void Wilhelmina::closeEvent(QCloseEvent* ev) {
+
+    //Want to encrypt? What if user kills the process? Should we check do we have a master passphrase?
+    //It should be enough to check the master password, if empty, skip encryption
+    if(!m_MasterPassword.isEmpty())
+        encryptOnWindowStateEvent();
+    
+    QMainWindow::closeEvent(ev);
+}
+
+void Wilhelmina::changeEvent(QEvent* ev) {
+
+    if (ev->type() == QEvent::WindowStateChange) {
+        switch (windowState())
+        {
+        case Qt::WindowMinimized:
+            encryptOnWindowStateEvent();
+            break;
+        default:
+            break;
+        }
+    }
+
+    ev->accept();
 }
 
 void Wilhelmina::PostActivate()
@@ -69,24 +113,25 @@ void Wilhelmina::PostActivate()
     else {
         //We have our data path, do we have any encrypted data?
         if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
-            if (m_MasterPassword.isEmpty()) {
-                MasterPasswordDialog dlg(false, true, this);
-                dlg.SetCanReject(false);
-                if (dlg.exec() == QDialog::Accepted) {
-                    m_MasterPassword = dlg.GetPassphrase();
+            
+            MasterPasswordDialog dlg(false, true, this);
+            dlg.SetCanReject(false);
+            if (dlg.exec() == QDialog::Accepted) {
+                m_MasterPassword = dlg.GetPassphrase();
 
-                    if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                        populateViewFromEntries();
-                    }
-                    else {
-                        m_MasterPassword.clear();
-                        PostActivate();
-                    }
+                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                    m_IsEncrypted = false;
+                    populateViewFromEntries();
+                }
+                else {
+                    m_MasterPassword.clear();
+                    PostActivate();
                 }
             }
         }
         else {
-            //We don't have any data even if the path exists so we need to ask for the user to set up the master passphrase.
+            //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
+            m_IsEncrypted = false;
             MasterPasswordDialog dlg(true, this);
             if (dlg.exec() == QDialog::Accepted)
                 m_MasterPassword = dlg.GetPassphrase();
@@ -121,11 +166,11 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
 }
 
 void Wilhelmina::encryptAndLock() {
-    if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
-        m_MasterPassword.clear();
-        ui.listWidget->clear();
+    //if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+        //m_MasterPassword.clear();
+        //ui.listWidget->clear();
         this->showMinimized();
-    }
+    //}
 }
 
 void Wilhelmina::populateViewFromEntries() {

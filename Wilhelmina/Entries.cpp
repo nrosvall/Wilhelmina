@@ -61,13 +61,16 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
 			m_EntryArray = QJsonArray();
 
 			QFile file(dataPath + m_encryptedBlobFile);
-			file.open(QFile::WriteOnly | QFile::Truncate ); //TODO: error check
-			
-			file.write(iv.constData(), crypto.ivSize());
-			file.write(reinterpret_cast<const char*>(key.salt), crypto.saltSize());
-			file.write(tag.constData(), crypto.tagSize());
-			file.write((const char *)(cipher), ret);
-			file.close();
+			if (file.open(QFile::WriteOnly | QFile::Truncate)) {
+				file.write(iv.constData(), crypto.ivSize());
+				file.write(reinterpret_cast<const char*>(key.salt), crypto.saltSize());
+				file.write(tag.constData(), crypto.tagSize());
+				file.write((const char*)(cipher), ret);
+				file.close();
+			}
+			else {
+				return false;
+			}
 		}
 	}
 
@@ -79,7 +82,10 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	bool keyOk;
 	int ret = -1;
 	QFile file(dataPath + m_encryptedBlobFile);
-	file.open(QFile::ReadOnly); //TODO: Error check
+
+	if (!file.open(QFile::ReadOnly)) {
+		return false;
+	}
 	
 	Crypto crypto;
 

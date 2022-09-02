@@ -83,7 +83,12 @@ void Wilhelmina::PostActivate()
             }
         }
         else {
-            //TODO: Implement, what the program should do if there are no data file? Nothing?
+            //We don't have any data even if the path exists so we need to ask for the user to set up the master passphrase.
+            MasterPasswordDialog dlg(true, this);
+            if (dlg.exec() == QDialog::Accepted)
+                m_MasterPassword = dlg.GetPassphrase();
+            else
+                QApplication::quit();
         }
     }
 }
@@ -130,6 +135,9 @@ void Wilhelmina::AddEntryToView(QString title, QString ID) {
     item->setID(ID);
 
     ui.listWidget->addItem(item);
+
+    if (!ui.actionEncrypt->isEnabled())
+        ui.actionEncrypt->setEnabled(true);
 }
 
 void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes) {

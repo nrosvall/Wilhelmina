@@ -15,7 +15,7 @@ unsigned int PasswordGenerator::randBetween(unsigned int min, unsigned int max) 
     {
         if (RAND_bytes((unsigned char*)&r, sizeof r) == 0)
         {
-            //TODO: Handle this, simply a messagebox?
+            //TODO: Handle this, simply a messagebox? 0 means failure
         }
 
     } while (r >= limit);

@@ -94,18 +94,25 @@
    </widget>
    <widget class="QMenu" name="menuEntries">
     <property name="title">
-     <string>Entries</string>
+     <string>Entry</string>
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
-    <addaction name="actionEncrypt"/>
-    <addaction name="separator"/>
     <addaction name="actionCopyPassword"/>
     <addaction name="actionCopyUsername"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_in_Browser"/>
+   </widget>
+   <widget class="QMenu" name="menuProtection">
+    <property name="title">
+     <string>Protection</string>
+    </property>
+    <addaction name="actionEncrypt"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
+   <addaction name="menuProtection"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
@@ -143,7 +150,7 @@
      <normaloff>:/wilhelmina/icons/new.png</normaloff>:/wilhelmina/icons/new.png</iconset>
    </property>
    <property name="text">
-    <string>New Entry...</string>
+    <string>New...</string>
    </property>
    <property name="toolTip">
     <string>Create new entry</string>
@@ -247,6 +254,14 @@
     <string>Print...</string>
    </property>
   </action>
+  <action name="actionOpen_in_Browser">
+   <property name="text">
+    <string>Open in Browser</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -333,6 +348,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionOpen_in_Browser</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>openInBrowser()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -341,5 +372,6 @@
   <slot>deleteSelectedItem()</slot>
   <slot>copyUsername()</slot>
   <slot>copyPassword()</slot>
+  <slot>openInBrowser()</slot>
  </slots>
 </ui>

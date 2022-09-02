@@ -40,4 +40,5 @@ public slots:
     void listItemSelectionChanged();
     void copyUsername();
     void copyPassword();
+    void openInBrowser();
 };

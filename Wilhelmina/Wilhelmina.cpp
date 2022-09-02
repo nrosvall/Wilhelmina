@@ -12,6 +12,8 @@
 #include <wincrypt.h>
 #include <qtimer.h>
 #include <qclipboard.h>
+#include <qdesktopservices.h>
+#include <qurl.h>
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -28,6 +30,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionDelete->setEnabled(false);
     ui.actionCopyPassword->setEnabled(false);
     ui.actionCopyUsername->setEnabled(false);
+    ui.actionOpen_in_Browser->setEnabled(false);
 
     m_IsEncrypted = false;
 }
@@ -63,6 +66,7 @@ void Wilhelmina::encryptOnWindowStateEvent() {
             QMessageBox box;
             box.setWindowTitle("Fatal error");
             box.setText("Wilhelmina: Encryption failed. Do you have permission to write into the data location?");
+            box.exec();
         }
     }
 }
@@ -146,6 +150,7 @@ void Wilhelmina::listItemClicked(QListWidgetItem* item) {
         ui.actionDelete->setEnabled(true);
         ui.actionCopyPassword->setEnabled(true);
         ui.actionCopyUsername->setEnabled(true);
+        ui.actionOpen_in_Browser->setEnabled(true);
     }
 }
 
@@ -219,6 +224,7 @@ void Wilhelmina::listItemSelectionChanged() {
         ui.actionDelete->setEnabled(false);
         ui.actionCopyPassword->setEnabled(false);
         ui.actionCopyUsername->setEnabled(false);
+        ui.actionOpen_in_Browser->setEnabled(false);
     }
 }
 
@@ -234,4 +240,19 @@ void Wilhelmina::copyPassword() {
     CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     
     cBoard->setText(m_Entries.GetJObject(item->getID()).value("password").toString());
+}
+
+void Wilhelmina::openInBrowser() {
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+    QJsonObject obj = m_Entries.GetJObject(item->getID());
+    QString url = obj.value("url").toString();
+    if (!url.isEmpty()) {
+        if (!url.startsWith("http"))
+            url = "https://" + url;
+        QDesktopServices::openUrl(QUrl(url));
+    }
+    else {
+        QMessageBox::warning(this, "Wilhelmina", "The entry has no URL set.\nEdit the entry to add one.", QMessageBox::Ok);
+    }
+
 }

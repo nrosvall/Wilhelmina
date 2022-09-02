@@ -35,10 +35,6 @@ QString PasswordGenerator::generatePassword(unsigned int len) {
 
     RAND_poll();
 
-    if (RAND_status() != 1) {
-        fprintf(stdout, "Warning, random number generator not seeded.\n");
-    }
-
     max = strlen(alpha) - 1;
 
     for (int j = 0; j < len; j++)

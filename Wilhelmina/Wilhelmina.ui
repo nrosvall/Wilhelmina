@@ -94,6 +94,9 @@
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionEncrypt"/>
+    <addaction name="separator"/>
+    <addaction name="actionCopyPassword"/>
+    <addaction name="actionCopyUsername"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
@@ -122,6 +125,9 @@
    </attribute>
    <addaction name="actionNew"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionCopyPassword"/>
+   <addaction name="actionCopyUsername"/>
+   <addaction name="separator"/>
    <addaction name="actionEncrypt"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -152,10 +158,13 @@
     <string>Encrypt</string>
    </property>
    <property name="toolTip">
-    <string>Encrypt passwords</string>
+    <string>Encrypt all data</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionDelete">
@@ -172,6 +181,45 @@
    <property name="shortcut">
     <string>Del</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionCopyPassword">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/password-copy.png</normaloff>:/wilhelmina/icons/password-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Password</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy password</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionCopyUsername">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/username-copy.png</normaloff>:/wilhelmina/icons/username-copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy Username</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy username</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -186,8 +234,8 @@
    <slot>addNewEntry()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>15</x>
-     <y>34</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>223</x>
@@ -202,8 +250,8 @@
    <slot>encryptAndLock()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>300</x>
-     <y>38</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>
@@ -218,12 +266,44 @@
    <slot>deleteSelectedItem()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>43</x>
-     <y>36</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>328</x>
      <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCopyPassword</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>copyPassword()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCopyUsername</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>copyUsername()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
     </hint>
    </hints>
   </connection>
@@ -233,5 +313,7 @@
   <slot>listItemDoubleClicked()</slot>
   <slot>encryptAndLock()</slot>
   <slot>deleteSelectedItem()</slot>
+  <slot>copyUsername()</slot>
+  <slot>copyPassword()</slot>
  </slots>
 </ui>

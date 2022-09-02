@@ -9,5 +9,9 @@
         <file>icons/protect.png</file>
         <file>icons/protect@2x.png</file>
         <file>icons/wilhelmina.png</file>
+        <file>icons/password-copy.png</file>
+        <file>icons/password-copy@2x.png</file>
+        <file>icons/username-copy.png</file>
+        <file>icons/username-copy@2x.png</file>
     </qresource>
 </RCC>

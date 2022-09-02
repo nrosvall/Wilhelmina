@@ -35,4 +35,6 @@ public slots:
     void encryptAndLock();
     void deleteSelectedItem();
     void listItemSelectionChanged();
+    void copyUsername();
+    void copyPassword();
 };

@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <wincrypt.h>
 #include <qtimer.h>
+#include <qclipboard.h>
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -25,6 +26,8 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     connect(ui.listWidget, &QListWidget::itemSelectionChanged, this, &Wilhelmina::listItemSelectionChanged);
 
     ui.actionDelete->setEnabled(false);
+    ui.actionCopyPassword->setEnabled(false);
+    ui.actionCopyUsername->setEnabled(false);
 }
 
 Wilhelmina::~Wilhelmina()
@@ -94,8 +97,11 @@ void Wilhelmina::PostActivate()
 }
 
 void Wilhelmina::listItemClicked(QListWidgetItem* item) {
-    if(item->isSelected())
+    if (item->isSelected()) {
         ui.actionDelete->setEnabled(true);
+        ui.actionCopyPassword->setEnabled(true);
+        ui.actionCopyUsername->setEnabled(true);
+    }
 }
 
 void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
@@ -164,6 +170,23 @@ void Wilhelmina::deleteSelectedItem() {
 }
 
 void Wilhelmina::listItemSelectionChanged() {
-    if (ui.listWidget->selectedItems().count() == 0)
+    if (ui.listWidget->selectedItems().count() == 0) {
         ui.actionDelete->setEnabled(false);
+        ui.actionCopyPassword->setEnabled(false);
+        ui.actionCopyUsername->setEnabled(false);
+    }
+}
+
+void Wilhelmina::copyUsername() {
+    QClipboard* cBoard = QApplication::clipboard();
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+   
+    cBoard->setText(m_Entries.GetJObject(item->getID()).value("user").toString());
+}
+
+void Wilhelmina::copyPassword() {
+    QClipboard* cBoard = QApplication::clipboard();
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+    
+    cBoard->setText(m_Entries.GetJObject(item->getID()).value("password").toString());
 }

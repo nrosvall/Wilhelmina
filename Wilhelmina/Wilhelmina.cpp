@@ -63,10 +63,8 @@ void Wilhelmina::encryptOnWindowStateEvent() {
         }
         else {
             //TODO: Test this with some crazy data location
-            QMessageBox box;
-            box.setWindowTitle("Fatal error");
-            box.setText("Wilhelmina: Encryption failed. Do you have permission to write into the data location?");
-            box.exec();
+            QMessageBox::critical(this, "Wilhelmina", "Encryption failed.\n\nDo you have permission to write into the data location?", 
+                                  QMessageBox::Ok);
         }
     }
 }

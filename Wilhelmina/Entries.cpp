@@ -95,7 +95,7 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	key = crypto.generate_key(master_passphrase.toLocal8Bit(), salt.data(), &keyOk);
 
 	if (!keyOk)
-		return -1;
+		return false;
 	
 	QByteArray plainData(cipher.length(), 'p');
 

@@ -111,7 +111,14 @@
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <ClInclude Include="Entries.h" />
+    <ClInclude Include="resource.h" />
     <QtMoc Include="MasterPasswordDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Wilhelmina.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="wilhelmina.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

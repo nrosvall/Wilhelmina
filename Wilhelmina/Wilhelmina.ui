@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Wilhelmina</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Wilhelmina.qrc">
+    <normaloff>:/wilhelmina/icons/wilhelmina.png</normaloff>:/wilhelmina/icons/wilhelmina.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="spacing">

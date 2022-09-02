@@ -8,5 +8,6 @@
         <file>icons/print@2x.png</file>
         <file>icons/protect.png</file>
         <file>icons/protect@2x.png</file>
+        <file>icons/wilhelmina.png</file>
     </qresource>
 </RCC>

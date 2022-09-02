@@ -177,7 +177,6 @@ int Crypto::decryptData(unsigned char* ciphertext,
         return -1;
     }
 
-    
     //Finalise the decryption. A positive return value indicates success,
     //anything else is a failure - the plaintext is not trustworthy.
     ret = EVP_DecryptFinal_ex(ctx, plaintext + len, &len);

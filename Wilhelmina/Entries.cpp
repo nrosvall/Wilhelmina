@@ -33,7 +33,7 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
 	Key key;
 	bool keyOk;
 	key = crypto.generate_key(master_passphrase.toLocal8Bit(), nullptr, &keyOk);
-	size_t ret = -1;
+	int ret = -1;
 
 	if (keyOk) {
 		m_EntriesDoc.setArray(m_EntryArray);
@@ -77,7 +77,7 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
 bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 
 	bool keyOk;
-	size_t ret = -1;
+	int ret = -1;
 	QFile file(dataPath + m_encryptedBlobFile);
 	file.open(QFile::ReadOnly); //TODO: Error check
 	
@@ -93,6 +93,9 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	Key key;
 
 	key = crypto.generate_key(master_passphrase.toLocal8Bit(), salt.data(), &keyOk);
+
+	if (!keyOk)
+		return -1;
 	
 	QByteArray plainData(cipher.length(), 'p');
 
@@ -105,7 +108,6 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	}
 
 	return ret > 0;
-
 }
 
 QJsonObject Entries::GetJObject(QString ID) {

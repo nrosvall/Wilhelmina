@@ -31,7 +31,7 @@ public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);
     void listItemClicked(QListWidgetItem*);
-    void PostStart();
+    void PostActivate();
     void encryptAndLock();
     void deleteSelectedItem();
     void listItemSelectionChanged();

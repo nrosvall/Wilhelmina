@@ -43,10 +43,10 @@ void Wilhelmina::UnProtectMasterPassphrase() {
 void Wilhelmina::showEvent(QShowEvent* ev)
 {
     QMainWindow::showEvent(ev);
-    QTimer::singleShot(0, this, SLOT(PostStart()));
+    QTimer::singleShot(0, this, SLOT(PostActivate()));
 }
 
-void Wilhelmina::PostStart()
+void Wilhelmina::PostActivate()
 {
     if (!QDir(m_DataPath).exists()) {
         MasterPasswordDialog dlg(true, this);
@@ -74,6 +74,10 @@ void Wilhelmina::PostStart()
 
                     if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
                         populateViewFromEntries();
+                    }
+                    else {
+                        m_MasterPassword.clear();
+                        PostActivate();
                     }
                 }
             }

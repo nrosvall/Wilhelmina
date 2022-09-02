@@ -102,9 +102,8 @@ void Wilhelmina::PostActivate()
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
             if (!QDir().mkpath(m_DataPath)) {
-                QMessageBox box(this);
-                box.setText("Unable to create path " + m_DataPath + ". Abort.");
-                box.exec();
+                QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
+                                      QMessageBox::Ok);
                 QApplication::quit();
             }
         }
@@ -169,11 +168,7 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
 }
 
 void Wilhelmina::encryptAndLock() {
-    //if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
-        //m_MasterPassword.clear();
-        //ui.listWidget->clear();
         this->showMinimized();
-    //}
 }
 
 void Wilhelmina::populateViewFromEntries() {

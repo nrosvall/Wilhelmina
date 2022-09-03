@@ -33,6 +33,7 @@
 #include <qclipboard.h>
 #include <qdesktopservices.h>
 #include <qurl.h>
+#include "PreferencesDialog.h"
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -40,7 +41,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.setupUi(this);
     ui.lineEdit->setPlaceholderText("Type to search");
    
-    m_DataPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/";
+    m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
     
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
@@ -81,8 +82,8 @@ void Wilhelmina::encryptOnWindowStateEvent() {
             m_IsEncrypted = true;
         }
         else {
-            //TODO: Test this with some crazy data location
-            QMessageBox::critical(this, "Wilhelmina", "Encryption failed.\n\nDo you have permission to write into the data location?", 
+            QMessageBox::critical(this, "Wilhelmina", 
+                "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                                   QMessageBox::Ok);
         }
     }
@@ -176,7 +177,7 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
     QString id = ci->getID();
     QJsonObject obj = m_Entries.GetJObject(id);
 
-    AddNewEntry dlg("View Entry", true, &obj, this);
+    AddNewEntry dlg("View Entry", true, &obj, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
         m_Entries.deleteItem(ci->getID());
@@ -217,7 +218,7 @@ void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString passwo
 }
 
 void Wilhelmina::addNewEntry() {
-    AddNewEntry dlg("Add New Entry", false, nullptr, this);
+    AddNewEntry dlg("Add New Entry", false, nullptr, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
@@ -266,5 +267,28 @@ void Wilhelmina::openInBrowser() {
     else {
         QMessageBox::warning(this, "Wilhelmina", "The entry has no URL set.\nEdit the entry to add one.", QMessageBox::Ok);
     }
+}
 
+void Wilhelmina::showPreferences() {
+    PreferencesDialog dlg(&Settings, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        m_DataPath = dlg.dataFileLocation();
+        
+        if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
+            if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                m_IsEncrypted = false;
+
+                //TODO: We should here check if current listview entries are not in entryarray and add them there?
+                //Or should we just start saving (encrypting) after every add/remove operation?
+
+                populateViewFromEntries();
+            }
+            else {
+                m_MasterPassword.clear();
+                PostActivate();
+            }
+        }
+
+        //TODO: update interval timer
+    }
 }

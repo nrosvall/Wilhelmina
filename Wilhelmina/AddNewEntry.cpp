@@ -23,11 +23,13 @@
 
 
 AddNewEntry::AddNewEntry(QString title, bool isEdit,
-						QJsonObject *obj,
+						QJsonObject *obj, QSettings *settings,
 						QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+
+	m_Settings = settings;
 
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
@@ -57,7 +59,7 @@ AddNewEntry::~AddNewEntry()
 void AddNewEntry::GenerateNewPassword() {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	PasswordGenerator generator;
-	ui.lineEdit_Password->setText(generator.generatePassword(26));
+	ui.lineEdit_Password->setText(generator.generatePassword(m_Settings->value("PasswordLength", 26).toInt()));
 	QApplication::restoreOverrideCursor();
 }
 

@@ -20,34 +20,25 @@
 #pragma once
 
 #include <QDialog>
-#include "ui_AddNewEntry.h"
-#include <qjsonobject.h>
-#include <qsettings.h>
+#include "ui_Preferences.h"
+#include <QSettings>
 
-class AddNewEntry : public QDialog
+class PreferencesDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	AddNewEntry(QString title, bool isEdit, 
-				QJsonObject *obj, QSettings* settings,
-				QWidget *parent = nullptr);
-	~AddNewEntry();
-	QString GetTitle();
-	QString GetUsername();
-	QString GetPassword();
-	QString GetUrl();
-	QString GetNotes();
+	PreferencesDialog(QSettings *settings, QWidget* parent = nullptr);
+	QString dataFileLocation();
 
 private:
-	Ui::AddNewEntryClass ui;
-	void CheckFieldStatuses();
+	Ui::PreferencesDialog ui;
 	QSettings* m_Settings;
 
+protected:
+	void accept() override;
+
 public slots:
-	void GenerateNewPassword();
-	void UserFieldChanged();
-	void TitleFieldChanged();
-	void PasswordFieldChanged();
-	void ShowPassword();
+	void selectDataPath();
 };
+

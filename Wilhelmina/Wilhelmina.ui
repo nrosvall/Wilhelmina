@@ -364,6 +364,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionPreferences</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>showPreferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -373,5 +389,6 @@
   <slot>copyUsername()</slot>
   <slot>copyPassword()</slot>
   <slot>openInBrowser()</slot>
+  <slot>showPreferences()</slot>
  </slots>
 </ui>

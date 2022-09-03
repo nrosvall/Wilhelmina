@@ -94,6 +94,7 @@
     <QtRcc Include="Wilhelmina.qrc" />
     <QtUic Include="AddNewEntry.ui" />
     <QtUic Include="MasterPasswordDialog.ui" />
+    <QtUic Include="Preferences.ui" />
     <QtUic Include="Wilhelmina.ui" />
     <QtMoc Include="Wilhelmina.h" />
     <ClCompile Include="AddNewEntry.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="IdleFilter.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
     <ClCompile Include="PasswordGenerator.cpp" />
+    <ClCompile Include="PreferencesDialog.cpp" />
     <ClCompile Include="Wilhelmina.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -115,6 +117,7 @@
     <ClInclude Include="Entries.h" />
     <QtMoc Include="IdleFilter.h" />
     <ClInclude Include="PasswordGenerator.h" />
+    <QtMoc Include="PreferencesDialog.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="MasterPasswordDialog.h" />
   </ItemGroup>

@@ -23,6 +23,7 @@
 #include "Entries.h"
 #include "CustomListWidgetItem.h"
 #include "ui_Wilhelmina.h"
+#include <qsettings.h>
 
 class Wilhelmina : public QMainWindow
 {
@@ -31,6 +32,7 @@ class Wilhelmina : public QMainWindow
 public:
     Wilhelmina(QWidget *parent = nullptr);
     ~Wilhelmina();
+    QSettings Settings;
 
 protected:
     void showEvent(QShowEvent* ev);
@@ -61,4 +63,5 @@ public slots:
     void copyUsername();
     void copyPassword();
     void openInBrowser();
+    void showPreferences();
 };

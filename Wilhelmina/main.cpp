@@ -24,9 +24,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QCoreApplication::setOrganizationName("Niko Rosvall");
+    QCoreApplication::setOrganizationDomain("byteptr.com");
+    QCoreApplication::setApplicationName("Wilhelmina");
+
     Wilhelmina w;
 
-    IdleFilter* idleFilter = new IdleFilter(&a, 180000);
+    IdleFilter* idleFilter = new IdleFilter(&a, w.Settings.value("LockInterval", 5).toInt() * 60000);
     idleFilter->setClient(&w);
 
     a.installEventFilter(idleFilter);

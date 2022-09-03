@@ -33,8 +33,6 @@ QString PasswordGenerator::generatePassword(unsigned int len) {
     unsigned int max;
     unsigned int number;
 
-    RAND_poll();
-
     max = strlen(alpha) - 1;
 
     for (int j = 0; j < len; j++)

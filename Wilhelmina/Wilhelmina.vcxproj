@@ -100,6 +100,7 @@
     <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="CustomListWidgetItem.cpp" />
     <ClCompile Include="Entries.cpp" />
+    <ClCompile Include="IdleFilter.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
     <ClCompile Include="PasswordGenerator.cpp" />
     <ClCompile Include="Wilhelmina.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <ClInclude Include="Entries.h" />
+    <QtMoc Include="IdleFilter.h" />
     <ClInclude Include="PasswordGenerator.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="MasterPasswordDialog.h" />

@@ -30,6 +30,7 @@ private:
     void populateViewFromEntries();
     void AddEntryToView(QString title, QString ID);
     bool m_IsEncrypted;
+
 public slots:
     void addNewEntry();
     void listItemDoubleClicked(QListWidgetItem*);

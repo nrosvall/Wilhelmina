@@ -36,6 +36,8 @@ int main(int argc, char *argv[])
 
     a.installEventFilter(idleFilter);
 
+    w.setIdleFilter(idleFilter);
+
     QObject::connect(idleFilter, SIGNAL(userInactive()),
         &w, nullptr);
 

@@ -60,6 +60,10 @@ Wilhelmina::~Wilhelmina()
     
 }
 
+void Wilhelmina::setIdleFilter(IdleFilter* filter) {
+    m_IdleFilter = filter;
+}
+
 void Wilhelmina::ProtectMasterPassphrase() {
     //CryptProtectMemory(&m_MasterPassword, m_MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
 }
@@ -288,22 +292,24 @@ void Wilhelmina::showPreferences() {
                     ui.listWidget->clear();
                 }
             }
-        }
-        
-        m_DataPath = dlg.dataFileLocation();
-        
-        if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
-            if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                m_IsEncrypted = false;
 
-                populateViewFromEntries();
-            }
-            else {
-                m_MasterPassword.clear();
-                PostActivate();
+            m_DataPath = dlg.dataFileLocation();
+
+            if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
+                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                    m_IsEncrypted = false;
+                    populateViewFromEntries();
+                }
+                else {
+                    m_MasterPassword.clear();
+                    PostActivate();
+                }
             }
         }
 
-        //TODO: update interval timer
+        //Update interval timer, check the interval value changed and restart timer with the new interval
+        if (m_IdleFilter->Interval() != dlg.intervalInMilliseconds()) {
+            m_IdleFilter->setInterval(dlg.intervalInMilliseconds());
+        }
     }
 }

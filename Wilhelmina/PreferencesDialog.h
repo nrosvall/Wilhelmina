@@ -30,6 +30,7 @@ class PreferencesDialog : public QDialog
 public:
 	PreferencesDialog(QSettings *settings, QWidget* parent = nullptr);
 	QString dataFileLocation();
+	int intervalInMilliseconds();
 
 private:
 	Ui::PreferencesDialog ui;

@@ -71,3 +71,7 @@ void PreferencesDialog::selectDataPath() {
 QString PreferencesDialog::dataFileLocation() {
 	return ui.lineEditDataLocation->text();
 }
+
+int PreferencesDialog::intervalInMilliseconds() {
+	return ui.spinBox_LockInterval->value() * 60000;
+}

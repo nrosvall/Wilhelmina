@@ -24,6 +24,7 @@
 #include "CustomListWidgetItem.h"
 #include "ui_Wilhelmina.h"
 #include <qsettings.h>
+#include "IdleFilter.h"
 
 class Wilhelmina : public QMainWindow
 {
@@ -33,6 +34,7 @@ public:
     Wilhelmina(QWidget *parent = nullptr);
     ~Wilhelmina();
     QSettings Settings;
+    void setIdleFilter(IdleFilter* filter);
 
 protected:
     void showEvent(QShowEvent* ev);
@@ -51,6 +53,7 @@ private:
     void populateViewFromEntries();
     void AddEntryToView(QString title, QString ID);
     bool m_IsEncrypted;
+    IdleFilter* m_IdleFilter;
 
 public slots:
     void addNewEntry();

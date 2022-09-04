@@ -30,6 +30,7 @@ public:
 	~IdleFilter();
 	int Interval();
 	void setClient(QMainWindow* client);
+	void setInterval(int interval);
 signals:
 	void dummy_userInactive();
 public slots:

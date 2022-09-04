@@ -35,6 +35,11 @@ int IdleFilter::Interval() {
     return m_Interval;
 }
 
+void IdleFilter::setInterval(int interval) {
+    m_Interval = interval;
+    m_Timer->setInterval(interval);
+}
+
 void IdleFilter::setClient(QMainWindow* client) {
     m_Client = client;
 }

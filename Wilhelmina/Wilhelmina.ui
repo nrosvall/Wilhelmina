@@ -88,6 +88,7 @@
     <addaction name="actionPrint"/>
     <addaction name="actionExport"/>
     <addaction name="separator"/>
+    <addaction name="actionChange_Master_Passphrase"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -109,6 +110,8 @@
      <string>Protection</string>
     </property>
     <addaction name="actionEncrypt"/>
+    <addaction name="separator"/>
+    <addaction name="actionChange_Master_Passphrase"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
@@ -262,6 +265,11 @@
     <string>Ctrl+B</string>
    </property>
   </action>
+  <action name="actionChange_Master_Passphrase">
+   <property name="text">
+    <string>Change Master Passphrase...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -380,6 +388,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionChange_Master_Passphrase</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>changeMasterPassphrase()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -390,5 +414,6 @@
   <slot>copyPassword()</slot>
   <slot>openInBrowser()</slot>
   <slot>showPreferences()</slot>
+  <slot>changeMasterPassphrase()</slot>
  </slots>
 </ui>

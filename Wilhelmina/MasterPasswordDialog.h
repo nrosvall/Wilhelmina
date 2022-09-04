@@ -28,7 +28,7 @@ class MasterPasswordDialog : public QDialog
 	Q_OBJECT
 
 public:
-	MasterPasswordDialog(bool setNewPassphrase, bool disableCancel = false, QWidget* parent = nullptr);
+	MasterPasswordDialog(bool setNewPassphrase, bool disableCancel, QWidget* parent = nullptr);
 	~MasterPasswordDialog();
 	void SetCanReject(bool status);
 	QString GetPassphrase();

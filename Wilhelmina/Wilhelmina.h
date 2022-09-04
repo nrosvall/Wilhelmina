@@ -67,4 +67,5 @@ public slots:
     void copyPassword();
     void openInBrowser();
     void showPreferences();
+    void changeMasterPassphrase();
 };

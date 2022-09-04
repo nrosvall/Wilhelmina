@@ -122,7 +122,7 @@ void Wilhelmina::changeEvent(QEvent* ev) {
 void Wilhelmina::PostActivate()
 {
     if (!QDir(m_DataPath).exists()) {
-        MasterPasswordDialog dlg(true, this);
+        MasterPasswordDialog dlg(true, false, this);
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
             if (!QDir().mkpath(m_DataPath)) {
@@ -157,7 +157,7 @@ void Wilhelmina::PostActivate()
         else {
             //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
             m_IsEncrypted = false;
-            MasterPasswordDialog dlg(true, this);
+            MasterPasswordDialog dlg(true, false, this);
             if (dlg.exec() == QDialog::Accepted)
                 m_MasterPassword = dlg.GetPassphrase();
             else
@@ -311,5 +311,12 @@ void Wilhelmina::showPreferences() {
         if (m_IdleFilter->Interval() != dlg.intervalInMilliseconds()) {
             m_IdleFilter->setInterval(dlg.intervalInMilliseconds());
         }
+    }
+}
+
+void Wilhelmina::changeMasterPassphrase() {
+    MasterPasswordDialog dlg(true, false, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        m_MasterPassword = dlg.GetPassphrase();
     }
 }

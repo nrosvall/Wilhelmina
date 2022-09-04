@@ -88,7 +88,6 @@
     <addaction name="actionPrint"/>
     <addaction name="actionExport"/>
     <addaction name="separator"/>
-    <addaction name="actionChange_Master_Passphrase"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>

@@ -270,6 +270,10 @@ void Wilhelmina::openInBrowser() {
 }
 
 void Wilhelmina::showPreferences() {
+
+    //TODO: Should we encrypt current data here just to make not to loose anything?
+    //Make check if the path actually changes to prevent unnecessary operations
+
     PreferencesDialog dlg(&Settings, this);
     if (dlg.exec() == QDialog::Accepted) {
         m_DataPath = dlg.dataFileLocation();
@@ -277,9 +281,6 @@ void Wilhelmina::showPreferences() {
         if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
             if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
                 m_IsEncrypted = false;
-
-                //TODO: We should here check if current listview entries are not in entryarray and add them there?
-                //Or should we just start saving (encrypting) after every add/remove operation?
 
                 populateViewFromEntries();
             }

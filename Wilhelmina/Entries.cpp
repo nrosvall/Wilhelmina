@@ -137,6 +137,7 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 
 QJsonObject Entries::GetJObject(QString ID) {
 	for (const auto obj : m_EntryArray) {
+		
 		if (obj.toObject().value("ID") == ID)
 			return obj.toObject();
 	}

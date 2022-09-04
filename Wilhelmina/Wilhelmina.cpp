@@ -271,11 +271,25 @@ void Wilhelmina::openInBrowser() {
 
 void Wilhelmina::showPreferences() {
 
-    //TODO: Should we encrypt current data here just to make not to loose anything?
-    //Make check if the path actually changes to prevent unnecessary operations
-
     PreferencesDialog dlg(&Settings, this);
     if (dlg.exec() == QDialog::Accepted) {
+        
+        //Check if we changed the datapath and encrypt all existing data to the old path.
+        if (m_DataPath != dlg.dataFileLocation()) {
+            if (!m_IsEncrypted) {
+                if (!m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+                    QMessageBox::critical(this, "Wilhelmina",
+                        "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
+                        QMessageBox::Ok);
+
+                    return;
+                }
+                else {
+                    ui.listWidget->clear();
+                }
+            }
+        }
+        
         m_DataPath = dlg.dataFileLocation();
         
         if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {

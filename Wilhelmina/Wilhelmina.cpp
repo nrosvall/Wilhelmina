@@ -41,13 +41,13 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.setupUi(this);
     ui.lineEdit->setPlaceholderText("Type to search");
    
+    this->restoreGeometry(Settings.value("geometry").toByteArray());
+
     m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
     
     m_statusLabel = new QLabel();
     m_statusLabel->setText(m_DataPath);
     ui.statusBar->addPermanentWidget(m_statusLabel);
-
-   
 
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
@@ -108,6 +108,8 @@ void Wilhelmina::closeEvent(QCloseEvent* ev) {
     if(!m_MasterPassword.isEmpty())
         encryptOnWindowStateEvent();
     
+    Settings.setValue("geometry", this->saveGeometry());
+
     QMainWindow::closeEvent(ev);
 }
 

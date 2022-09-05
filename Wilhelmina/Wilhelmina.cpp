@@ -51,6 +51,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionCopyPassword->setEnabled(false);
     ui.actionCopyUsername->setEnabled(false);
     ui.actionOpen_in_Browser->setEnabled(false);
+    ui.actionEdit->setEnabled(false);
 
     m_IsEncrypted = false;
 }
@@ -172,12 +173,17 @@ void Wilhelmina::listItemClicked(QListWidgetItem* item) {
         ui.actionCopyPassword->setEnabled(true);
         ui.actionCopyUsername->setEnabled(true);
         ui.actionOpen_in_Browser->setEnabled(true);
+        ui.actionEdit->setEnabled(true);
     }
 }
 
 void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
-    
-    CustomListWidgetItem* ci =  static_cast<CustomListWidgetItem *>(item);
+    editEntry();
+}
+
+void Wilhelmina::editEntry() {
+
+    CustomListWidgetItem* ci = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     QString id = ci->getID();
     QJsonObject obj = m_Entries.GetJObject(id);
 
@@ -185,8 +191,8 @@ void Wilhelmina::listItemDoubleClicked(QListWidgetItem *item) {
 
     if (dlg.exec() == QDialog::Accepted) {
         m_Entries.deleteItem(ci->getID());
-        ui.listWidget->removeItemWidget(item);
-        delete item;
+        ui.listWidget->removeItemWidget(ci);
+        delete ci;
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
     }
 }
@@ -242,6 +248,7 @@ void Wilhelmina::listItemSelectionChanged() {
         ui.actionCopyPassword->setEnabled(false);
         ui.actionCopyUsername->setEnabled(false);
         ui.actionOpen_in_Browser->setEnabled(false);
+        ui.actionEdit->setEnabled(false);
     }
 }
 

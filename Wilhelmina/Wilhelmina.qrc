@@ -13,5 +13,7 @@
         <file>icons/password-copy@2x.png</file>
         <file>icons/username-copy.png</file>
         <file>icons/username-copy@2x.png</file>
+        <file>icons/edit.png</file>
+        <file>icons/edit@2x.png</file>
     </qresource>
 </RCC>

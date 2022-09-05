@@ -68,4 +68,5 @@ public slots:
     void openInBrowser();
     void showPreferences();
     void changeMasterPassphrase();
+    void editEntry();
 };

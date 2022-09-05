@@ -97,6 +97,7 @@
      <string>Entry</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionEdit"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionCopyPassword"/>
@@ -139,7 +140,9 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
+   <addaction name="actionEdit"/>
    <addaction name="actionDelete"/>
+   <addaction name="separator"/>
    <addaction name="actionCopyPassword"/>
    <addaction name="actionCopyUsername"/>
    <addaction name="separator"/>
@@ -267,6 +270,18 @@
   <action name="actionChange_Master_Passphrase">
    <property name="text">
     <string>Change Master Passphrase...</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/edit.png</normaloff>:/wilhelmina/icons/edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>
@@ -403,6 +418,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionEdit</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>editEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -414,5 +445,6 @@
   <slot>openInBrowser()</slot>
   <slot>showPreferences()</slot>
   <slot>changeMasterPassphrase()</slot>
+  <slot>editEntry()</slot>
  </slots>
 </ui>

@@ -281,6 +281,7 @@ void Wilhelmina::copyUsername() {
     CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
    
     cBoard->setText(m_Entries.GetJObject(item->getID()).value("user").toString());
+    ui.statusBar->showMessage("Username copied", 2000);
 }
 
 void Wilhelmina::copyPassword() {
@@ -288,6 +289,7 @@ void Wilhelmina::copyPassword() {
     CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     
     cBoard->setText(m_Entries.GetJObject(item->getID()).value("password").toString());
+    ui.statusBar->showMessage("Password copied", 2000);
 }
 
 void Wilhelmina::openInBrowser() {
@@ -359,6 +361,10 @@ void Wilhelmina::showContextMenu(const QPoint& point) {
     
     menu.addAction(ui.actionEdit);
     menu.addAction(ui.actionClone);
+    menu.addSeparator();
+    menu.addAction(ui.actionCopyPassword);
+    menu.addAction(ui.actionCopyUsername);
+    menu.addSeparator();
     menu.addAction(ui.actionDelete);
 
     const QPoint global = ui.listWidget->mapToGlobal(point);

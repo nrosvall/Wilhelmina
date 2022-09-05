@@ -72,4 +72,5 @@ public slots:
     void changeMasterPassphrase();
     void editEntry();
     void cloneEntry();
+    void showContextMenu(const QPoint&);
 };

@@ -49,9 +49,12 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     m_statusLabel->setText(m_DataPath);
     ui.statusBar->addPermanentWidget(m_statusLabel);
 
+    ui.listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
     connect(ui.listWidget, &QListWidget::itemSelectionChanged, this, &Wilhelmina::listItemSelectionChanged);
+    connect(ui.listWidget, &QListWidget::customContextMenuRequested, this, &Wilhelmina::showContextMenu);
 
     ui.actionDelete->setEnabled(false);
     ui.actionCopyPassword->setEnabled(false);
@@ -348,4 +351,17 @@ void Wilhelmina::changeMasterPassphrase() {
     if (dlg.exec() == QDialog::Accepted) {
         m_MasterPassword = dlg.GetPassphrase();
     }
+}
+
+void Wilhelmina::showContextMenu(const QPoint& point) {
+    
+    QMenu menu(this);
+    
+    menu.addAction(ui.actionEdit);
+    menu.addAction(ui.actionClone);
+    menu.addAction(ui.actionDelete);
+
+    const QPoint global = ui.listWidget->mapToGlobal(point);
+    
+    menu.exec(global);
 }

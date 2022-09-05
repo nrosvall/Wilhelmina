@@ -470,6 +470,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>exitWilhelmina()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -483,5 +499,6 @@
   <slot>changeMasterPassphrase()</slot>
   <slot>editEntry()</slot>
   <slot>cloneEntry()</slot>
+  <slot>exitWilhelmina()</slot>
  </slots>
 </ui>

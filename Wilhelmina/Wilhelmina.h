@@ -73,4 +73,5 @@ public slots:
     void editEntry();
     void cloneEntry();
     void showContextMenu(const QPoint&);
+    void exitWilhelmina();
 };

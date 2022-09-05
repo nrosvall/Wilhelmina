@@ -89,6 +89,10 @@ void Wilhelmina::showEvent(QShowEvent* ev)
     QTimer::singleShot(0, this, SLOT(PostActivate()));
 }
 
+void Wilhelmina::exitWilhelmina() {
+    this->close();
+}
+
 void Wilhelmina::encryptOnWindowStateEvent() {
     if (!m_IsEncrypted) {
         if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {

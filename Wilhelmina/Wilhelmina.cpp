@@ -43,6 +43,12 @@ Wilhelmina::Wilhelmina(QWidget *parent)
    
     m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
     
+    m_statusLabel = new QLabel();
+    m_statusLabel->setText(m_DataPath);
+    ui.statusBar->addPermanentWidget(m_statusLabel);
+
+   
+
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
     connect(ui.listWidget, &QListWidget::itemSelectionChanged, this, &Wilhelmina::listItemSelectionChanged);
@@ -59,7 +65,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
 
 Wilhelmina::~Wilhelmina()
 {
-    
+    delete m_statusLabel;
 }
 
 void Wilhelmina::setIdleFilter(IdleFilter* filter) {
@@ -209,6 +215,7 @@ void Wilhelmina::cloneEntry() {
 }
 
 void Wilhelmina::encryptAndLock() {
+
         this->showMinimized();
 }
 
@@ -288,7 +295,7 @@ void Wilhelmina::openInBrowser() {
         QDesktopServices::openUrl(QUrl(url));
     }
     else {
-        QMessageBox::warning(this, "Wilhelmina", "The entry has no URL set.\nEdit the entry to add one.", QMessageBox::Ok);
+        QMessageBox::warning(this, "Wilhelmina", "The entry has no URL set. Edit the entry to add one.", QMessageBox::Ok);
     }
 }
 
@@ -313,6 +320,7 @@ void Wilhelmina::showPreferences() {
             }
 
             m_DataPath = dlg.dataFileLocation();
+            m_statusLabel->setText(m_DataPath);
 
             if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
                 if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {

@@ -25,6 +25,7 @@
 #include "ui_Wilhelmina.h"
 #include <qsettings.h>
 #include "IdleFilter.h"
+#include <qlabel.h>
 
 class Wilhelmina : public QMainWindow
 {
@@ -54,6 +55,7 @@ private:
     void AddEntryToView(QString title, QString ID);
     bool m_IsEncrypted;
     IdleFilter* m_IdleFilter;
+    QLabel* m_statusLabel;
 
 public slots:
     void addNewEntry();

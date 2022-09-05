@@ -98,6 +98,7 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionEdit"/>
+    <addaction name="actionClone"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionCopyPassword"/>
@@ -141,6 +142,7 @@
    </attribute>
    <addaction name="actionNew"/>
    <addaction name="actionEdit"/>
+   <addaction name="actionClone"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionCopyPassword"/>
@@ -279,6 +281,24 @@
    </property>
    <property name="text">
     <string>Edit...</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit entry</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionClone">
+   <property name="icon">
+    <iconset resource="Wilhelmina.qrc">
+     <normaloff>:/wilhelmina/icons/clone.png</normaloff>:/wilhelmina/icons/clone.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clone</string>
+   </property>
+   <property name="toolTip">
+    <string>Clone entry</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -434,6 +454,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionClone</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>cloneEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -446,5 +482,6 @@
   <slot>showPreferences()</slot>
   <slot>changeMasterPassphrase()</slot>
   <slot>editEntry()</slot>
+  <slot>cloneEntry()</slot>
  </slots>
 </ui>

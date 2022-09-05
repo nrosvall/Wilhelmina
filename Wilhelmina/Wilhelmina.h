@@ -69,4 +69,5 @@ public slots:
     void showPreferences();
     void changeMasterPassphrase();
     void editEntry();
+    void cloneEntry();
 };

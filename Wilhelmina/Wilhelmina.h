@@ -41,6 +41,7 @@ protected:
     void showEvent(QShowEvent* ev);
     void changeEvent(QEvent* ev);
     void closeEvent(QCloseEvent* ev);
+    bool eventFilter(QObject* target, QEvent* ev);
 
 private:
     void encryptOnWindowStateEvent();

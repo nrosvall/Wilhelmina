@@ -136,6 +136,20 @@ void Wilhelmina::changeEvent(QEvent* ev) {
     ev->accept();
 }
 
+bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
+
+    if (ev->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(ev);
+
+        if (keyEvent->key() == Qt::Key_Escape) {
+            if (ui.lineEditSearch->text().length() > 0)
+                ui.lineEditSearch->clear();
+        }
+    }
+
+    return QMainWindow::eventFilter(target, ev);
+}
+
 void Wilhelmina::PostActivate()
 {
     if (!QDir(m_DataPath).exists()) {
@@ -390,10 +404,14 @@ void Wilhelmina::showContextMenu(const QPoint& point) {
 
 void Wilhelmina::searchChanged() {
 
+    for (int i = 0; i < ui.listWidget->count(); i++) {
+        QListWidgetItem* item = ui.listWidget->item(i);
+        item->setHidden(false);
+    }
+
     QString search = ui.lineEditSearch->text().toLower();
 
     if (search.length() > 0) {
-
         //loop all listwidget items and hide the ones which title does not match the search
         for (int i = 0; i < ui.listWidget->count(); i++) {
             QListWidgetItem* item = ui.listWidget->item(i);
@@ -401,11 +419,4 @@ void Wilhelmina::searchChanged() {
                 item->setHidden(true);
         }
     }
-    else {
-        for (int i = 0; i < ui.listWidget->count(); i++) {
-            QListWidgetItem* item = ui.listWidget->item(i);
-            item->setHidden(false);
-        }
-    }
-
 }

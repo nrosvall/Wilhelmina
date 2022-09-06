@@ -492,7 +492,6 @@ void Wilhelmina::importEntries() {
                 QJsonDocument doc = QJsonDocument::fromJson(json);
                 m_Entries.setDocument(doc);
                 populateViewFromEntries();
-
             }
         }
     }

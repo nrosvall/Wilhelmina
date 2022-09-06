@@ -85,7 +85,6 @@
     <property name="toolTipsVisible">
      <bool>true</bool>
     </property>
-    <addaction name="actionPrint"/>
     <addaction name="actionExport"/>
     <addaction name="actionImport"/>
     <addaction name="separator"/>
@@ -255,11 +254,6 @@
   <action name="actionExport">
    <property name="text">
     <string>Export...</string>
-   </property>
-  </action>
-  <action name="actionPrint">
-   <property name="text">
-    <string>Print...</string>
    </property>
   </action>
   <action name="actionOpen_in_Browser">
@@ -557,5 +551,6 @@
   <slot>searchChanged()</slot>
   <slot>exportEntries()</slot>
   <slot>importEntries()</slot>
+  <slot>printEntries()</slot>
  </slots>
 </ui>

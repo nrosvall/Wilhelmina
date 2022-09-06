@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
     idleFilter->setClient(&w);
 
     a.installEventFilter(idleFilter);
+    a.installEventFilter(&w);
 
     w.setIdleFilter(idleFilter);
 

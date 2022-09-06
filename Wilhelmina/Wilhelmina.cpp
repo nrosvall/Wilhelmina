@@ -138,7 +138,7 @@ void Wilhelmina::changeEvent(QEvent* ev) {
 
 bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
 
-    if (ev->type() == QEvent::KeyPress) {
+    if (ev->type() == QEvent::KeyPress && target == ui.lineEditSearch) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(ev);
 
         if (keyEvent->key() == Qt::Key_Escape) {
@@ -147,7 +147,7 @@ bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
         }
     }
 
-    return QMainWindow::eventFilter(target, ev);
+    return QObject::eventFilter(target, ev);
 }
 
 void Wilhelmina::PostActivate()

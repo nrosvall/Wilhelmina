@@ -40,7 +40,7 @@
        <number>1</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="lineEditSearch">
         <property name="focusPolicy">
          <enum>Qt::ClickFocus</enum>
         </property>
@@ -51,7 +51,7 @@
          <string/>
         </property>
         <property name="clearButtonEnabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -486,6 +486,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lineEditSearch</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>searchChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>377</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>446</x>
+     <y>-13</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -500,5 +516,6 @@
   <slot>editEntry()</slot>
   <slot>cloneEntry()</slot>
   <slot>exitWilhelmina()</slot>
+  <slot>searchChanged()</slot>
  </slots>
 </ui>

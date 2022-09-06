@@ -39,7 +39,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    ui.lineEdit->setPlaceholderText("Type to search");
+    ui.lineEditSearch->setPlaceholderText("Type to search");
    
     this->restoreGeometry(Settings.value("geometry").toByteArray());
 
@@ -386,4 +386,26 @@ void Wilhelmina::showContextMenu(const QPoint& point) {
     const QPoint global = ui.listWidget->mapToGlobal(point);
     
     menu.exec(global);
+}
+
+void Wilhelmina::searchChanged() {
+
+    QString search = ui.lineEditSearch->text().toLower();
+
+    if (search.length() > 0) {
+
+        //loop all listwidget items and hide the ones which title does not match the search
+        for (int i = 0; i < ui.listWidget->count(); i++) {
+            QListWidgetItem* item = ui.listWidget->item(i);
+            if (!item->text().toLower().contains(search))
+                item->setHidden(true);
+        }
+    }
+    else {
+        for (int i = 0; i < ui.listWidget->count(); i++) {
+            QListWidgetItem* item = ui.listWidget->item(i);
+            item->setHidden(false);
+        }
+    }
+
 }

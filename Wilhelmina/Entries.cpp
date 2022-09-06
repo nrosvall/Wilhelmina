@@ -137,6 +137,11 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	return ret > 0;
 }
 
+void Entries::setDocument(QJsonDocument& doc) {
+	m_EntriesDoc = doc;
+	m_EntryArray = m_EntriesDoc.array();
+}
+
 QJsonObject Entries::GetJObject(QString ID) {
 	for (const auto obj : m_EntryArray) {
 		

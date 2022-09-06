@@ -78,4 +78,5 @@ public slots:
     void exitWilhelmina();
     void searchChanged();
     void exportEntries();
+    void importEntries();
 };

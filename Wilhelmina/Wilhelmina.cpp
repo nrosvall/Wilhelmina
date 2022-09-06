@@ -441,24 +441,58 @@ void Wilhelmina::exportEntries() {
     msgBox.setIcon(QMessageBox::Question);
     msgBox.setText("All entries are exported as plain text.");
     msgBox.setInformativeText("Do you want to continue?");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    //msgBox.setParent(this);
-    
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+
     int ret = msgBox.exec();
 
-    if (ret == QMessageBox::Save) {
+    if (ret == QMessageBox::Yes) {
         QString filename = QFileDialog::getSaveFileName(this,
-            tr("Save Entries"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), "Json Files (*.json)");
+            tr("Export Entries"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), "Json Files (*.json)");
 
         if (!filename.isEmpty()) {
             QFile file(filename);
 
             if (file.open(QIODevice::ReadWrite)) {
-                QTextStream stream(&file);
-                stream << m_Entries.getJson().toUtf8();
+                QJsonDocument doc;
+                doc.setArray(m_Entries.entryArray());
+                QByteArray json = doc.toJson();
+                file.write(json);
                 file.close();
                 ui.statusBar->showMessage("Entries exported.", 2000);
+            }
+        }
+    }
+}
+
+void Wilhelmina::importEntries() {
+
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setText("This will overwrite existing entries.");
+    msgBox.setInformativeText("Do you want to continue?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::Yes) {
+
+        QString filename = QFileDialog::getOpenFileName(this,
+            tr("Import Entries"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), "Json Files (*.json)");
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+
+            if (file.open(QIODevice::ReadOnly)) {
+                QByteArray json = file.readAll();
+                file.close();
+
+                ui.listWidget->clear();
+                QJsonDocument doc = QJsonDocument::fromJson(json);
+                m_Entries.setDocument(doc);
+                populateViewFromEntries();
+
             }
         }
     }

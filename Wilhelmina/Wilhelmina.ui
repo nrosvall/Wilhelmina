@@ -87,6 +87,7 @@
     </property>
     <addaction name="actionPrint"/>
     <addaction name="actionExport"/>
+    <addaction name="actionImport"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
@@ -304,6 +305,11 @@
     <bool>false</bool>
    </property>
   </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -518,6 +524,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionImport</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>importEntries()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -534,5 +556,6 @@
   <slot>exitWilhelmina()</slot>
   <slot>searchChanged()</slot>
   <slot>exportEntries()</slot>
+  <slot>importEntries()</slot>
  </slots>
 </ui>

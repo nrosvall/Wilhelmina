@@ -40,6 +40,7 @@ public:
 	QJsonArray& entryArray();
 	void deleteItem(QString ID);
 	QString getJson();
+	void setDocument(QJsonDocument& doc);
 	Entries();
 	~Entries();
 

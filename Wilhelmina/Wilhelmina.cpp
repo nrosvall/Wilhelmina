@@ -34,6 +34,7 @@
 #include <qdesktopservices.h>
 #include <qurl.h>
 #include "PreferencesDialog.h"
+#include <qfiledialog.h>
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -430,6 +431,35 @@ void Wilhelmina::searchChanged() {
             QListWidgetItem* item = ui.listWidget->item(i);
             if (!item->text().toLower().contains(search))
                 item->setHidden(true);
+        }
+    }
+}
+
+void Wilhelmina::exportEntries() {
+
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setText("All entries are exported as plain text.");
+    msgBox.setInformativeText("Do you want to continue?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    //msgBox.setParent(this);
+    
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::Save) {
+        QString filename = QFileDialog::getSaveFileName(this,
+            tr("Save Entries"), QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation), "Json Files (*.json)");
+
+        if (!filename.isEmpty()) {
+            QFile file(filename);
+
+            if (file.open(QIODevice::ReadWrite)) {
+                QTextStream stream(&file);
+                stream << m_Entries.getJson().toUtf8();
+                file.close();
+                ui.statusBar->showMessage("Entries exported.", 2000);
+            }
         }
     }
 }

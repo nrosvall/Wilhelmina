@@ -77,4 +77,5 @@ public slots:
     void showContextMenu(const QPoint&);
     void exitWilhelmina();
     void searchChanged();
+    void exportEntries();
 };

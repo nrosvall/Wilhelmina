@@ -162,3 +162,12 @@ void Entries::deleteItem(QString ID) {
 QJsonArray& Entries::entryArray() {
 	return m_EntryArray;
 }
+
+QString Entries::getJson() {
+	QJsonDocument doc;
+	doc.setArray(m_EntryArray);
+
+	QString json = doc.toJson();
+
+	return json;
+}

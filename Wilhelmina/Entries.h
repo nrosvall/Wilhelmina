@@ -39,6 +39,7 @@ public:
 	QString encryptedBlobFile();
 	QJsonArray& entryArray();
 	void deleteItem(QString ID);
+	QString getJson();
 	Entries();
 	~Entries();
 

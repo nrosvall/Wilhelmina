@@ -33,7 +33,7 @@ private:
 
 public:
 	void AddEntry(QString& title, QString& user, QString& password, QString& url, QString& notes, QString& ID);
-	bool Encrypt(QString &master_passphrase, QString& dataPath);
+	bool Encrypt(QString &master_passphrase, QString& dataPath, bool dataClearing);
 	bool Decrypt(QString &master_passphrase, QString& dataPath);
 	QJsonObject GetJObject(QString ID);
 	QString encryptedBlobFile();

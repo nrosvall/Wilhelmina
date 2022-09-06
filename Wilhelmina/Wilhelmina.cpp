@@ -95,7 +95,7 @@ void Wilhelmina::exitWilhelmina() {
 
 void Wilhelmina::encryptOnWindowStateEvent() {
     if (!m_IsEncrypted) {
-        if (m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+        if (m_Entries.Encrypt(m_MasterPassword, m_DataPath, true)) {
             m_MasterPassword.clear();
             ui.listWidget->clear();
             m_IsEncrypted = true;
@@ -224,7 +224,6 @@ void Wilhelmina::cloneEntry() {
 }
 
 void Wilhelmina::encryptAndLock() {
-
         this->showMinimized();
 }
 
@@ -252,6 +251,17 @@ void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString passwo
     m_Entries.AddEntry(title, user, password, url, notes, ID);
     
     AddEntryToView(title, ID);
+    encryptCurrentData();
+}
+
+void Wilhelmina::encryptCurrentData() {
+    if (!m_IsEncrypted) {
+        if (!m_Entries.Encrypt(m_MasterPassword, m_DataPath, false)) {
+            QMessageBox::critical(this, "Wilhelmina",
+                "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
+                QMessageBox::Ok);
+        }
+    }
 }
 
 void Wilhelmina::addNewEntry() {
@@ -267,6 +277,8 @@ void Wilhelmina::deleteSelectedItem() {
     m_Entries.deleteItem(item->getID());
     ui.listWidget->takeItem(ui.listWidget->currentRow());
     delete item;
+
+    encryptCurrentData();
 }
 
 void Wilhelmina::listItemSelectionChanged() {
@@ -318,7 +330,7 @@ void Wilhelmina::showPreferences() {
         //Check if we changed the datapath and encrypt all existing data to the old path.
         if (m_DataPath != dlg.dataFileLocation()) {
             if (!m_IsEncrypted) {
-                if (!m_Entries.Encrypt(m_MasterPassword, m_DataPath)) {
+                if (!m_Entries.Encrypt(m_MasterPassword, m_DataPath, true)) {
                     QMessageBox::critical(this, "Wilhelmina",
                         "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                         QMessageBox::Ok);

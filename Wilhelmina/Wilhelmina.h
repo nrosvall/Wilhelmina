@@ -56,6 +56,7 @@ private:
     bool m_IsEncrypted;
     IdleFilter* m_IdleFilter;
     QLabel* m_statusLabel;
+    void encryptCurrentData();
 
 public slots:
     void addNewEntry();

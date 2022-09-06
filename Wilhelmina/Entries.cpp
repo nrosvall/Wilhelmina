@@ -46,7 +46,7 @@ void Entries::AddEntry(QString &title, QString &user, QString &password, QString
 	m_EntryArray.push_back(jObj);
 }
 
-bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
+bool Entries::Encrypt(QString &master_passphrase, QString &dataPath, bool dataClearing) {
 
 	Crypto crypto;
 	Key key;
@@ -69,15 +69,17 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath) {
 
 		if (ret > 0) {
 
-			plainBytes.clear();
-			m_rootEntry = QJsonObject();
-			m_EntriesDoc = QJsonDocument();
+			if (dataClearing) {
+				plainBytes.clear();
+				m_rootEntry = QJsonObject();
+				m_EntriesDoc = QJsonDocument();
 
-			for (int i = 0; i < m_EntryArray.count(); i++) {
-				m_EntryArray.removeAt(0);
+				for (int i = 0; i < m_EntryArray.count(); i++) {
+					m_EntryArray.removeAt(0);
+				}
+
+				m_EntryArray = QJsonArray();
 			}
-
-			m_EntryArray = QJsonArray();
 
 			QFile file(dataPath + m_encryptedBlobFile);
 			if (file.open(QFile::WriteOnly | QFile::Truncate)) {

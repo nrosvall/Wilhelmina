@@ -129,6 +129,9 @@
       <property name="placeholderText">
        <string>Type URL</string>
       </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item row="7" column="0">

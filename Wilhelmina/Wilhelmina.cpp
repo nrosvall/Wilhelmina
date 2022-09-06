@@ -400,6 +400,14 @@ void Wilhelmina::showContextMenu(const QPoint& point) {
     menu.addAction(ui.actionCopyPassword);
     menu.addAction(ui.actionCopyUsername);
     menu.addSeparator();
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+    QJsonObject obj = m_Entries.GetJObject(item->getID());
+
+    if (!obj.value("url").toString().isEmpty()) {
+        menu.addAction(ui.actionOpen_in_Browser);
+    }
+
+    menu.addSeparator();
     menu.addAction(ui.actionDelete);
 
     const QPoint global = ui.listWidget->mapToGlobal(point);

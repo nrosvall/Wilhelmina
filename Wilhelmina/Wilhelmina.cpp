@@ -242,10 +242,15 @@ void Wilhelmina::encryptAndLock() {
 }
 
 void Wilhelmina::populateViewFromEntries() {
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     for (auto oneEntry : m_Entries.entryArray()) {
         QJsonObject entry = oneEntry.toObject();
         AddEntryToView(entry.value("title").toString(), entry.value("ID").toString());
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void Wilhelmina::AddEntryToView(QString title, QString ID) {

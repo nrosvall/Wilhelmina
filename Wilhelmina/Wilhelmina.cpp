@@ -153,6 +153,9 @@ bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
 
 void Wilhelmina::PostActivate()
 {
+    //TODO: If ssh flag is set, read parameters from Qsettings and download the encrypted file from the server
+    //and put it into the data path. Then continue. This should probably be void syncSSH();
+
     if (!QDir(m_DataPath).exists()) {
         MasterPasswordDialog dlg(true, false, this);
         if (dlg.exec() == QDialog::Accepted) {

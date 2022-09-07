@@ -18,9 +18,16 @@
 */
 
 #pragma once
+#include <qsettings.h>
+
 class SSHsync
 {
 public:
-	void test();
+	SSHsync(QSettings* settings);
+	bool toRemote();
+	bool fromRemote();
+
+private:
+	QSettings* m_Settings;
 };
 

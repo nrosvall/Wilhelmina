@@ -20,10 +20,20 @@
 #include "SSHsync.h"
 #include <libssh/sftp.h>
 
+SSHsync::SSHsync(QSettings* settings) {
+	m_Settings = settings;
+}
 
-void SSHsync::test() {
+bool SSHsync::toRemote() {
 	sftp_session sftp;
 	int rc = 0;
 
 	sftp = sftp_new(nullptr);
+
+	return true;
+}
+
+bool SSHsync::fromRemote() {
+
+	return true;
 }

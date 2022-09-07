@@ -88,6 +88,8 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath, bool dataCl
 				file.write(tag.constData(), crypto.tagSize());
 				file.write((const char*)(cipher), ret);
 				file.close();
+
+				//TODO: If ssh flag is set upload to sftp server (read parameters from QSettings)
 			}
 			else {
 				return false;

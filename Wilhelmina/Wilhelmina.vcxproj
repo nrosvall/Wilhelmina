@@ -55,13 +55,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>C:\Program Files\OpenSSL-Win64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\OpenSSL-Win64\include;C:\src\vcpkg\packages\libssh_x64-windows\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib"</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\debug\lib\ssh.lib"</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -105,6 +105,7 @@
     <ClCompile Include="MasterPasswordDialog.cpp" />
     <ClCompile Include="PasswordGenerator.cpp" />
     <ClCompile Include="PreferencesDialog.cpp" />
+    <ClCompile Include="SSHsync.cpp" />
     <ClCompile Include="Wilhelmina.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -115,6 +116,7 @@
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <ClInclude Include="Entries.h" />
+    <ClInclude Include="SSHsync.h" />
     <QtMoc Include="IdleFilter.h" />
     <ClInclude Include="PasswordGenerator.h" />
     <QtMoc Include="PreferencesDialog.h" />

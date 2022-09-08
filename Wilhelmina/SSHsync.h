@@ -19,6 +19,8 @@
 
 #pragma once
 #include <qsettings.h>
+#include <qstring.h>
+#include <libssh/libssh.h>
 
 class SSHsync
 {
@@ -26,6 +28,10 @@ public:
 	SSHsync(QSettings* settings);
 	bool toRemote();
 	bool fromRemote();
+	QString lastErrorMessage();
+private:
+	QString m_LastErrorMessage;
+	bool verifySession(ssh_session session);
 
 private:
 	QSettings* m_Settings;

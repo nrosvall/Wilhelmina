@@ -24,11 +24,57 @@ SSHsync::SSHsync(QSettings* settings) {
 	m_Settings = settings;
 }
 
+QString SSHsync::lastErrorMessage() {
+	return m_LastErrorMessage;
+}
+
+bool SSHsync::verifySession(ssh_session session) {
+
+
+	return true;
+}
+
 bool SSHsync::toRemote() {
+	
 	sftp_session sftp;
+	ssh_session session;
+	ssh_key pubkey = NULL;
+	ssh_channel channel;
+
+	session = ssh_new();
+
+	if (!session)
+		return false;
+
+	int port = 22; //TODO: get from settings;
+
+	ssh_options_set(session, SSH_OPTIONS_HOST, "localhost"); //TODO: get server from settings
+	ssh_options_set(session, SSH_OPTIONS_PORT, &port);
+	ssh_options_set(session, SSH_OPTIONS_USER, "root"); //TODO: get server from settings
+
 	int rc = 0;
 
+	rc = ssh_connect(session);
+	if (rc != SSH_OK) {
+		ssh_free(session);
+		QString err(ssh_get_error(session));
+		m_LastErrorMessage = "Connection failed: " + err;
+		return false;
+	}
+
+	if (!verifySession(session)) {
+		ssh_disconnect(session);
+		ssh_free(session);
+		return false;
+	}
+
+
+
 	sftp = sftp_new(nullptr);
+
+
+	ssh_disconnect(session);
+	ssh_free(session);
 
 	return true;
 }

@@ -21,17 +21,19 @@
 #include <qsettings.h>
 #include <qstring.h>
 #include <libssh/libssh.h>
+#include <qmainwindow.h>
 
 class SSHsync
 {
 public:
-	SSHsync(QSettings* settings);
+	SSHsync(QSettings* settings, QMainWindow* parentWindow);
 	bool toRemote();
 	bool fromRemote();
 	QString lastErrorMessage();
 private:
 	QString m_LastErrorMessage;
 	bool verifySession(ssh_session session);
+	QMainWindow* m_parentWindow;
 
 private:
 	QSettings* m_Settings;

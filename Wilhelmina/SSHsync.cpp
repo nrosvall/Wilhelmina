@@ -19,9 +19,11 @@
 
 #include "SSHsync.h"
 #include <libssh/sftp.h>
+#include <qmessagebox.h>
 
-SSHsync::SSHsync(QSettings* settings) {
+SSHsync::SSHsync(QSettings* settings, QMainWindow *parentWindow) {
 	m_Settings = settings;
+    m_parentWindow = parentWindow;
 }
 
 QString SSHsync::lastErrorMessage() {
@@ -30,6 +32,68 @@ QString SSHsync::lastErrorMessage() {
 
 bool SSHsync::verifySession(ssh_session session) {
 
+    int state, hlen;
+    unsigned char* hash = NULL;
+    char* hexa;
+    state = ssh_is_server_known(session);
+    hlen = ssh_get_pubkey_hash(session, &hash);
+    
+    if(hlen < 0)
+        return false;
+
+    switch (state) {
+    case SSH_SERVER_KNOWN_OK:
+        break; //Everything OK
+
+    case SSH_SERVER_KNOWN_CHANGED:
+        m_LastErrorMessage = "Host key for server changed. For security reasons,\n connection will be stopped.";
+        free(hash);
+        return false;
+
+    case SSH_SERVER_FOUND_OTHER:
+        m_LastErrorMessage = "The host key for this server was not found but an other"
+            "type of key exists.\n An attacker might change the default server key to "
+            "confuse your client into thinking the key does not exist. Aborting.";
+        free(hash);
+        return false;
+
+    case SSH_SERVER_FILE_NOT_FOUND:
+        //fall to SSH_SERVER_NOT_KNOWN behavior
+        [[fallthrough]];
+
+    case SSH_SERVER_NOT_KNOWN: {
+        hexa = ssh_get_hexa(hash, hlen);
+        QString hex(hexa);
+        free(hexa);
+
+        QMessageBox msgBox(m_parentWindow);
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setText("The server is unknown. Do you trust the host key?");
+        msgBox.setInformativeText("Public key hash: " + hex);
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+
+        int ret = msgBox.exec();
+
+        if (ret == QMessageBox::Yes) {
+            if (ssh_write_knownhost(session) < 0) {
+                QString err(strerror(errno));
+                m_LastErrorMessage = err;
+                free(hash);
+                return false;
+            }
+        }
+    }
+        break;
+
+    case SSH_SERVER_ERROR:
+        QString err(ssh_get_error(session));
+        m_LastErrorMessage = err;
+        free(hash);
+        return false;
+    }
+
+    free(hash);
 
 	return true;
 }
@@ -55,6 +119,7 @@ bool SSHsync::toRemote() {
 	int rc = 0;
 
 	rc = ssh_connect(session);
+
 	if (rc != SSH_OK) {
 		ssh_free(session);
 		QString err(ssh_get_error(session));
@@ -68,10 +133,7 @@ bool SSHsync::toRemote() {
 		return false;
 	}
 
-
-
 	sftp = sftp_new(nullptr);
-
 
 	ssh_disconnect(session);
 	ssh_free(session);

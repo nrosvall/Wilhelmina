@@ -88,9 +88,9 @@ bool SSHsync::verifySession(ssh_session session) {
 				return false;
 			}
 		}
-	}
-							 break;
 
+		break;
+	}
 	case SSH_SERVER_ERROR:
 		QString err(ssh_get_error(session));
 		m_LastErrorMessage = err;
@@ -123,8 +123,7 @@ ssh_session SSHsync::initSession() {
 
 	if (rc != SSH_OK) {
 		ssh_free(session);
-		QString err(ssh_get_error(session));
-		m_LastErrorMessage = "Connection failed: " + err;
+		m_LastErrorMessage = "SSH connection failed";
 		return nullptr;
 	}
 
@@ -137,8 +136,7 @@ ssh_session SSHsync::initSession() {
 	rc = ssh_userauth_publickey_auto(session, m_Settings->value("SSHuser").toString().toLocal8Bit(), nullptr);
 
 	if (rc != SSH_AUTH_SUCCESS) {
-		QString err(ssh_get_error(session));
-		m_LastErrorMessage = "Authentication failed: " + err;
+		m_LastErrorMessage = "SSH authentication failed";
 		ssh_disconnect(session);
 		ssh_free(session);
 		return nullptr;

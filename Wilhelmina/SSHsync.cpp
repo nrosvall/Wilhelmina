@@ -215,7 +215,33 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 	return true;
 }
 
-bool SSHsync::fromRemote() {
+bool SSHsync::fromRemote(QString &fullDataFilepath) {
+
+	sftp_session sftp;
+	ssh_session session = nullptr;
+
+	int access_type = O_RDONLY;
+	sftp_file file;
+	int rc, count_written;
+
+	session = initSession();
+
+	if (session == nullptr)
+		return false;
+
+	sftp = sftp_new(session);
+	rc = sftp_init(sftp);
+
+	if (rc != SSH_OK) {
+		m_LastErrorMessage = "SFTP initialization failed.";
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		return false;
+	}
+
+	file = sftp_open(sftp, ".wilhelmina_sync",
+		access_type, 0);
 
 	return true;
 }

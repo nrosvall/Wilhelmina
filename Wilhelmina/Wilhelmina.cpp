@@ -163,6 +163,22 @@ void Wilhelmina::PostActivate()
     //and put it into the data path. Then continue. This should probably be void syncSSH();
 
     if (!QDir(m_DataPath).exists()) {
+        if (!QDir().mkpath(m_DataPath)) {
+            QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
+                QMessageBox::Ok);
+            QApplication::quit();
+        }
+    }
+
+    QString fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
+
+    if (Settings.value("SSHenabled").toBool()) {
+        SSHsync sync(&Settings, this);
+        if (!sync.fromRemote(fullDataPath))
+            QMessageBox::critical(this, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
+    }
+
+   /* if (!QDir(m_DataPath).exists()) {
         MasterPasswordDialog dlg(true, false, this);
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
@@ -176,35 +192,35 @@ void Wilhelmina::PostActivate()
             QApplication::quit();
         }
     }
-    else {
-        //We have our data path, do we have any encrypted data?
-        if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
-            
-            MasterPasswordDialog dlg(false, true, this);
-            dlg.SetCanReject(false);
-            if (dlg.exec() == QDialog::Accepted) {
-                m_MasterPassword = dlg.GetPassphrase();
+    else {*/
 
-                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                    m_IsEncrypted = false;
-                    populateViewFromEntries();
-                }
-                else {
-                    m_MasterPassword.clear();
-                    PostActivate();
-                }
+    //We have our data path, do we have any encrypted data?
+    if (QFile::exists(fullDataPath)) {
+        MasterPasswordDialog dlg(false, true, this);
+        dlg.SetCanReject(false);
+        if (dlg.exec() == QDialog::Accepted) {
+            m_MasterPassword = dlg.GetPassphrase();
+
+            if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                m_IsEncrypted = false;
+                populateViewFromEntries();
+            }
+            else {
+                m_MasterPassword.clear();
+                PostActivate();
             }
         }
-        else {
-            //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
-            m_IsEncrypted = false;
-            MasterPasswordDialog dlg(true, false, this);
-            if (dlg.exec() == QDialog::Accepted)
-                m_MasterPassword = dlg.GetPassphrase();
-            else
-                QApplication::quit();
-        }
     }
+    else {
+        //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
+        m_IsEncrypted = false;
+        MasterPasswordDialog dlg(true, false, this);
+        if (dlg.exec() == QDialog::Accepted)
+            m_MasterPassword = dlg.GetPassphrase();
+        else
+            QApplication::quit();
+    }
+    //}
 }
 
 void Wilhelmina::listItemClicked(QListWidgetItem* item) {

@@ -56,11 +56,23 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
 
     if (old_salt == NULL) {
         salt = (unsigned char*)malloc(SALT_SIZE * sizeof(char));
+
+        if (!salt) {
+            *ok = false;
+            return key;
+        }
+
         RAND_bytes(salt, SALT_SIZE);
     }
     else
     {
-        salt = (unsigned char *)malloc(SALT_SIZE * sizeof(char)); //TODO: error check this
+        salt = (unsigned char *)malloc(SALT_SIZE * sizeof(char));
+
+        if (!salt) {
+            *ok = false;
+            return key;
+        }
+
         memmove(salt, old_salt, SALT_SIZE);
     }
 

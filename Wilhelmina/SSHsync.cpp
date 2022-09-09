@@ -123,7 +123,7 @@ ssh_session SSHsync::initSession() {
 
 	if (rc != SSH_OK) {
 		ssh_free(session);
-		m_LastErrorMessage = "SSH connection failed";
+		m_LastErrorMessage = "SSH connection failed, check preferences?";
 		return nullptr;
 	}
 
@@ -170,7 +170,8 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 		return false;
 	}
 
-	file = sftp_open(sftp, ".wilhelmina_sync",
+	file = sftp_open(sftp, ".wilhelmina_sync", //TODO: the fullpath should somehow differentiate with the local path. Otherwise we will always overwrite (on restore) the local path
+//user might want to have multiple data sets...maybe: . + folder + .wilhelmina_sync?
 		access_type, 0644);
 
 	QFile dataFile(fullDataFilepath);
@@ -222,7 +223,7 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 
 	int access_type = O_RDONLY;
 	sftp_file file;
-	int rc, count_written;
+	int rc;
 
 	session = initSession();
 
@@ -242,6 +243,63 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 
 	file = sftp_open(sftp, ".wilhelmina_sync",
 		access_type, 0);
+
+	if (file == nullptr) {
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		m_LastErrorMessage = "Unable to open remote file: .wilhelmina_sync";
+		return false;
+	}
+
+	QFile localFile(fullDataFilepath);
+
+	if(!localFile.open(QFile::WriteOnly | QFile::Truncate)) {
+		sftp_close(file);
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		m_LastErrorMessage = "Unable to open file: " + fullDataFilepath;
+		return false;
+	}
+
+	int count_bytes, count_written;
+	QByteArray buffer(16384, 'b');
+	//char *buffer = new char[16384];
+
+	for (;;) {
+		count_bytes = sftp_read(file, buffer.data(), buffer.length());
+		if (count_bytes == 0) {
+			break; // EOF
+		}
+		else if (count_bytes < 0) {
+			m_LastErrorMessage = "Error while reading remote file.";
+			sftp_close(file);
+			sftp_free(sftp);
+			ssh_disconnect(session);
+			ssh_free(session);
+			localFile.close();
+			return false;
+		}
+
+		count_written = localFile.write(buffer, count_bytes);
+
+		if (count_written != count_bytes) {
+			m_LastErrorMessage = "Error writing to " + fullDataFilepath + ".";
+			sftp_close(file);
+			sftp_free(sftp);
+			ssh_disconnect(session);
+			ssh_free(session);
+			localFile.close();
+			return false;
+		}
+	}
+
+	sftp_close(file);
+	sftp_free(sftp);
+	ssh_disconnect(session);
+	ssh_free(session);
+	localFile.close();
 
 	return true;
 }

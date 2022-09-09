@@ -159,9 +159,6 @@ bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
 
 void Wilhelmina::PostActivate()
 {
-    //TODO: If ssh flag is set, read parameters from Qsettings and download the encrypted file from the server
-    //and put it into the data path. Then continue. This should probably be void syncSSH();
-
     if (!QDir(m_DataPath).exists()) {
         if (!QDir().mkpath(m_DataPath)) {
             QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
@@ -174,25 +171,15 @@ void Wilhelmina::PostActivate()
 
     if (Settings.value("SSHenabled").toBool()) {
         SSHsync sync(&Settings, this);
-        if (!sync.fromRemote(fullDataPath))
-            QMessageBox::critical(this, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
-    }
+        QApplication::setOverrideCursor(Qt::WaitCursor);
 
-   /* if (!QDir(m_DataPath).exists()) {
-        MasterPasswordDialog dlg(true, false, this);
-        if (dlg.exec() == QDialog::Accepted) {
-            m_MasterPassword = dlg.GetPassphrase();
-            if (!QDir().mkpath(m_DataPath)) {
-                QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
-                                      QMessageBox::Ok);
-                QApplication::quit();
-            }
+        if (!sync.fromRemote(fullDataPath)) {
+            QApplication::restoreOverrideCursor(); //Stupid, but we want the wait cursor to go away even if there's an error.
+            QMessageBox::critical(this, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
         }
-        else {
-            QApplication::quit();
-        }
+        
+        QApplication::restoreOverrideCursor();
     }
-    else {*/
 
     //We have our data path, do we have any encrypted data?
     if (QFile::exists(fullDataPath)) {

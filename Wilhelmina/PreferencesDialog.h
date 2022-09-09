@@ -35,11 +35,15 @@ public:
 private:
 	Ui::PreferencesDialog ui;
 	QSettings* m_Settings;
+	void checkFieldStatuses();
 
 protected:
 	void accept() override;
 
 public slots:
+	void sshUserFieldChanged();
+	void sshServerFieldChanged();
 	void selectDataPath();
+	void sshGroupBoxToggled();
 };
 

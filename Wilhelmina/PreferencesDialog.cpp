@@ -39,6 +39,10 @@ PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDi
 	ui.spinBoxPasswordLength->setValue(m_Settings->value("PasswordLength", 26).toInt());
 
 	ui.groupBoxSSH->setChecked(m_Settings->value("SSHenabled", false).toBool());
+
+	if (ui.groupBoxSSH->isChecked())
+		ui.okButton->setEnabled(false);
+
 	ui.spinBoxSSHport->setValue(m_Settings->value("SSHport", 22).toInt());
 	ui.lineEditSSHserver->setText(m_Settings->value("SSHserver").toString());
 	ui.lineEditSSHuser->setText(m_Settings->value("SSHuser").toString());
@@ -84,4 +88,27 @@ QString PreferencesDialog::dataFileLocation() {
 
 int PreferencesDialog::intervalInMilliseconds() {
 	return ui.spinBox_LockInterval->value() * 60000;
+}
+
+void PreferencesDialog::checkFieldStatuses() {
+	if (ui.lineEditSSHserver->text().length() == 0 || ui.lineEditSSHuser->text().length() == 0) {
+		ui.okButton->setEnabled(false);
+	}
+	else
+		ui.okButton->setEnabled(true);
+}
+
+void PreferencesDialog::sshGroupBoxToggled() {
+	if (!ui.groupBoxSSH->isChecked())
+		ui.okButton->setEnabled(true);
+	else
+		checkFieldStatuses();
+}
+
+void PreferencesDialog::sshUserFieldChanged() {
+	checkFieldStatuses();
+}
+
+void PreferencesDialog::sshServerFieldChanged() {
+	checkFieldStatuses();
 }

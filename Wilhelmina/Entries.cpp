@@ -21,6 +21,8 @@
 #include "Crypto.h"
 #include <qfile.h>
 #include <qdatastream.h>
+#include <qmessagebox.h>
+#include "SSHsync.h"
 
 Entries::Entries() {
 	m_encryptedBlobFile = "entries.wil";
@@ -46,7 +48,7 @@ void Entries::AddEntry(QString &title, QString &user, QString &password, QString
 	m_EntryArray.push_back(jObj);
 }
 
-bool Entries::Encrypt(QString &master_passphrase, QString &dataPath, bool dataClearing) {
+bool Entries::Encrypt(QMainWindow* parentWindow, QSettings *settings, QString &master_passphrase, QString &dataPath, bool dataClearing) {
 
 	Crypto crypto;
 	Key key;
@@ -81,7 +83,9 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath, bool dataCl
 				m_EntryArray = QJsonArray();
 			}
 
-			QFile file(dataPath + m_encryptedBlobFile);
+			QString fullDataPath = dataPath + m_encryptedBlobFile;
+
+			QFile file(fullDataPath);
 			if (file.open(QFile::WriteOnly | QFile::Truncate)) {
 				file.write(iv.constData(), crypto.ivSize());
 				file.write(reinterpret_cast<const char*>(key.salt), crypto.saltSize());
@@ -89,7 +93,11 @@ bool Entries::Encrypt(QString &master_passphrase, QString &dataPath, bool dataCl
 				file.write((const char*)(cipher), ret);
 				file.close();
 
-				//TODO: If ssh flag is set upload to sftp server (read parameters from QSettings)
+				if (settings->value("SSHenabled").toBool()) {
+					SSHsync sync(settings, parentWindow);
+					if (!sync.toRemote(fullDataPath))
+						QMessageBox::critical(parentWindow, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
+				}
 			}
 			else {
 				return false;

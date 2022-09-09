@@ -38,6 +38,11 @@ PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDi
 	ui.spinBox_LockInterval->setValue(m_Settings->value("LockInterval", 5).toInt());
 	ui.spinBoxPasswordLength->setValue(m_Settings->value("PasswordLength", 26).toInt());
 
+	ui.groupBoxSSH->setChecked(m_Settings->value("SSHenabled", false).toBool());
+	ui.spinBoxSSHport->setValue(m_Settings->value("SSHport", 22).toInt());
+	ui.lineEditSSHserver->setText(m_Settings->value("SSHserver").toString());
+	ui.lineEditSSHuser->setText(m_Settings->value("SSHuser").toString());
+
 	this->setFixedSize(this->size());
 }
 
@@ -55,6 +60,11 @@ void PreferencesDialog::accept() {
 	m_Settings->setValue("LockInterval", ui.spinBox_LockInterval->value());
 	m_Settings->setValue("PasswordLength", ui.spinBoxPasswordLength->value());
 
+	m_Settings->setValue("SSHuser", ui.lineEditSSHuser->text());
+	m_Settings->setValue("SSHport", ui.spinBoxSSHport->value());
+	m_Settings->setValue("SSHserver", ui.lineEditSSHserver->text());
+	m_Settings->setValue("SSHenabled", ui.groupBoxSSH->isChecked());
+	
 	QDialog::accept();
 }
 

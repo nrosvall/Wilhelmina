@@ -27,11 +27,12 @@ class SSHsync
 {
 public:
 	SSHsync(QSettings* settings, QMainWindow* parentWindow);
-	bool toRemote();
+	bool toRemote(QString& FullDataFilepath);
 	bool fromRemote();
 	QString lastErrorMessage();
 private:
 	QString m_LastErrorMessage;
+	ssh_session initSession();
 	bool verifySession(ssh_session session);
 	QMainWindow* m_parentWindow;
 

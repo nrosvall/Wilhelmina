@@ -22,6 +22,8 @@
 #include <qjsondocument.h>
 #include <qjsonobject.h>
 #include <qjsonarray.h>
+#include <qsettings.h>
+#include <qmainwindow.h>
 
 class Entries
 {
@@ -33,7 +35,7 @@ private:
 
 public:
 	void AddEntry(QString& title, QString& user, QString& password, QString& url, QString& notes, QString& ID);
-	bool Encrypt(QString &master_passphrase, QString& dataPath, bool dataClearing);
+	bool Encrypt(QMainWindow* parentWindow, QSettings* settings, QString &master_passphrase, QString& dataPath, bool dataClearing);
 	bool Decrypt(QString &master_passphrase, QString& dataPath);
 	QJsonObject GetJObject(QString ID);
 	QString encryptedBlobFile();

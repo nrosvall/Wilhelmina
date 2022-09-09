@@ -17,13 +17,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "SSHsync.h"
 #include <libssh/sftp.h>
 #include <qmessagebox.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <qfile.h>
+#include <qbytearray.h>
 
-SSHsync::SSHsync(QSettings* settings, QMainWindow *parentWindow) {
+SSHsync::SSHsync(QSettings* settings, QMainWindow* parentWindow) {
 	m_Settings = settings;
-    m_parentWindow = parentWindow;
+	m_parentWindow = parentWindow;
 }
 
 QString SSHsync::lastErrorMessage() {
@@ -32,89 +37,85 @@ QString SSHsync::lastErrorMessage() {
 
 bool SSHsync::verifySession(ssh_session session) {
 
-    int state, hlen;
-    unsigned char* hash = NULL;
-    char* hexa;
-    state = ssh_is_server_known(session);
-    hlen = ssh_get_pubkey_hash(session, &hash);
-    
-    if(hlen < 0)
-        return false;
+	int state, hlen;
+	unsigned char* hash = NULL;
+	char* hexa;
+	state = ssh_is_server_known(session);
+	hlen = ssh_get_pubkey_hash(session, &hash);
 
-    switch (state) {
-    case SSH_SERVER_KNOWN_OK:
-        break; //Everything OK
+	if (hlen < 0)
+		return false;
 
-    case SSH_SERVER_KNOWN_CHANGED:
-        m_LastErrorMessage = "Host key for server changed. For security reasons,\n connection will be stopped.";
-        free(hash);
-        return false;
+	switch (state) {
+	case SSH_SERVER_KNOWN_OK:
+		break; //Everything OK
 
-    case SSH_SERVER_FOUND_OTHER:
-        m_LastErrorMessage = "The host key for this server was not found but an other"
-            "type of key exists.\n An attacker might change the default server key to "
-            "confuse your client into thinking the key does not exist. Aborting.";
-        free(hash);
-        return false;
+	case SSH_SERVER_KNOWN_CHANGED:
+		m_LastErrorMessage = "Host key for server changed. For security reasons,\n connection will be stopped.";
+		free(hash);
+		return false;
 
-    case SSH_SERVER_FILE_NOT_FOUND:
-        //fall to SSH_SERVER_NOT_KNOWN behavior
-        [[fallthrough]];
+	case SSH_SERVER_FOUND_OTHER:
+		m_LastErrorMessage = "The host key for this server was not found but an other"
+			"type of key exists.\n An attacker might change the default server key to "
+			"confuse your client into thinking the key does not exist. Aborting.";
+		free(hash);
+		return false;
 
-    case SSH_SERVER_NOT_KNOWN: {
-        hexa = ssh_get_hexa(hash, hlen);
-        QString hex(hexa);
-        free(hexa);
+	case SSH_SERVER_FILE_NOT_FOUND:
+		//fall to SSH_SERVER_NOT_KNOWN behavior
+		[[fallthrough]];
 
-        QMessageBox msgBox(m_parentWindow);
-        msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText("The server is unknown. Do you trust the host key?");
-        msgBox.setInformativeText("Public key hash: " + hex);
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Yes);
+	case SSH_SERVER_NOT_KNOWN: {
+		hexa = ssh_get_hexa(hash, hlen);
+		QString hex(hexa);
+		free(hexa);
 
-        int ret = msgBox.exec();
+		QMessageBox msgBox(m_parentWindow);
+		msgBox.setIcon(QMessageBox::Question);
+		msgBox.setText("The server is unknown. Do you trust the host key?");
+		msgBox.setInformativeText("Public key hash: " + hex);
+		msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+		msgBox.setDefaultButton(QMessageBox::Yes);
 
-        if (ret == QMessageBox::Yes) {
-            if (ssh_write_knownhost(session) < 0) {
-                QString err(strerror(errno));
-                m_LastErrorMessage = err;
-                free(hash);
-                return false;
-            }
-        }
-    }
-        break;
+		int ret = msgBox.exec();
 
-    case SSH_SERVER_ERROR:
-        QString err(ssh_get_error(session));
-        m_LastErrorMessage = err;
-        free(hash);
-        return false;
-    }
+		if (ret == QMessageBox::Yes) {
+			if (ssh_write_knownhost(session) < 0) {
+				QString err(strerror(errno));
+				m_LastErrorMessage = err;
+				free(hash);
+				return false;
+			}
+		}
+	}
+							 break;
 
-    free(hash);
+	case SSH_SERVER_ERROR:
+		QString err(ssh_get_error(session));
+		m_LastErrorMessage = err;
+		free(hash);
+		return false;
+	}
+
+	free(hash);
 
 	return true;
 }
 
-bool SSHsync::toRemote() {
-	
-	sftp_session sftp;
+ssh_session SSHsync::initSession() {
+
 	ssh_session session;
-	ssh_key pubkey = NULL;
-	ssh_channel channel;
 
 	session = ssh_new();
 
 	if (!session)
-		return false;
+		return nullptr;
 
-	int port = 22; //TODO: get from settings;
+	int port = m_Settings->value("SSHport").toInt();
 
-	ssh_options_set(session, SSH_OPTIONS_HOST, "localhost"); //TODO: get server from settings
+	ssh_options_set(session, SSH_OPTIONS_HOST, m_Settings->value("SSHserver").toString().toLocal8Bit());
 	ssh_options_set(session, SSH_OPTIONS_PORT, &port);
-	ssh_options_set(session, SSH_OPTIONS_USER, "root"); //TODO: get server from settings
 
 	int rc = 0;
 
@@ -124,17 +125,92 @@ bool SSHsync::toRemote() {
 		ssh_free(session);
 		QString err(ssh_get_error(session));
 		m_LastErrorMessage = "Connection failed: " + err;
-		return false;
+		return nullptr;
 	}
 
 	if (!verifySession(session)) {
 		ssh_disconnect(session);
 		ssh_free(session);
+		return nullptr;
+	}
+
+	rc = ssh_userauth_publickey_auto(session, m_Settings->value("SSHuser").toString().toLocal8Bit(), nullptr);
+
+	if (rc != SSH_AUTH_SUCCESS) {
+		QString err(ssh_get_error(session));
+		m_LastErrorMessage = "Authentication failed: " + err;
+		ssh_disconnect(session);
+		ssh_free(session);
+		return nullptr;
+	}
+
+	return session;
+}
+
+bool SSHsync::toRemote(QString& fullDataFilepath) {
+
+	sftp_session sftp;
+	ssh_session session = nullptr;
+
+	int access_type = O_WRONLY | O_CREAT | O_TRUNC;
+	sftp_file file;
+	int rc, count_written;
+
+	session = initSession();
+
+	if (session == nullptr)
+		return false;
+
+	sftp = sftp_new(session);
+	rc = sftp_init(sftp);
+
+	if (rc != SSH_OK) {
+		m_LastErrorMessage = "SFTP initialization failed.";
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
 		return false;
 	}
 
-	sftp = sftp_new(nullptr);
+	file = sftp_open(sftp, ".wilhelmina_sync",
+		access_type, 0644);
 
+	QFile dataFile(fullDataFilepath);
+
+	if (!dataFile.open(QFile::ReadOnly)) {
+		sftp_close(file);
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		m_LastErrorMessage = "Unable to open " + fullDataFilepath;
+		return false;
+	}
+
+	QByteArray data = dataFile.readAll();
+	dataFile.close();
+
+	count_written = sftp_write(file, data.constData(), data.length());
+
+	if (count_written != data.length()) {
+		m_LastErrorMessage = "Copying file to sftp server failed.";
+		sftp_close(file);
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		return false;
+	}
+
+	rc = sftp_close(file);
+
+	if (rc != SSH_OK) {
+		m_LastErrorMessage = "Unable to close remote file.";
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		return false;
+	}
+
+	sftp_free(sftp);
 	ssh_disconnect(session);
 	ssh_free(session);
 

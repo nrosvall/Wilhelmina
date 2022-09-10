@@ -256,7 +256,7 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 		sftp_free(sftp);
 		ssh_disconnect(session);
 		ssh_free(session);
-		m_LastErrorMessage = "Unable to open remote file: .wilhelmina_sync";
+		m_LastErrorMessage = "Unable to open remote file: " + remoteFilename;
 		return false;
 	}
 

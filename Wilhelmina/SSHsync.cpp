@@ -171,7 +171,7 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 	}
 
 	file = sftp_open(sftp, ".wilhelmina_sync", //TODO: the fullpath should somehow differentiate with the local path. Otherwise we will always overwrite (on restore) the local path
-//user might want to have multiple data sets...maybe: . + folder + .wilhelmina_sync?
+//user might want to have multiple data sets...maybe: . + folder + .wilhelmina_sync? Do the same for toRemote()
 		access_type, 0644);
 
 	QFile dataFile(fullDataFilepath);

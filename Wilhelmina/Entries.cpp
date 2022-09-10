@@ -22,6 +22,7 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <qmessagebox.h>
+#include <quuid.h>
 #include "SSHsync.h"
 
 Entries::Entries() {
@@ -147,9 +148,23 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 	return ret > 0;
 }
 
-void Entries::setDocument(QJsonDocument& doc) {
+//Create a copy of the array and insert missing ID values, replace original array with the copy
+void Entries::setDocumentFromImportData(QJsonDocument& doc) {
 	m_EntriesDoc = doc;
 	m_EntryArray = m_EntriesDoc.array();
+	QJsonArray tmpArr;
+	QJsonObject newObj;
+
+	for (auto obj : m_EntryArray) {
+		newObj = obj.toObject();
+		if(obj.toObject().value("ID").isUndefined()) {
+			QString ID = QUuid::createUuid().toString();
+			newObj.insert("ID", ID);
+		}
+		tmpArr.push_back(newObj);
+	}
+	
+	m_EntryArray = tmpArr;
 }
 
 QJsonObject Entries::GetJObject(QString ID) {

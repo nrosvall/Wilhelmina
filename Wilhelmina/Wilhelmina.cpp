@@ -49,7 +49,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
     
     m_statusLabel = new QLabel();
-    m_statusLabel->setText(m_DataPath);
+    this->setWindowTitle("Wilhelmina - " + m_DataPath);
     ui.statusBar->addPermanentWidget(m_statusLabel);
 
     ui.listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -275,6 +275,8 @@ void Wilhelmina::AddEntryToView(QString title, QString ID) {
 
     if (!ui.actionEncrypt->isEnabled())
         ui.actionEncrypt->setEnabled(true);
+
+    m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
 }
 
 void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes) {
@@ -316,6 +318,7 @@ void Wilhelmina::deleteSelectedItem() {
     delete item;
 
     encryptCurrentData();
+    m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
 }
 
 void Wilhelmina::listItemSelectionChanged() {
@@ -380,7 +383,7 @@ void Wilhelmina::showPreferences() {
             }
 
             m_DataPath = dlg.dataFileLocation();
-            m_statusLabel->setText(m_DataPath);
+            this->setWindowTitle("Wilhelmina - " + m_DataPath);
 
             if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
                 if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
@@ -507,7 +510,7 @@ void Wilhelmina::importEntries() {
 
                 ui.listWidget->clear();
                 QJsonDocument doc = QJsonDocument::fromJson(json);
-                m_Entries.setDocument(doc);
+                m_Entries.setDocumentFromImportData(doc);
                 populateViewFromEntries();
             }
         }

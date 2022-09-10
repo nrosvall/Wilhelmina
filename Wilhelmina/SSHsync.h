@@ -35,6 +35,7 @@ private:
 	ssh_session initSession();
 	bool verifySession(ssh_session session);
 	QMainWindow* m_parentWindow;
+	QString makeUniqueRemoteFilename(QString& fullDataFilePath);
 
 private:
 	QSettings* m_Settings;

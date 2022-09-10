@@ -25,6 +25,8 @@
 #include <sys/stat.h>
 #include <qfile.h>
 #include <qbytearray.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 SSHsync::SSHsync(QSettings* settings, QMainWindow* parentWindow) {
 	m_Settings = settings;
@@ -145,6 +147,13 @@ ssh_session SSHsync::initSession() {
 	return session;
 }
 
+QString SSHsync::makeUniqueRemoteFilename(QString& fullDataFilePath) {
+	QFileInfo fInfo(fullDataFilePath);
+	QString identifier = fInfo.dir().dirName();
+
+	return "." + identifier + "_wilhelmina.sync";
+}
+
 bool SSHsync::toRemote(QString& fullDataFilepath) {
 
 	sftp_session sftp;
@@ -170,9 +179,8 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 		return false;
 	}
 
-	file = sftp_open(sftp, ".wilhelmina_sync", //TODO: the fullpath should somehow differentiate with the local path. Otherwise we will always overwrite (on restore) the local path
-//user might want to have multiple data sets...maybe: . + folder + .wilhelmina_sync? Do the same for toRemote()
-		access_type, 0644);
+	QString remoteFilename = makeUniqueRemoteFilename(fullDataFilepath);
+	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0644);
 
 	QFile dataFile(fullDataFilepath);
 
@@ -241,8 +249,8 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 		return false;
 	}
 
-	file = sftp_open(sftp, ".wilhelmina_sync",
-		access_type, 0);
+	QString remoteFilename = makeUniqueRemoteFilename(fullDataFilepath);
+	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0);
 
 	if (file == nullptr) {
 		sftp_free(sftp);

@@ -312,13 +312,27 @@ void Wilhelmina::addNewEntry() {
 }
 
 void Wilhelmina::deleteSelectedItem() {
-    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
-    m_Entries.deleteItem(item->getID());
-    ui.listWidget->takeItem(ui.listWidget->currentRow());
-    delete item;
 
-    encryptCurrentData();
-    m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Question);
+   
+    CustomListWidgetItem* item = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
+
+    msgBox.setText("This will delete \"" + item->text() + "\".");
+    msgBox.setInformativeText("Do you want to continue?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+
+    int ret = msgBox.exec();
+
+    if (ret == QMessageBox::Yes) {
+        m_Entries.deleteItem(item->getID());
+        ui.listWidget->takeItem(ui.listWidget->currentRow());
+        delete item;
+
+        encryptCurrentData();
+        m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
+    }
 }
 
 void Wilhelmina::listItemSelectionChanged() {

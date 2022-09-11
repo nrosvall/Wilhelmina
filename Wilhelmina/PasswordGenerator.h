@@ -20,11 +20,14 @@
 #pragma once
 
 #include <qstring.h>
+#include <qwidget.h>
 
 class PasswordGenerator
 {
 private:
 	unsigned int randBetween(unsigned int min, unsigned int max);
+	QWidget* m_Parent;
 public:
 	QString generatePassword(unsigned int len);
+	PasswordGenerator(QWidget *parentWindow);
 };

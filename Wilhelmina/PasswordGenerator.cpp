@@ -19,6 +19,11 @@
 
 #include "PasswordGenerator.h"
 #include <openssl/rand.h>
+#include <qmessagebox.h>
+
+PasswordGenerator::PasswordGenerator(QWidget* parentWindow) {
+    this->m_Parent = parentWindow;
+}
 
 unsigned int PasswordGenerator::randBetween(unsigned int min, unsigned int max) {
     uint32_t r;
@@ -34,7 +39,7 @@ unsigned int PasswordGenerator::randBetween(unsigned int min, unsigned int max) 
     {
         if (RAND_bytes((unsigned char*)&r, sizeof r) == 0)
         {
-            //TODO: Handle this, simply a messagebox? 0 means failure, we should probably inform user and return max
+            QMessageBox::critical(m_Parent, "Wilhelmina", "Failure generating random bytes. Abort.", QMessageBox::Ok);
             return max;
         }
 

@@ -28,7 +28,6 @@ AddNewEntry::AddNewEntry(QString title, bool isEdit,
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-
 	m_Settings = settings;
 
 	//Hide the dialog icon
@@ -58,7 +57,7 @@ AddNewEntry::~AddNewEntry()
 
 void AddNewEntry::GenerateNewPassword() {
 	QApplication::setOverrideCursor(Qt::WaitCursor);
-	PasswordGenerator generator;
+	PasswordGenerator generator(this);
 	ui.lineEdit_Password->setText(generator.generatePassword(m_Settings->value("PasswordLength", 26).toInt()));
 	QApplication::restoreOverrideCursor();
 }

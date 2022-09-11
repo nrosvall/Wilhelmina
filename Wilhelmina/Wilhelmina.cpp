@@ -98,7 +98,9 @@ void Wilhelmina::exitWilhelmina() {
 
 void Wilhelmina::encryptOnWindowStateEvent() {
     if (!m_IsEncrypted) {
-        if (m_Entries.Encrypt(this, &Settings, m_MasterPassword, m_DataPath, true)) {
+        if(Settings.value("SSHenabled").toBool())
+            
+        if (m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             m_MasterPassword.clear();
             ui.listWidget->clear();
             m_IsEncrypted = true;
@@ -108,6 +110,7 @@ void Wilhelmina::encryptOnWindowStateEvent() {
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                                   QMessageBox::Ok);
         }
+        ui.statusBar->showMessage("Ready");
     }
 }
 
@@ -172,12 +175,12 @@ void Wilhelmina::PostActivate()
     if (Settings.value("SSHenabled").toBool()) {
         SSHsync sync(&Settings, this);
         QApplication::setOverrideCursor(Qt::WaitCursor);
-
+        ui.statusBar->showMessage("Please wait...Syncing...");
         if (!sync.fromRemote(fullDataPath)) {
             QApplication::restoreOverrideCursor(); //Stupid, but we want the wait cursor to go away even if there's an error.
             QMessageBox::critical(this, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
         }
-        
+        ui.statusBar->showMessage("Sync Ready");
         QApplication::restoreOverrideCursor();
     }
 
@@ -207,7 +210,8 @@ void Wilhelmina::PostActivate()
         else
             QApplication::quit();
     }
-    //}
+    
+    ui.statusBar->showMessage("Ready");
 }
 
 void Wilhelmina::listItemClicked(QListWidgetItem* item) {
@@ -293,7 +297,7 @@ void Wilhelmina::encryptCurrentData() {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (!m_IsEncrypted) {
-        if (!m_Entries.Encrypt(this, &Settings, m_MasterPassword, m_DataPath, false)) {
+        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, false)) {
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                 QMessageBox::Ok);
@@ -384,7 +388,7 @@ void Wilhelmina::showPreferences() {
         //Check if we changed the datapath and encrypt all existing data to the old path.
         if (m_DataPath != dlg.dataFileLocation()) {
             if (!m_IsEncrypted) {
-                if (!m_Entries.Encrypt(this, &Settings, m_MasterPassword, m_DataPath, true)) {
+                if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
                     QMessageBox::critical(this, "Wilhelmina",
                         "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                         QMessageBox::Ok);

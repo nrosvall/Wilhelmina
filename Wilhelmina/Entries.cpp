@@ -49,7 +49,7 @@ void Entries::AddEntry(QString &title, QString &user, QString &password, QString
 	m_EntryArray.push_back(jObj);
 }
 
-bool Entries::Encrypt(QMainWindow* parentWindow, QSettings *settings, QString &master_passphrase, QString &dataPath, bool dataClearing) {
+bool Entries::Encrypt(QMainWindow* parentWindow, QStatusBar *statusBar, QSettings *settings, QString &master_passphrase, QString &dataPath, bool dataClearing) {
 
 	Crypto crypto;
 	Key key;
@@ -95,9 +95,11 @@ bool Entries::Encrypt(QMainWindow* parentWindow, QSettings *settings, QString &m
 				file.close();
 
 				if (settings->value("SSHenabled").toBool()) {
+					statusBar->showMessage("Please wait...Syncing...");
 					SSHsync sync(settings, parentWindow);
 					if (!sync.toRemote(fullDataPath))
 						QMessageBox::critical(parentWindow, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
+					statusBar->showMessage("Sync Ready");
 				}
 			}
 			else {

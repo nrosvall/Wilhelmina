@@ -39,6 +39,7 @@
 #include "SSHsync.h"
 #include <QMultiMap>
 #include "DuplicateDialog.h"
+#include "AboutDialog.h"
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -546,9 +547,7 @@ void Wilhelmina::findDuplicates() {
     QJsonObject entryNext;
 
     for (int i = 0; i < m_Entries.entryArray().count() - 1; i++) {
-        
         for (int j = i + 1; j < m_Entries.entryArray().count(); j++) {
-
             entry = m_Entries.entryArray()[i].toObject();
             entryNext = m_Entries.entryArray()[j].toObject();
 
@@ -556,7 +555,6 @@ void Wilhelmina::findDuplicates() {
                 dups.insert(entry.value("title").toString(), entryNext.value("title").toString());
             }
         }
-
     }
 
     QApplication::restoreOverrideCursor();
@@ -568,4 +566,9 @@ void Wilhelmina::findDuplicates() {
     else {
         QMessageBox::information(this, "Wilhelmina", "No duplicate passwords found.", QMessageBox::Ok);
     }
+}
+
+void Wilhelmina::showAbout() {
+    AboutDialog dlg(this);
+    dlg.exec();
 }

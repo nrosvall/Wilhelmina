@@ -93,11 +93,13 @@
   <ItemGroup>
     <QtRcc Include="Wilhelmina.qrc" />
     <QtUic Include="AddNewEntry.ui" />
+    <QtUic Include="DialogAbout.ui" />
     <QtUic Include="DuplicatesDialog.ui" />
     <QtUic Include="MasterPasswordDialog.ui" />
     <QtUic Include="Preferences.ui" />
     <QtUic Include="Wilhelmina.ui" />
     <QtMoc Include="Wilhelmina.h" />
+    <ClCompile Include="AboutDialog.cpp" />
     <ClCompile Include="AddNewEntry.cpp" />
     <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="CustomListWidgetItem.cpp" />
@@ -115,6 +117,7 @@
     <QtMoc Include="AddNewEntry.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AboutDialog.h" />
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <QtMoc Include="DuplicateDialog.h" />

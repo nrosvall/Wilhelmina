@@ -80,4 +80,5 @@ public slots:
     void exportEntries();
     void importEntries();
     void findDuplicates();
+    void showAbout();
 };

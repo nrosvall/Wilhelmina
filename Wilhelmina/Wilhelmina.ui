@@ -120,6 +120,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
@@ -336,6 +337,17 @@
    </property>
    <property name="toolTip">
     <string>Find duplicate passwords</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About...</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -587,6 +599,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>showAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -606,5 +634,6 @@
   <slot>importEntries()</slot>
   <slot>printEntries()</slot>
   <slot>findDuplicates()</slot>
+  <slot>showAbout()</slot>
  </slots>
 </ui>

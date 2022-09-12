@@ -105,6 +105,8 @@
     <addaction name="actionCopyUsername"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_in_Browser"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind_Duplicates"/>
    </widget>
    <widget class="QMenu" name="menuProtection">
     <property name="title">
@@ -114,9 +116,15 @@
     <addaction name="separator"/>
     <addaction name="actionChange_Master_Passphrase"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
    <addaction name="menuProtection"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
@@ -245,15 +253,24 @@
    <property name="text">
     <string>Preferences...</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionExport">
    <property name="text">
     <string>Export As Json...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionOpen_in_Browser">
@@ -263,10 +280,16 @@
    <property name="shortcut">
     <string>Ctrl+B</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionChange_Master_Passphrase">
    <property name="text">
     <string>Change Master Passphrase...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionEdit">
@@ -302,6 +325,20 @@
   <action name="actionImport">
    <property name="text">
     <string>Import From Json...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionFind_Duplicates">
+   <property name="text">
+    <string>Find Duplicates...</string>
+   </property>
+   <property name="toolTip">
+    <string>Find duplicate passwords</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>
@@ -534,6 +571,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFind_Duplicates</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>findDuplicates()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -552,5 +605,6 @@
   <slot>exportEntries()</slot>
   <slot>importEntries()</slot>
   <slot>printEntries()</slot>
+  <slot>findDuplicates()</slot>
  </slots>
 </ui>

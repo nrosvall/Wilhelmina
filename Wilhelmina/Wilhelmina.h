@@ -79,4 +79,5 @@ public slots:
     void searchChanged();
     void exportEntries();
     void importEntries();
+    void findDuplicates();
 };

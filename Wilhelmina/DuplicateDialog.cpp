@@ -30,12 +30,13 @@ DuplicateDialog::DuplicateDialog(QWidget* parent, QMultiMap<QString, QString>& d
 
 	this->setFixedSize(this->size());
 
-	QMultiMap<QString, QString>::iterator i;
+	ui.labelInfo->setText("Found " + QString::number(dups.count()) + " duplicates");
 
-	for (i = dups.begin(); i != dups.end(); i++) {
-		//ui.plainTextEditDuplicates->moveCursor(QTextCursor::End);
-		//ui.plainTextEditDuplicates->insertPlainText(i.key() + ": " + i.value());
-		qDebug() << i.key() + " has same password as " + i.value();
-	}
+	QMultiMap<QString, QString>::iterator i;
+	QString viewText;
+
+	for (i = dups.begin(); i != dups.end(); i++)
+		viewText.append(i.key() + " has the same password as " + i.value() + "\n");
 	
+	ui.plainTextEditDuplicates->setPlainText(viewText.trimmed());
 }

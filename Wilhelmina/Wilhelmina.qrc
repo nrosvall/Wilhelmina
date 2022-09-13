@@ -17,5 +17,6 @@
         <file>icons/edit@2x.png</file>
         <file>icons/clone.png</file>
         <file>icons/clone@2x.png</file>
+        <file>icons/wilhelmina@2x.png</file>
     </qresource>
 </RCC>

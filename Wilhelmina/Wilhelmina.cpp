@@ -100,9 +100,7 @@ void Wilhelmina::exitWilhelmina() {
 }
 
 void Wilhelmina::encryptOnWindowStateEvent() {
-    if (!m_IsEncrypted) {
-        if(Settings.value("SSHenabled").toBool())
-            
+    if (!m_IsEncrypted) {            
         if (m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             m_MasterPassword.clear();
             ui.listWidget->clear();

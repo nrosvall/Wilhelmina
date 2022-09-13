@@ -273,7 +273,6 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 
 	int count_bytes, count_written;
 	QByteArray buffer(16384, 'b');
-	//char *buffer = new char[16384];
 
 	for (;;) {
 		count_bytes = sftp_read(file, buffer.data(), buffer.length());

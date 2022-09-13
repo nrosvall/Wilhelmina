@@ -60,6 +60,9 @@
         <property name="focusPolicy">
          <enum>Qt::ClickFocus</enum>
         </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
        </widget>
       </item>
      </layout>
@@ -121,6 +124,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionHomepage"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEntries"/>
@@ -351,6 +355,11 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionHomepage">
+   <property name="text">
+    <string>Homepage...</string>
    </property>
   </action>
  </widget>
@@ -615,6 +624,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionHomepage</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>openHomepage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -635,5 +660,6 @@
   <slot>printEntries()</slot>
   <slot>findDuplicates()</slot>
   <slot>showAbout()</slot>
+  <slot>openHomepage()</slot>
  </slots>
 </ui>

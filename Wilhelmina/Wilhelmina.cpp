@@ -570,3 +570,7 @@ void Wilhelmina::showAbout() {
     AboutDialog dlg(this);
     dlg.exec();
 }
+
+void Wilhelmina::openHomepage() {
+    QDesktopServices::openUrl(QUrl("https://www.byteptr.com/wilhelmina/"));
+}

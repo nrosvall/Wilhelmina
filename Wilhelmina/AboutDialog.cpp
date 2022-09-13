@@ -28,6 +28,6 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
 	setWindowFlag(Qt::WindowSystemMenuHint, false);
 
 	this->setFixedSize(this->size());
-
-	ui.labelVersion->setText(ui.labelVersion->text() + " " + QCoreApplication::applicationVersion());
+	ui.label->setText("Copyright @ Niko Rosvall");
+	ui.labelVersion->setText(ui.labelVersion->text() + " Version " + QCoreApplication::applicationVersion());
 }

@@ -58,10 +58,16 @@
     <IncludePath>C:\Program Files\OpenSSL-Win64\include;C:\src\vcpkg\packages\libssh_x64-windows\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <IncludePath>C:\Program Files\OpenSSL-Win64\include;C:\src\vcpkg\packages\libssh_x64-windows\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\debug\lib\ssh.lib"</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\lib\ssh.lib"</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

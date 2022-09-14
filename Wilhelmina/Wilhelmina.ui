@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
+    <width>553</width>
     <height>400</height>
    </rect>
   </property>
@@ -74,7 +74,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>602</width>
+     <width>553</width>
      <height>22</height>
     </rect>
    </property>
@@ -126,7 +126,13 @@
     <addaction name="actionAbout"/>
     <addaction name="actionHomepage"/>
    </widget>
+   <widget class="QMenu" name="menuProfiles">
+    <property name="title">
+     <string>Profiles</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuProfiles"/>
    <addaction name="menuEntries"/>
    <addaction name="menuProtection"/>
    <addaction name="menuHelp"/>
@@ -360,6 +366,11 @@
   <action name="actionHomepage">
    <property name="text">
     <string>Homepage...</string>
+   </property>
+  </action>
+  <action name="actionProfiles">
+   <property name="text">
+    <string>Profiles</string>
    </property>
   </action>
  </widget>

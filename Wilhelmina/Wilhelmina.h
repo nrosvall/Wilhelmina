@@ -26,6 +26,7 @@
 #include <qsettings.h>
 #include "IdleFilter.h"
 #include <qlabel.h>
+#include <qmenu.h>
 
 class Wilhelmina : public QMainWindow
 {
@@ -36,6 +37,7 @@ public:
     ~Wilhelmina();
     QSettings Settings;
     void setIdleFilter(IdleFilter* filter);
+    void populateProfileMenu();
 
 protected:
     void showEvent(QShowEvent* ev);
@@ -58,6 +60,7 @@ private:
     IdleFilter* m_IdleFilter;
     QLabel* m_statusLabel;
     void encryptCurrentData();
+    void applyNewProfile(QString profilePath);
 
 public slots:
     void addNewEntry();
@@ -82,4 +85,5 @@ public slots:
     void findDuplicates();
     void showAbout();
     void openHomepage();
+    void changeProfile(QString profilePath);
 };

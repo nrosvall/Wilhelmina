@@ -28,14 +28,17 @@ class PreferencesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	PreferencesDialog(QSettings *settings, QWidget* parent = nullptr);
+	PreferencesDialog(QSettings *settings, QWidget* parent);
 	QString dataFileLocation();
 	int intervalInMilliseconds();
+	bool profilesAdded();
 
 private:
 	Ui::PreferencesDialog ui;
 	QSettings* m_Settings;
 	void checkFieldStatuses();
+	QWidget* m_Parent;
+	bool m_profilesAdded;
 
 protected:
 	void accept() override;

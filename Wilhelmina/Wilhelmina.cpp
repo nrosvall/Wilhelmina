@@ -50,12 +50,19 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     this->restoreGeometry(Settings.value("geometry").toByteArray());
 
     m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
-    
+    if (!Settings.contains("Profiles")) {
+        QList<QString> profiles;
+        profiles.append(m_DataPath);
+        Settings.setValue("Profiles", QVariant::fromValue(profiles));
+    }
+
     m_statusLabel = new QLabel();
     this->setWindowTitle("Wilhelmina - " + m_DataPath);
     ui.statusBar->addPermanentWidget(m_statusLabel);
 
     ui.listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    populateProfileMenu();
 
     connect(ui.listWidget, &QListWidget::itemDoubleClicked, this, &Wilhelmina::listItemDoubleClicked);
     connect(ui.listWidget, &QListWidget::itemClicked, this, &Wilhelmina::listItemClicked);
@@ -75,6 +82,24 @@ Wilhelmina::Wilhelmina(QWidget *parent)
 Wilhelmina::~Wilhelmina()
 {
     delete m_statusLabel;
+    
+}
+
+void Wilhelmina::populateProfileMenu() {
+    ui.menuProfiles->clear();
+    QList<QString> profiles = Settings.value("Profiles").value<QList<QString>>();
+    for (auto item : profiles) {
+        if (QDir(item).exists()) {
+            QAction* action = ui.menuProfiles->addAction(item);
+            connect(action, &QAction::triggered, this, [=]() { changeProfile(item); });
+        }
+    }
+}
+
+void Wilhelmina::changeProfile(QString profilePath) {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    applyNewProfile(profilePath);
+    QApplication::restoreOverrideCursor();
 }
 
 void Wilhelmina::setIdleFilter(IdleFilter* filter) {
@@ -381,6 +406,39 @@ void Wilhelmina::openInBrowser() {
     }
 }
 
+void Wilhelmina::applyNewProfile(QString profilePath) {
+    if (!m_IsEncrypted) {
+        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
+            QMessageBox::critical(this, "Wilhelmina",
+                "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
+                QMessageBox::Ok);
+
+            return;
+        }
+        else {
+            ui.listWidget->clear();
+        }
+    }
+
+    m_DataPath = profilePath;
+    this->setWindowTitle("Wilhelmina - " + m_DataPath);
+
+    if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
+        if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+            m_IsEncrypted = false;
+            populateViewFromEntries();
+        }
+        else {
+            //It's possible to have wait cursor set when we land here, restore default cursor
+            //to make user experience nicer.
+            QApplication::restoreOverrideCursor();
+
+            m_MasterPassword.clear();
+            PostActivate();
+        }
+    }
+}
+
 void Wilhelmina::showPreferences() {
 
     PreferencesDialog dlg(&Settings, this);
@@ -388,38 +446,16 @@ void Wilhelmina::showPreferences() {
         
         //Check if we changed the datapath and encrypt all existing data to the old path.
         if (m_DataPath != dlg.dataFileLocation()) {
-            if (!m_IsEncrypted) {
-                if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
-                    QMessageBox::critical(this, "Wilhelmina",
-                        "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
-                        QMessageBox::Ok);
-
-                    return;
-                }
-                else {
-                    ui.listWidget->clear();
-                }
-            }
-
-            m_DataPath = dlg.dataFileLocation();
-            this->setWindowTitle("Wilhelmina - " + m_DataPath);
-
-            if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
-                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                    m_IsEncrypted = false;
-                    populateViewFromEntries();
-                }
-                else {
-                    m_MasterPassword.clear();
-                    PostActivate();
-                }
-            }
+            applyNewProfile(dlg.dataFileLocation());
         }
 
         //Update interval timer, check the interval value changed and restart timer with the new interval
         if (m_IdleFilter->Interval() != dlg.intervalInMilliseconds()) {
             m_IdleFilter->setInterval(dlg.intervalInMilliseconds());
         }
+
+        if (dlg.profilesAdded())
+            populateProfileMenu();
     }
 }
 
@@ -544,10 +580,10 @@ void Wilhelmina::findDuplicates() {
     QJsonObject entry;
     QJsonObject entryNext;
 
-    for (int i = 0; i < m_Entries.entryArray().count() - 1; i++) {
+    for (int i = 0; i < m_Entries.entryArray().count(); i++) {
         for (int j = i + 1; j < m_Entries.entryArray().count(); j++) {
             entry = m_Entries.entryArray()[i].toObject();
-            entryNext = m_Entries.entryArray()[j].toObject();
+            entryNext = m_Entries.entryArray()[j + 1].toObject();
 
             if ((i != j) && (entry.value("password").toString() == entryNext.value("password").toString()) ) {
                 dups.insert(entry.value("title").toString(), entryNext.value("title").toString());

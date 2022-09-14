@@ -20,6 +20,9 @@
 #include "Wilhelmina.h"
 #include <QtWidgets/QApplication>
 #include "IdleFilter.h"
+#include <QMetaType>
+
+Q_DECLARE_METATYPE(QList<QString>)
 
 int main(int argc, char *argv[])
 {

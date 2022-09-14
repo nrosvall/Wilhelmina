@@ -25,7 +25,9 @@
 PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDialog(parent) {
 	ui.setupUi(this);
 
+	m_Parent = parent;
 	m_Settings = settings;
+	m_profilesAdded = false;
 
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
@@ -50,6 +52,10 @@ PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDi
 	this->setFixedSize(this->size());
 }
 
+bool PreferencesDialog::profilesAdded() {
+	return m_profilesAdded;
+}
+
 void PreferencesDialog::accept() {
 
 	QString dataPath = ui.lineEditDataLocation->text();
@@ -58,6 +64,13 @@ void PreferencesDialog::accept() {
 			QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + dataPath + ".\n Abort.",
 				QMessageBox::Ok);
 		}
+	}
+
+	QList<QString> profiles = m_Settings->value("Profiles").value<QList<QString>>();
+	if (!profiles.contains(dataPath)) {
+		profiles.append(dataPath);
+		m_Settings->setValue("Profiles", QVariant::fromValue(profiles));
+		m_profilesAdded = true;
 	}
 
 	m_Settings->setValue("DatafileLocation", dataPath);

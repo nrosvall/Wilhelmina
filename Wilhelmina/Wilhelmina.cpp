@@ -144,13 +144,11 @@ void Wilhelmina::closeEvent(QCloseEvent* ev) {
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    //Want to encrypt? What if user kills the process? Should we check do we have a master passphrase?
-    //It should be enough to check the master password, if empty, skip encryption
     if(!m_MasterPassword.isEmpty())
         encryptOnWindowStateEvent();
     
     Settings.setValue("geometry", this->saveGeometry());
-
+    Settings.setValue("DatafileLocation", m_DataPath);
     QApplication::restoreOverrideCursor();
 
     QMainWindow::closeEvent(ev);

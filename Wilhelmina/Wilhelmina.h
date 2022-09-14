@@ -61,6 +61,7 @@ private:
     QLabel* m_statusLabel;
     void encryptCurrentData();
     void applyNewProfile(QString profilePath);
+    void addProfileAction(QString title);
 
 public slots:
     void addNewEntry();

@@ -147,7 +147,7 @@ ssh_session SSHsync::initSession() {
 	return session;
 }
 
-QString SSHsync::makeUniqueRemoteFilename(QString& fullDataFilePath) {
+QString SSHsync::getRemoteFilename(QString& fullDataFilePath) {
 	QFileInfo fInfo(fullDataFilePath);
 	QString identifier = fInfo.dir().dirName();
 
@@ -179,7 +179,7 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 		return false;
 	}
 
-	QString remoteFilename = makeUniqueRemoteFilename(fullDataFilepath);
+	QString remoteFilename = getRemoteFilename(fullDataFilepath);
 	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0644);
 
 	QFile dataFile(fullDataFilepath);
@@ -249,7 +249,7 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 		return false;
 	}
 
-	QString remoteFilename = makeUniqueRemoteFilename(fullDataFilepath);
+	QString remoteFilename = getRemoteFilename(fullDataFilepath);
 	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0);
 
 	if (file == nullptr) {

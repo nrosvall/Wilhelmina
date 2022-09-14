@@ -82,16 +82,26 @@ Wilhelmina::Wilhelmina(QWidget *parent)
 Wilhelmina::~Wilhelmina()
 {
     delete m_statusLabel;
-    
+}
+
+void Wilhelmina::addProfileAction(QString title) {
+    QAction* action = ui.menuProfiles->addAction(title);
+    connect(action, &QAction::triggered, this, [=]() { changeProfile(title); });
 }
 
 void Wilhelmina::populateProfileMenu() {
     ui.menuProfiles->clear();
     QList<QString> profiles = Settings.value("Profiles").value<QList<QString>>();
-    for (auto item : profiles) {
+    for (auto &item : profiles) {
         if (QDir(item).exists()) {
-            QAction* action = ui.menuProfiles->addAction(item);
-            connect(action, &QAction::triggered, this, [=]() { changeProfile(item); });
+            addProfileAction(item);
+        }
+        else {
+            //Situation where the last known data location was deleted from the file system.
+            if (item == m_DataPath) {
+                QDir().mkpath(item);
+                addProfileAction(item);
+            }
         }
     }
 }
@@ -322,6 +332,7 @@ void Wilhelmina::encryptCurrentData() {
 
     if (!m_IsEncrypted) {
         if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, false)) {
+            QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                 QMessageBox::Ok);
@@ -416,6 +427,14 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
         else {
             ui.listWidget->clear();
         }
+    }
+
+    if (!QDir(profilePath).exists()) {
+        if (!QDir().mkpath(profilePath))
+            QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + profilePath + ".\n Abort.",
+                QMessageBox::Ok);
+
+        return;
     }
 
     m_DataPath = profilePath;

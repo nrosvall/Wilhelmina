@@ -21,6 +21,8 @@
 #include <QtWidgets/QApplication>
 #include "IdleFilter.h"
 #include <QMetaType>
+#include "MyNativeEventFilter.h"
+
 
 Q_DECLARE_METATYPE(QList<QString>)
 
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
     w.setIdleFilter(idleFilter);
     a.installEventFilter(idleFilter);
     a.installEventFilter(&w);
-
+    a.installNativeEventFilter(new MyNativeEventFilter(w.cryptoState(), &w));
 
     QObject::connect(idleFilter, SIGNAL(userInactive()),
         &w, nullptr);

@@ -62,12 +62,12 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\debug\lib\ssh.lib"</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\debug\lib\ssh.lib";wtsapi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\lib\ssh.lib"</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);$(Qt_LIBS_);Crypt32.lib;"C:\Program Files\OpenSSL-Win64\lib\libcrypto.lib";"C:\src\vcpkg\packages\libssh_x64-windows\lib\ssh.lib";wtsapi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -114,6 +114,7 @@
     <ClCompile Include="Entries.cpp" />
     <ClCompile Include="IdleFilter.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
+    <ClCompile Include="MyNativeEventFilter.cpp" />
     <ClCompile Include="PasswordGenerator.cpp" />
     <ClCompile Include="PreferencesDialog.cpp" />
     <ClCompile Include="SSHsync.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="CustomListWidgetItem.h" />
     <QtMoc Include="DuplicateDialog.h" />
     <ClInclude Include="Entries.h" />
+    <ClInclude Include="MyNativeEventFilter.h" />
     <ClInclude Include="SSHsync.h" />
     <QtMoc Include="IdleFilter.h" />
     <ClInclude Include="PasswordGenerator.h" />

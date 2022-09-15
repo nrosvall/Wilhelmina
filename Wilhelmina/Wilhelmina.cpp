@@ -40,6 +40,7 @@
 #include <QMultiMap>
 #include "DuplicateDialog.h"
 #include "AboutDialog.h"
+#include <WtsApi32.h>
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -75,11 +76,14 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionOpen_in_Browser->setEnabled(false);
     ui.actionEdit->setEnabled(false);
     ui.actionClone->setEnabled(false);
+
+    WTSRegisterSessionNotification((HWND)winId(), NOTIFY_FOR_THIS_SESSION);    
 }
 
 Wilhelmina::~Wilhelmina()
 {
     delete m_statusLabel;
+   WTSUnRegisterSessionNotification((HWND)winId());
 }
 
 void Wilhelmina::addProfileAction(QString title) {
@@ -590,6 +594,10 @@ void Wilhelmina::importEntries() {
             }
         }
     }
+}
+
+CryptoState* Wilhelmina::cryptoState() {
+    return &m_cryptoState;
 }
 
 void Wilhelmina::findDuplicates() {

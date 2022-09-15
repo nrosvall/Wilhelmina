@@ -76,6 +76,9 @@
     <ClCompile Include="CryptoState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyNativeEventFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AddNewEntry.ui">
@@ -134,6 +137,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CryptoState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyNativeEventFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

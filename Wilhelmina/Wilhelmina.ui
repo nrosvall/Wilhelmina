@@ -60,8 +60,17 @@
         <property name="focusPolicy">
          <enum>Qt::ClickFocus</enum>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QListWidget::item { margin: 4px; }</string>
+        </property>
+        <property name="tabKeyNavigation">
+         <bool>false</bool>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>false</bool>
+        </property>
         <property name="spacing">
-         <number>0</number>
+         <number>2</number>
         </property>
        </widget>
       </item>

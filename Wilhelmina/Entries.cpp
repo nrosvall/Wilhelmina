@@ -49,7 +49,7 @@ void Entries::AddEntry(QString &title, QString &user, QString &password, QString
 	m_EntryArray.push_back(jObj);
 }
 
-bool Entries::Encrypt(QMainWindow* parentWindow, QStatusBar *statusBar, QSettings *settings, QString &master_passphrase, QString &dataPath, bool dataClearing) {
+bool Entries::Encrypt(QWidget* parentWindow, QStatusBar *statusBar, QSettings *settings, QString &master_passphrase, QString &dataPath, bool dataClearing) {
 
 	Crypto crypto;
 	Key key;

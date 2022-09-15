@@ -44,6 +44,10 @@ void IdleFilter::setClient(QMainWindow* client) {
     m_Client = client;
 }
 
+void IdleFilter::setCryptoStateInstance(CryptoState* state) {
+    m_cryptoState = state;
+}
+
 bool IdleFilter::eventFilter(QObject* obj, QEvent* ev)
 {
     if (ev->type() != QEvent::Timer)
@@ -54,9 +58,11 @@ bool IdleFilter::eventFilter(QObject* obj, QEvent* ev)
 
 void IdleFilter::Timeout()
 {
-    if (m_Client) {
-        m_Client->showMinimized();
-    }
+    if (!m_cryptoState->getState()) {
+        if (m_Client) {
+            m_Client->showMinimized();
+        }
 
-    emit dummy_userInactive();
+        emit dummy_userInactive();
+    }
 }

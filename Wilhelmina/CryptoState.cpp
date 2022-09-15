@@ -17,32 +17,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
-#include <QtGui>
-#include <QtCore>
-#include <QtWidgets/QMainWindow>
 #include "CryptoState.h"
 
-class IdleFilter : public QObject
-{
-	Q_OBJECT
-public:
-	IdleFilter(QObject* parent, int interval);
-	~IdleFilter();
-	int Interval();
-	void setClient(QMainWindow* client);
-	void setInterval(int interval);
-	void setCryptoStateInstance(CryptoState* state);
-signals:
-	void dummy_userInactive();
-public slots:
-	void Timeout();
-protected:
-	bool eventFilter(QObject* obj, QEvent* ev);
-private:
-	QTimer *m_Timer;
-	int m_Interval;
-	QMainWindow* m_Client = nullptr;
-	CryptoState* m_cryptoState = nullptr;
-};
+CryptoState::CryptoState() {
+	m_isEncrypted = false;
+}
 
+void CryptoState::setState(bool value) {
+	m_isEncrypted = value;
+}
+
+bool CryptoState::getState() {
+	return m_isEncrypted;
+}

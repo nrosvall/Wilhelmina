@@ -75,8 +75,6 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionOpen_in_Browser->setEnabled(false);
     ui.actionEdit->setEnabled(false);
     ui.actionClone->setEnabled(false);
-
-    m_IsEncrypted = false;
 }
 
 Wilhelmina::~Wilhelmina()
@@ -113,6 +111,7 @@ void Wilhelmina::changeProfile(QString profilePath) {
 }
 
 void Wilhelmina::setIdleFilter(IdleFilter* filter) {
+    filter->setCryptoStateInstance(&m_cryptoState);
     m_IdleFilter = filter;
 }
 
@@ -135,11 +134,11 @@ void Wilhelmina::exitWilhelmina() {
 }
 
 void Wilhelmina::encryptOnWindowStateEvent() {
-    if (!m_IsEncrypted) {            
+    if (!m_cryptoState.getState()) {            
         if (m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             m_MasterPassword.clear();
             ui.listWidget->clear();
-            m_IsEncrypted = true;
+            m_cryptoState.setState(true);
         }
         else {
             QMessageBox::critical(this, "Wilhelmina", 
@@ -226,7 +225,7 @@ void Wilhelmina::PostActivate()
             m_MasterPassword = dlg.GetPassphrase();
 
             if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                m_IsEncrypted = false;
+                m_cryptoState.setState(false);
                 populateViewFromEntries();
             }
             else {
@@ -237,7 +236,7 @@ void Wilhelmina::PostActivate()
     }
     else {
         //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
-        m_IsEncrypted = false;
+        m_cryptoState.setState(false);
         MasterPasswordDialog dlg(true, false, this);
         if (dlg.exec() == QDialog::Accepted)
             m_MasterPassword = dlg.GetPassphrase();
@@ -330,13 +329,16 @@ void Wilhelmina::encryptCurrentData() {
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (!m_IsEncrypted) {
+    if (!m_cryptoState.getState()) {
         if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, false)) {
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                 QMessageBox::Ok);
         }
+    }
+    else {
+        m_cryptoState.setState(true);
     }
 
     QApplication::restoreOverrideCursor();
@@ -416,7 +418,7 @@ void Wilhelmina::openInBrowser() {
 }
 
 void Wilhelmina::applyNewProfile(QString profilePath) {
-    if (!m_IsEncrypted) {
+    if (!m_cryptoState.getState()) {
         if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
@@ -425,6 +427,7 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
             return;
         }
         else {
+            m_cryptoState.setState(true);
             ui.listWidget->clear();
         }
     }
@@ -442,7 +445,7 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
 
     if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
         if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-            m_IsEncrypted = false;
+            m_cryptoState.setState(false);
             populateViewFromEntries();
         }
         else {

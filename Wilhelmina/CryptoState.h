@@ -18,31 +18,13 @@
 */
 
 #pragma once
-#include <QtGui>
-#include <QtCore>
-#include <QtWidgets/QMainWindow>
-#include "CryptoState.h"
-
-class IdleFilter : public QObject
+class CryptoState
 {
-	Q_OBJECT
 public:
-	IdleFilter(QObject* parent, int interval);
-	~IdleFilter();
-	int Interval();
-	void setClient(QMainWindow* client);
-	void setInterval(int interval);
-	void setCryptoStateInstance(CryptoState* state);
-signals:
-	void dummy_userInactive();
-public slots:
-	void Timeout();
-protected:
-	bool eventFilter(QObject* obj, QEvent* ev);
+	CryptoState();
+	void setState(bool value);
+	bool getState();
 private:
-	QTimer *m_Timer;
-	int m_Interval;
-	QMainWindow* m_Client = nullptr;
-	CryptoState* m_cryptoState = nullptr;
+	bool m_isEncrypted;
 };
 

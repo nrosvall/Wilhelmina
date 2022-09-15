@@ -27,6 +27,7 @@
 #include "IdleFilter.h"
 #include <qlabel.h>
 #include <qmenu.h>
+#include "CryptoState.h"
 
 class Wilhelmina : public QMainWindow
 {
@@ -56,12 +57,12 @@ private:
     void UnProtectMasterPassphrase();
     void populateViewFromEntries();
     void AddEntryToView(QString title, QString ID);
-    bool m_IsEncrypted;
     IdleFilter* m_IdleFilter;
     QLabel* m_statusLabel;
     void encryptCurrentData();
     void applyNewProfile(QString profilePath);
     void addProfileAction(QString title);
+    CryptoState m_cryptoState;
 
 public slots:
     void addNewEntry();

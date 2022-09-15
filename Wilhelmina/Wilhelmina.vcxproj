@@ -108,6 +108,7 @@
     <ClCompile Include="AboutDialog.cpp" />
     <ClCompile Include="AddNewEntry.cpp" />
     <ClCompile Include="Crypto.cpp" />
+    <ClCompile Include="CryptoState.cpp" />
     <ClCompile Include="CustomListWidgetItem.cpp" />
     <ClCompile Include="DuplicateDialog.cpp" />
     <ClCompile Include="Entries.cpp" />
@@ -125,6 +126,7 @@
   <ItemGroup>
     <QtMoc Include="AboutDialog.h" />
     <ClInclude Include="Crypto.h" />
+    <ClInclude Include="CryptoState.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <QtMoc Include="DuplicateDialog.h" />
     <ClInclude Include="Entries.h" />

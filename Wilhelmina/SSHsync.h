@@ -21,12 +21,12 @@
 #include <qsettings.h>
 #include <qstring.h>
 #include <libssh/libssh.h>
-#include <qmainwindow.h>
+#include <qwidget.h>
 
 class SSHsync
 {
 public:
-	SSHsync(QSettings* settings, QMainWindow* parentWindow);
+	SSHsync(QSettings* settings, QWidget* parentWindow);
 	bool toRemote(QString& FullDataFilepath);
 	bool fromRemote(QString& fullDataFilepath);
 	QString lastErrorMessage();
@@ -34,7 +34,7 @@ private:
 	QString m_LastErrorMessage;
 	ssh_session initSession();
 	bool verifySession(ssh_session session);
-	QMainWindow* m_parentWindow;
+	QWidget* m_parentWindow;
 	QString getRemoteFilename(QString& fullDataFilePath);
 
 private:

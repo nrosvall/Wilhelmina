@@ -28,7 +28,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 
-SSHsync::SSHsync(QSettings* settings, QMainWindow* parentWindow) {
+SSHsync::SSHsync(QSettings* settings, QWidget* parentWindow) {
 	m_Settings = settings;
 	m_parentWindow = parentWindow;
 }

@@ -73,6 +73,9 @@
     <ClCompile Include="AboutDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CryptoState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AddNewEntry.ui">
@@ -128,6 +131,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SSHsync.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptoState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

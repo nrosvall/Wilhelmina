@@ -272,7 +272,7 @@ void Wilhelmina::editEntry() {
     QString id = ci->getID();
     QJsonObject obj = m_Entries.GetJObject(id);
 
-    AddNewEntry dlg("View Entry", true, &obj, &Settings, this);
+    AddNewEntry dlg("Edit Entry", true, &obj, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
         m_Entries.deleteItem(ci->getID());

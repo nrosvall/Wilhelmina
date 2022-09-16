@@ -42,6 +42,9 @@ AddNewEntry::AddNewEntry(QString title, bool isEdit,
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (isEdit) {
+
+		ui.buttonBox->button(QDialogButtonBox::Save)->setText("Edit");
+
 		ui.lineEdit_Title->setText(obj->value("title").toString());
 		ui.lineEdit_Username->setText(obj->value("user").toString());
 		ui.lineEdit_Password->setText(obj->value("password").toString());

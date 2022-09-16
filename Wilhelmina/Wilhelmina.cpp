@@ -615,7 +615,8 @@ void Wilhelmina::findDuplicates() {
             entryNext = m_Entries.entryArray()[j + 1].toObject();
 
             if ((i != j) && (entry.value("password").toString() == entryNext.value("password").toString()) ) {
-                dups.insert(entry.value("title").toString(), entryNext.value("title").toString());
+                if(entry.value("title").toString() != entryNext.value("title").toString())
+                    dups.insert(entry.value("title").toString(), entryNext.value("title").toString());
             }
         }
     }

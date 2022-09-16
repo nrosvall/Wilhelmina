@@ -23,7 +23,6 @@
 #include <QMetaType>
 #include "MyNativeEventFilter.h"
 
-
 Q_DECLARE_METATYPE(QList<QString>)
 
 int main(int argc, char *argv[])

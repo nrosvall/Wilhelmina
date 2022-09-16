@@ -306,7 +306,8 @@ void Wilhelmina::populateViewFromEntries() {
 
     QApplication::restoreOverrideCursor();
 }
-
+//UNDONE: Implement starring, items should have isStarred member
+//starred items will be inserted with insertItem(0, item)
 void Wilhelmina::AddEntryToView(QString title, QString ID) {
     CustomListWidgetItem* item = new CustomListWidgetItem();
     item->setText(title);

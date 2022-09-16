@@ -70,7 +70,7 @@
          <bool>false</bool>
         </property>
         <property name="spacing">
-         <number>2</number>
+         <number>0</number>
         </property>
        </widget>
       </item>

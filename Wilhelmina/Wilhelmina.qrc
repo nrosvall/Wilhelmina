@@ -18,5 +18,9 @@
         <file>icons/clone.png</file>
         <file>icons/clone@2x.png</file>
         <file>icons/wilhelmina@2x.png</file>
+        <file>icons/pin.png</file>
+        <file>icons/pin@2x.png</file>
+        <file>icons/nopin.png</file>
+        <file>icons/nopin@2x.png</file>
     </qresource>
 </RCC>

@@ -27,9 +27,9 @@ class CustomListWidgetItem : public QListWidgetItem
 public:
 	void setID(QString ID);
 	QString getID();
-	//CustomListWidgetItem();
-	//~CustomListWidgetItem();
-
+	void setPinned(bool value);
+	bool pinned();
 private:
 	QString m_ID;
+	bool m_Pinned = false;
 };

@@ -53,11 +53,11 @@ private:
     Ui::WilhelminaClass ui;
     QString m_DataPath;
     Entries m_Entries;
-    void AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes);
+    void AddNewEntryToMemory(QString title, QString user, QString password, QString url, bool pinned, QString notes);
     void ProtectMasterPassphrase();
     void UnProtectMasterPassphrase();
     void populateViewFromEntries();
-    void AddEntryToView(QString title, QString ID);
+    void AddEntryToView(QString title, QString ID, bool pinned);
     IdleFilter* m_IdleFilter;
     QLabel* m_statusLabel;
     void encryptCurrentData();

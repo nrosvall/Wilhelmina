@@ -37,13 +37,14 @@ QString Entries::encryptedBlobFile() {
 	return m_encryptedBlobFile;
 }
 
-void Entries::AddEntry(QString &title, QString &user, QString &password, QString &url, QString &notes, QString &ID) {
+void Entries::AddEntry(QString &title, QString &user, QString &password, QString &url, QString &notes, bool pinned, QString &ID) {
     QJsonObject jObj;
 	jObj.insert("title", title);
 	jObj.insert("user", user);
 	jObj.insert("password", password);
 	jObj.insert("url", url);
 	jObj.insert("notes", notes);
+	jObj.insert("pinned", pinned);
 	jObj.insert("ID", ID);
 
 	m_EntryArray.push_back(jObj);

@@ -26,3 +26,18 @@ void CustomListWidgetItem::setID(QString ID) {
 QString CustomListWidgetItem::getID() {
 	return m_ID;
 }
+
+void CustomListWidgetItem::setPinned(bool value) {
+	m_Pinned = value;
+
+	if (value) {
+		setIcon(QIcon(":/wilhelmina/icons/pin.png"));
+	}
+	else {
+		setIcon(QIcon(":/wilhelmina/icons/nopin.png"));
+	}
+}
+
+bool CustomListWidgetItem::pinned() {
+	return m_Pinned;
+}

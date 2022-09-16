@@ -278,7 +278,7 @@ void Wilhelmina::editEntry() {
         m_Entries.deleteItem(ci->getID());
         ui.listWidget->removeItemWidget(ci);
         delete ci;
-        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
+        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
     }
 }
 
@@ -287,7 +287,8 @@ void Wilhelmina::cloneEntry() {
     QString id = ci->getID();
     QJsonObject obj = m_Entries.GetJObject(id);
     AddNewEntryToMemory(obj.value("title").toString(), obj.value("user").toString(), 
-                        obj.value("password").toString(), obj.value("url").toString(), 
+                        obj.value("password").toString(), obj.value("url").toString(),
+                        obj.value("pinned").toBool(),
                         obj.value("notes").toString());
 }
 
@@ -301,19 +302,23 @@ void Wilhelmina::populateViewFromEntries() {
 
     for (auto oneEntry : m_Entries.entryArray()) {
         QJsonObject entry = oneEntry.toObject();
-        AddEntryToView(entry.value("title").toString(), entry.value("ID").toString());
+        AddEntryToView(entry.value("title").toString(), entry.value("ID").toString(), entry.value("pinned").toBool());
     }
 
     QApplication::restoreOverrideCursor();
 }
 //UNDONE: Implement starring, items should have isStarred member
 //starred items will be inserted with insertItem(0, item)
-void Wilhelmina::AddEntryToView(QString title, QString ID) {
+void Wilhelmina::AddEntryToView(QString title, QString ID, bool pinned) {
     CustomListWidgetItem* item = new CustomListWidgetItem();
+    item->setPinned(pinned);
     item->setText(title);
     item->setID(ID);
 
-    ui.listWidget->addItem(item);
+    if (item->pinned())
+        ui.listWidget->insertItem(0, item);
+    else
+        ui.listWidget->addItem(item);
 
     if (!ui.actionEncrypt->isEnabled())
         ui.actionEncrypt->setEnabled(true);
@@ -321,12 +326,12 @@ void Wilhelmina::AddEntryToView(QString title, QString ID) {
     m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
 }
 
-void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, QString notes) {
+void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, bool pinned, QString notes) {
 
     QString ID = QUuid::createUuid().toString();
-    m_Entries.AddEntry(title, user, password, url, notes, ID);
+    m_Entries.AddEntry(title, user, password, url, notes, pinned, ID);
     
-    AddEntryToView(title, ID);
+    AddEntryToView(title, ID, pinned);
     encryptCurrentData();
 }
 
@@ -353,7 +358,7 @@ void Wilhelmina::addNewEntry() {
     AddNewEntry dlg("Add New Entry", false, nullptr, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
-        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.GetNotes());
+        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
     }
 }
 

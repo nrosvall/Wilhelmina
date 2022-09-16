@@ -35,7 +35,7 @@ private:
 	QString m_encryptedBlobFile;
 
 public:
-	void AddEntry(QString& title, QString& user, QString& password, QString& url, QString& notes, QString& ID);
+	void AddEntry(QString& title, QString& user, QString& password, QString& url, QString& notes, bool pinned, QString& ID);
 	bool Encrypt(QWidget* parentWindow, QStatusBar* statusBar, QSettings* settings, QString &master_passphrase, QString& dataPath, bool dataClearing);
 	bool Decrypt(QString &master_passphrase, QString& dataPath);
 	QJsonObject GetJObject(QString ID);

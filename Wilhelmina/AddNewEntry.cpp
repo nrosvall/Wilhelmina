@@ -47,6 +47,7 @@ AddNewEntry::AddNewEntry(QString title, bool isEdit,
 		ui.lineEdit_Password->setText(obj->value("password").toString());
 		ui.lineEdit_Url->setText(obj->value("url").toString());
 		ui.plainTextEditNotes->setPlainText(obj->value("notes").toString());
+		ui.checkBoxPinned->setChecked(obj->value("pinned").toBool());
 	}
 
 	CheckFieldStatuses();
@@ -80,6 +81,10 @@ QString AddNewEntry::GetUrl() {
 
 QString AddNewEntry::GetNotes() {
 	return this->ui.plainTextEditNotes->toPlainText();
+}
+
+bool AddNewEntry::Pinned() {
+	return this->ui.checkBoxPinned->isChecked();
 }
 
 void AddNewEntry::CheckFieldStatuses() {

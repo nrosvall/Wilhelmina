@@ -38,6 +38,7 @@ public:
 	QString GetPassword();
 	QString GetUrl();
 	QString GetNotes();
+	bool Pinned();
 
 private:
 	Ui::AddNewEntryClass ui;

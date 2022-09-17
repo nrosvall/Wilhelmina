@@ -35,7 +35,7 @@ DuplicateDialog::DuplicateDialog(QWidget* parent, Entries *entries, QSettings *s
 	setWindowFlag(Qt::WindowSystemMenuHint, false);
 
 	this->setFixedSize(this->size());
-
+	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	connect(ui.tableWidget, &QTableWidget::itemDoubleClicked, this, &DuplicateDialog::cellDoubleClicked);
 
 	findDuplicates();

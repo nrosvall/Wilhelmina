@@ -609,7 +609,9 @@ CryptoState* Wilhelmina::cryptoState() {
 void Wilhelmina::findDuplicates() {
     
     DuplicateDialog dlg(this, &m_Entries, &Settings);
-    if (dlg.exec() == QDialog::Accepted) {
+    int ret = dlg.exec();
+    //We don't really care what button user uses to exit the dialog, check if anything is edited instead.
+    if (ret == QDialog::Accepted || ret == QDialog::Rejected) {
         if (dlg.Edited()) {
             ui.listWidget->clear();
             encryptCurrentData();

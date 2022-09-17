@@ -18,29 +18,14 @@
 */
 
 #pragma once
+#include <qtablewidget.h>
 
-#include <QDialog>
-#include "ui_DuplicatesDialog.h"
-#include "DuplicateEntry.h"
-#include "Entries.h"
-#include <qsettings.h>
-
-class DuplicateDialog : public QDialog
+class CustomQTableWidgetItem : public QTableWidgetItem
 {
-	Q_OBJECT
-
 public:
-	DuplicateDialog(QWidget* parent,  Entries* entries, QSettings* settings);
-	~DuplicateDialog();
-	bool Edited();
-public slots:
-	void cellDoubleClicked(QTableWidgetItem* item);
+	CustomQTableWidgetItem(QString title, QString ID);
+	QString ID() const;
 private:
-	Ui::DialogDuplicates ui;
-	void findDuplicates();
-	Entries* m_entries;
-	QSettings* m_settings;
-	bool m_edited;
-	void freeTableWidgetMemory();
-
+	QString m_ID;
 };
+

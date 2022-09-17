@@ -110,7 +110,9 @@
     <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="CryptoState.cpp" />
     <ClCompile Include="CustomListWidgetItem.cpp" />
+    <ClCompile Include="CustomQTableWidgetItem.cpp" />
     <ClCompile Include="DuplicateDialog.cpp" />
+    <ClCompile Include="DuplicateEntry.cpp" />
     <ClCompile Include="Entries.cpp" />
     <ClCompile Include="IdleFilter.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
@@ -130,6 +132,8 @@
     <ClInclude Include="CryptoState.h" />
     <ClInclude Include="CustomListWidgetItem.h" />
     <QtMoc Include="DuplicateDialog.h" />
+    <ClInclude Include="CustomQTableWidgetItem.h" />
+    <ClInclude Include="DuplicateEntry.h" />
     <ClInclude Include="Entries.h" />
     <ClInclude Include="MyNativeEventFilter.h" />
     <ClInclude Include="SSHsync.h" />

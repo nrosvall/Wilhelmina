@@ -37,7 +37,7 @@ QString Entries::encryptedBlobFile() {
 	return m_encryptedBlobFile;
 }
 
-void Entries::AddEntry(QString &title, QString &user, QString &password, QString &url, QString &notes, bool pinned, QString &ID) {
+void Entries::AddEntry(QString const &title, QString const &user, QString const &password, QString const &url, QString const &notes, bool pinned, QString const &ID) {
     QJsonObject jObj;
 	jObj.insert("title", title);
 	jObj.insert("user", user);

@@ -17,30 +17,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "CustomQTableWidgetItem.h"
 
-#include <QDialog>
-#include "ui_DuplicatesDialog.h"
-#include "DuplicateEntry.h"
-#include "Entries.h"
-#include <qsettings.h>
 
-class DuplicateDialog : public QDialog
-{
-	Q_OBJECT
+CustomQTableWidgetItem::CustomQTableWidgetItem(QString title, QString ID) : QTableWidgetItem(title) {
+	m_ID = ID;
+}
 
-public:
-	DuplicateDialog(QWidget* parent,  Entries* entries, QSettings* settings);
-	~DuplicateDialog();
-	bool Edited();
-public slots:
-	void cellDoubleClicked(QTableWidgetItem* item);
-private:
-	Ui::DialogDuplicates ui;
-	void findDuplicates();
-	Entries* m_entries;
-	QSettings* m_settings;
-	bool m_edited;
-	void freeTableWidgetMemory();
-
-};
+QString CustomQTableWidgetItem::ID() const {
+	return m_ID;
+}

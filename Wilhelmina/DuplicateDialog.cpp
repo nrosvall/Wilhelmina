@@ -18,10 +18,19 @@
 */
 
 #include "DuplicateDialog.h"
+#include "CustomQTableWidgetItem.h"
+#include "AddNewEntry.h"
 
-DuplicateDialog::DuplicateDialog(QWidget* parent, QMultiMap<QString, QString>& dups) : QDialog(parent)
+//TODO: user can edit entries, after closing the dialog MainWindow will populate again (add OK button)
+//after each edit find duplicates runs again
+//add entry simply by entries.addentry
+DuplicateDialog::DuplicateDialog(QWidget* parent, Entries *entries, QSettings *settings) : QDialog(parent)
 {
 	ui.setupUi(this);
+
+	m_entries = entries;
+	m_settings = settings;
+	m_edited = false;
 
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
@@ -30,13 +39,83 @@ DuplicateDialog::DuplicateDialog(QWidget* parent, QMultiMap<QString, QString>& d
 
 	this->setFixedSize(this->size());
 
-	ui.labelInfo->setText("Found " + QString::number(dups.count()) + " duplicates");
+	connect(ui.tableWidget, &QTableWidget::itemDoubleClicked, this, &DuplicateDialog::cellDoubleClicked);
 
-	QMultiMap<QString, QString>::iterator i;
-	QString viewText;
+	findDuplicates();
+}
 
-	for (i = dups.begin(); i != dups.end(); i++)
-		viewText.append(i.key() + " has the same password as " + i.value() + "\n");
+DuplicateDialog::~DuplicateDialog() {
+	freeTableWidgetMemory();
+}
+
+void DuplicateDialog::freeTableWidgetMemory() {
+	for (int i = 0; i < ui.tableWidget->rowCount(); i++) {
+		delete ui.tableWidget->item(i, 0);
+		delete ui.tableWidget->item(i, 1);
+	}
+}
+
+bool DuplicateDialog::Edited() {
+	return m_edited;
+}
+
+void DuplicateDialog::cellDoubleClicked(QTableWidgetItem* item) {
+
+	CustomQTableWidgetItem* ci = static_cast<CustomQTableWidgetItem*>(item);
+	QString id = ci->ID();
+	QJsonObject obj = m_entries->GetJObject(id);
+
+	AddNewEntry dlg("Edit Entry", true, &obj, m_settings, this);
+
+	if (dlg.exec() == QDialog::Accepted) {
+		m_entries->deleteItem(ci->ID());
+		m_entries->AddEntry(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(),  dlg.GetNotes(), dlg.Pinned(), id);
+		m_edited = true;
+
+		freeTableWidgetMemory();
+		findDuplicates();
+	}
+}
+
+void DuplicateDialog::findDuplicates() {
+
+	ui.tableWidget->clear();
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QList<DuplicateEntry*> dups;
+
+	QJsonObject entry;
+	QJsonObject entryNext;
+
+	for (int i = 0; i < m_entries->entryArray().count(); i++) {
+		for (int j = i + 1; j < m_entries->entryArray().count(); j++) {
+			entry = m_entries->entryArray()[i].toObject();
+			entryNext = m_entries->entryArray()[j].toObject();
+
+			if ((i != j) && (entry.value("password").toString() == entryNext.value("password").toString())) {
+				if (entry.value("title").toString() != entryNext.value("title").toString()) {
+					dups.append(new DuplicateEntry(entry.value("title").toString(), entry.value("ID").toString(),
+						entryNext.value("title").toString(), entryNext.value("ID").toString()));
+				}
+			}
+		}
+	}
+
+	ui.tableWidget->setColumnCount(2);
+	ui.tableWidget->setRowCount(dups.count());
 	
-	ui.plainTextEditDuplicates->setPlainText(viewText.trimmed());
+	if(dups.count() > 0)
+		ui.labelInfo->setText("Same passwords reused " + QString::number(dups.count()) + " times");
+	else
+		ui.labelInfo->setText("No duplicates found.");
+	
+	int index = 0;
+
+	for (auto entry : dups) {
+		ui.tableWidget->setItem(index, 0, new CustomQTableWidgetItem(entry->title(), entry->ID()));
+		ui.tableWidget->setItem(index, 1, new CustomQTableWidgetItem(entry->secondTitle(), entry->secondID()));
+		index++;
+	}
+
+	QApplication::restoreOverrideCursor();
 }

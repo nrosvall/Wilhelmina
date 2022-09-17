@@ -41,6 +41,7 @@
 #include "DuplicateDialog.h"
 #include "AboutDialog.h"
 #include <WtsApi32.h>
+#include "DuplicateEntry.h"
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -82,7 +83,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
 
 Wilhelmina::~Wilhelmina()
 {
-    delete m_statusLabel;
+   delete m_statusLabel;
    WTSUnRegisterSessionNotification((HWND)winId());
 }
 
@@ -607,32 +608,13 @@ CryptoState* Wilhelmina::cryptoState() {
 
 void Wilhelmina::findDuplicates() {
     
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    QMultiMap<QString, QString> dups;
-    QJsonObject entry;
-    QJsonObject entryNext;
-
-    for (int i = 0; i < m_Entries.entryArray().count(); i++) {
-        for (int j = i + 1; j < m_Entries.entryArray().count(); j++) {
-            entry = m_Entries.entryArray()[i].toObject();
-            entryNext = m_Entries.entryArray()[j + 1].toObject();
-
-            if ((i != j) && (entry.value("password").toString() == entryNext.value("password").toString()) ) {
-                if(entry.value("title").toString() != entryNext.value("title").toString())
-                    dups.insert(entry.value("title").toString(), entryNext.value("title").toString());
-            }
+    DuplicateDialog dlg(this, &m_Entries, &Settings);
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.Edited()) {
+            ui.listWidget->clear();
+            encryptCurrentData();
+            populateViewFromEntries();
         }
-    }
-
-    QApplication::restoreOverrideCursor();
-
-    if (dups.count() > 0) {
-        DuplicateDialog dlg(this, dups);
-        dlg.exec();
-    }
-    else {
-        QMessageBox::information(this, "Wilhelmina", "No duplicate passwords found.", QMessageBox::Ok);
     }
 }
 

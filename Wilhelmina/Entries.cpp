@@ -179,7 +179,7 @@ QJsonObject Entries::GetJObject(QString ID) {
 	return QJsonObject();
 }
 
-void Entries::deleteItem(QString ID) {
+void Entries::deleteEntry(QString ID) {
 
 	QJsonObject tmpObj;
 

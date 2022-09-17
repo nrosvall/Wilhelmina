@@ -276,7 +276,7 @@ void Wilhelmina::editEntry() {
     AddNewEntry dlg("Edit Entry", true, &obj, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
-        m_Entries.deleteItem(ci->getID());
+        m_Entries.deleteEntry(ci->getID());
         ui.listWidget->removeItemWidget(ci);
         delete ci;
         AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
@@ -377,7 +377,7 @@ void Wilhelmina::deleteSelectedItem() {
     int ret = msgBox.exec();
 
     if (ret == QMessageBox::Yes) {
-        m_Entries.deleteItem(item->getID());
+        m_Entries.deleteEntry(item->getID());
         ui.listWidget->takeItem(ui.listWidget->currentRow());
         delete item;
 

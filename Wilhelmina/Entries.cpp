@@ -55,7 +55,7 @@ bool Entries::Encrypt(QWidget* parentWindow, QStatusBar *statusBar, QSettings *s
 	Crypto crypto;
 	Key key;
 	bool keyOk;
-	key = crypto.generate_key(master_passphrase.toLocal8Bit(), nullptr, &keyOk);
+	key = crypto.generate_key(master_passphrase.toUtf8(), nullptr, &keyOk);
 	int ret = -1;
 
 	if (keyOk) {
@@ -133,7 +133,7 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 
 	Key key;
 
-	key = crypto.generate_key(master_passphrase.toLocal8Bit(), salt.data(), &keyOk);
+	key = crypto.generate_key(master_passphrase.toUtf8(), salt.data(), &keyOk);
 
 	if (!keyOk)
 		return false;

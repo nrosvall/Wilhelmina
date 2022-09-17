@@ -180,7 +180,7 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 	}
 
 	QString remoteFilename = getRemoteFilename(fullDataFilepath);
-	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0644);
+	file = sftp_open(sftp, remoteFilename.toUtf8(), access_type, 0644);
 
 	QFile dataFile(fullDataFilepath);
 
@@ -250,7 +250,7 @@ bool SSHsync::fromRemote(QString &fullDataFilepath) {
 	}
 
 	QString remoteFilename = getRemoteFilename(fullDataFilepath);
-	file = sftp_open(sftp, remoteFilename.toLocal8Bit(), access_type, 0);
+	file = sftp_open(sftp, remoteFilename.toUtf8(), access_type, 0);
 
 	if (file == nullptr) {
 		sftp_free(sftp);

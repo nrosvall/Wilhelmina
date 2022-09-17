@@ -231,12 +231,14 @@ void Wilhelmina::PostActivate()
         dlg.SetCanReject(false);
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
+
             if (m_DataPath != dlg.GetProfilePath()) {
                 m_DataPath = dlg.GetProfilePath();
                 this->setWindowTitle("Wilhelmina - " + m_DataPath);
                 fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
                 sync(fullDataPath);
             }
+
             if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
                 m_cryptoState.setState(false);
                 populateViewFromEntries();

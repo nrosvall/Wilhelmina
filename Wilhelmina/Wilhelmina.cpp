@@ -198,18 +198,7 @@ bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
     return QObject::eventFilter(target, ev);
 }
 
-void Wilhelmina::PostActivate()
-{
-    if (!QDir(m_DataPath).exists()) {
-        if (!QDir().mkpath(m_DataPath)) {
-            QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
-                QMessageBox::Ok);
-            QApplication::quit();
-        }
-    }
-
-    QString fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
-
+void Wilhelmina::sync(QString& fullDataPath) {
     if (Settings.value("SSHenabled").toBool()) {
         SSHsync sync(&Settings, this);
         QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -221,14 +210,33 @@ void Wilhelmina::PostActivate()
         ui.statusBar->showMessage("Sync Ready");
         QApplication::restoreOverrideCursor();
     }
+}
+
+void Wilhelmina::PostActivate()
+{
+    if (!QDir(m_DataPath).exists()) {
+        if (!QDir().mkpath(m_DataPath)) {
+            QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".\n Abort.",
+                QMessageBox::Ok);
+            QApplication::quit();
+        }
+    }
+
+    QString fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
+    sync(fullDataPath);
 
     //We have our data path, do we have any encrypted data?
     if (QFile::exists(fullDataPath)) {
-        MasterPasswordDialog dlg(false, true, this);
+        MasterPasswordDialog dlg(m_DataPath, &Settings, false, true, this);
         dlg.SetCanReject(false);
         if (dlg.exec() == QDialog::Accepted) {
             m_MasterPassword = dlg.GetPassphrase();
-
+            if (m_DataPath != dlg.GetProfilePath()) {
+                m_DataPath = dlg.GetProfilePath();
+                this->setWindowTitle("Wilhelmina - " + m_DataPath);
+                fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
+                sync(fullDataPath);
+            }
             if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
                 m_cryptoState.setState(false);
                 populateViewFromEntries();
@@ -242,7 +250,7 @@ void Wilhelmina::PostActivate()
     else {
         //We don't have any data even if the directory path exists so we need to ask for the user to set up the master passphrase.
         m_cryptoState.setState(false);
-        MasterPasswordDialog dlg(true, false, this);
+        MasterPasswordDialog dlg(m_DataPath, &Settings, true, false, this);
         if (dlg.exec() == QDialog::Accepted)
             m_MasterPassword = dlg.GetPassphrase();
         else
@@ -490,7 +498,7 @@ void Wilhelmina::showPreferences() {
 }
 
 void Wilhelmina::changeMasterPassphrase() {
-    MasterPasswordDialog dlg(true, false, this);
+    MasterPasswordDialog dlg(m_DataPath, &Settings, true, false, this);
     if (dlg.exec() == QDialog::Accepted) {
         m_MasterPassword = dlg.GetPassphrase();
     }

@@ -20,12 +20,13 @@
 #include "MasterPasswordDialog.h"
 #include <qdialogbuttonbox.h>
 #include <qprocess.h>
+#include <qdir.h>
 
-MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, bool disableCancel, QWidget* parent)
+MasterPasswordDialog::MasterPasswordDialog(QString &dataPath, QSettings* settings, bool setNewPassphrase, bool disableCancel, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-
+	
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
 	setWindowFlag(Qt::WindowTitleHint, true);
@@ -37,12 +38,27 @@ MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, bool disableCa
 
 	connect(ui.lineEditMasterPassphrase, &QLineEdit::textChanged, this, &MasterPasswordDialog::PassphraseFieldChanged);
 
-	if(m_setNewPassphrase)
+	if (m_setNewPassphrase) {
 		connect(ui.lineEditMasterPassphraseAgain, &QLineEdit::textChanged, this, &MasterPasswordDialog::PassphraseFieldChanged);
+		ui.comboBoxProfiles->setVisible(false);
+	}
 
 	if (!m_setNewPassphrase) {
 		ui.lineEditMasterPassphraseAgain->setVisible(false);
 		ui.label_MasterPassphraseAgain->setVisible(false);
+		ui.comboBoxProfiles->insertItem(0, dataPath);
+
+		QList<QString> profiles = settings->value("Profiles").value<QList<QString>>();
+		//Zero is our last known path, skip that as it's already inserted
+		int count = 1;
+		for (auto& item : profiles) {
+			if (QDir(item).exists()) {
+				if (ui.comboBoxProfiles->findText(item, Qt::MatchExactly) == -1) {
+					ui.comboBoxProfiles->insertItem(count, item);
+					count++;
+				}
+			}
+		}
 	}
 
 	if (disableCancel)
@@ -57,6 +73,10 @@ MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, bool disableCa
 
 MasterPasswordDialog::~MasterPasswordDialog()
 {}
+
+QString MasterPasswordDialog::GetProfilePath() {
+	return ui.comboBoxProfiles->currentText();
+}
 
 QString MasterPasswordDialog::GetPassphrase() {
 	return ui.lineEditMasterPassphrase->text();

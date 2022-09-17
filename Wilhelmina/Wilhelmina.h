@@ -64,6 +64,7 @@ private:
     void applyNewProfile(QString profilePath);
     void addProfileAction(QString title);
     CryptoState m_cryptoState;
+    void sync(QString& fullDataPath);
 
 public slots:
     void addNewEntry();

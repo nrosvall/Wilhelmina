@@ -22,16 +22,18 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include "ui_MasterPasswordDialog.h"
+#include <qsettings.h>
 
 class MasterPasswordDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	MasterPasswordDialog(bool setNewPassphrase, bool disableCancel, QWidget* parent = nullptr);
+	MasterPasswordDialog(QString& dataPath, QSettings *settings, bool setNewPassphrase, bool disableCancel, QWidget* parent = nullptr);
 	~MasterPasswordDialog();
 	void SetCanReject(bool status);
 	QString GetPassphrase();
+	QString GetProfilePath();
 	
 private:
 	Ui::DialogMasterPassword ui;

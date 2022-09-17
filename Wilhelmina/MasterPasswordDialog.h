@@ -41,6 +41,7 @@ private:
 public slots:
 	void PassphraseFieldChanged();
 	void exitWilhelmina();
+	void showVirtualKeyboard();
 
 protected:
 	void keyPressEvent(QKeyEvent* e) override;

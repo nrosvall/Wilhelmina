@@ -19,6 +19,7 @@
 
 #include "MasterPasswordDialog.h"
 #include <qdialogbuttonbox.h>
+#include <qprocess.h>
 
 MasterPasswordDialog::MasterPasswordDialog(bool setNewPassphrase, bool disableCancel, QWidget* parent)
 	: QDialog(parent)
@@ -101,5 +102,11 @@ void MasterPasswordDialog::reject() {
 void MasterPasswordDialog::exitWilhelmina() {
 	m_canReject = true;
 	QApplication::quit();
+}
+
+void MasterPasswordDialog::showVirtualKeyboard() {
+	QProcess osk;
+	osk.setProgram("\"C:\\Windows\\System32\\osk.exe\"");
+	osk.startDetached();
 }
 

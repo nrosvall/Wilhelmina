@@ -21,9 +21,6 @@
 #include "CustomQTableWidgetItem.h"
 #include "AddNewEntry.h"
 
-//TODO: user can edit entries, after closing the dialog MainWindow will populate again (add OK button)
-//after each edit find duplicates runs again
-//add entry simply by entries.addentry
 DuplicateDialog::DuplicateDialog(QWidget* parent, Entries *entries, QSettings *settings) : QDialog(parent)
 {
 	ui.setupUi(this);

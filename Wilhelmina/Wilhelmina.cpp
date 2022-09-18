@@ -89,8 +89,15 @@ Wilhelmina::~Wilhelmina()
 }
 
 void Wilhelmina::addProfileAction(QString title) {
-    QAction* action = ui.menuProfiles->addAction(title);
-    connect(action, &QAction::triggered, this, [=]() { changeProfile(title); });
+    
+    QAction* act = new QAction(title);
+    if (ui.menuProfiles->findChild<QAction*>(title) == nullptr) {
+        ui.menuProfiles->addAction(act);
+        connect(act, &QAction::triggered, this, [=]() { changeProfile(title); });
+    }
+    else {
+        delete act;
+    }
 }
 
 void Wilhelmina::populateProfileMenu() {

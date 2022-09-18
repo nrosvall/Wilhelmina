@@ -103,7 +103,6 @@ void Wilhelmina::populateProfileMenu() {
         }
         else {
             //Situation where the last known data location was deleted from the file system.
-            //TODO: Let's remove it from the profiles too
             //Just create the missing path again and add it as a profile
             if (item == m_DataPath) {
                 QDir().mkpath(item);

@@ -109,8 +109,10 @@ void Wilhelmina::populateProfileMenu() {
                 profiles.append(item);
                 addProfileAction(item);
             }
-
-            toBeRemoved.append(item);
+            else {
+                //If the profile is missing from the filesystem and it's not the last one in use, delete it completely.
+                toBeRemoved.append(item);
+            }
         }
     }
 
@@ -245,6 +247,7 @@ void Wilhelmina::PostActivate()
 
             if (m_DataPath != dlg.GetProfilePath()) {
                 m_DataPath = dlg.GetProfilePath();
+                Settings.setValue("DatafileLocation", m_DataPath);
                 this->setWindowTitle("Wilhelmina - " + m_DataPath);
                 fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
                 sync(fullDataPath);
@@ -450,8 +453,6 @@ void Wilhelmina::openInBrowser() {
 
 void Wilhelmina::applyNewProfile(QString profilePath) {
     
-
-    
     if (!m_cryptoState.getState()) {
         if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             QMessageBox::critical(this, "Wilhelmina",
@@ -475,6 +476,7 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
     }
 
     m_DataPath = profilePath;
+    Settings.setValue("DatafileLocation", m_DataPath);
     this->setWindowTitle("Wilhelmina - " + m_DataPath);
 
 

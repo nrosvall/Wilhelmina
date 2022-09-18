@@ -52,6 +52,7 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     this->restoreGeometry(Settings.value("geometry").toByteArray());
 
     m_DataPath = Settings.value("DatafileLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Wilhelmina/").toString();
+
     if (!Settings.contains("Profiles")) {
         QList<QString> profiles;
         profiles.append(m_DataPath);
@@ -94,6 +95,7 @@ void Wilhelmina::addProfileAction(QString title) {
 
 void Wilhelmina::populateProfileMenu() {
     ui.menuProfiles->clear();
+    QList<QString> toBeRemoved;
     QList<QString> profiles = Settings.value("Profiles").value<QList<QString>>();
     for (auto &item : profiles) {
         if (QDir(item).exists()) {
@@ -101,12 +103,22 @@ void Wilhelmina::populateProfileMenu() {
         }
         else {
             //Situation where the last known data location was deleted from the file system.
+            //TODO: Let's remove it from the profiles too
+            //Just create the missing path again and add it as a profile
             if (item == m_DataPath) {
                 QDir().mkpath(item);
+                profiles.append(item);
                 addProfileAction(item);
             }
+
+            toBeRemoved.append(item);
         }
     }
+
+    for (auto& item : toBeRemoved)
+        profiles.removeAll(item);
+
+    Settings.setValue("Profiles", QVariant::fromValue(profiles));
 }
 
 void Wilhelmina::changeProfile(QString profilePath) {
@@ -438,6 +450,9 @@ void Wilhelmina::openInBrowser() {
 }
 
 void Wilhelmina::applyNewProfile(QString profilePath) {
+    
+
+    
     if (!m_cryptoState.getState()) {
         if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
             QMessageBox::critical(this, "Wilhelmina",
@@ -463,6 +478,7 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
     m_DataPath = profilePath;
     this->setWindowTitle("Wilhelmina - " + m_DataPath);
 
+
     if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
         if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
             m_cryptoState.setState(false);
@@ -477,6 +493,9 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
             PostActivate();
         }
     }
+    else {
+        m_cryptoState.setState(false);
+    }
 }
 
 void Wilhelmina::showPreferences() {
@@ -486,6 +505,7 @@ void Wilhelmina::showPreferences() {
         
         //Check if we changed the datapath and encrypt all existing data to the old path.
         if (m_DataPath != dlg.dataFileLocation()) {
+            //m_cryptoState.setState(false);
             applyNewProfile(dlg.dataFileLocation());
         }
 

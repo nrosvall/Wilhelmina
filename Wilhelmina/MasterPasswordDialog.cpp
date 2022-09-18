@@ -40,6 +40,7 @@ MasterPasswordDialog::MasterPasswordDialog(QString &dataPath, QSettings* setting
 
 	if (m_setNewPassphrase) {
 		connect(ui.lineEditMasterPassphraseAgain, &QLineEdit::textChanged, this, &MasterPasswordDialog::PassphraseFieldChanged);
+		ui.comboBoxProfiles->insertItem(0, dataPath);
 		ui.comboBoxProfiles->setEnabled(false);
 	}
 

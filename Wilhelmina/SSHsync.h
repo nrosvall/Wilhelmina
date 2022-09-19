@@ -30,6 +30,7 @@ public:
 	bool toRemote(QString& FullDataFilepath);
 	bool fromRemote(const QString& fullDataFilepath);
 	QString lastErrorMessage();
+	bool remoteFileExists(const QString& fullDataFilepath);
 private:
 	QString m_LastErrorMessage;
 	ssh_session initSession();

@@ -25,16 +25,8 @@
 #include <quuid.h>
 #include "SSHsync.h"
 
-Entries::Entries() {
-	m_encryptedBlobFile = "entries.wil";
-}
-
-Entries::~Entries() {
-
-}
-
 QString Entries::encryptedBlobFile() {
-	return m_encryptedBlobFile;
+	return "entries.wil";
 }
 
 void Entries::AddEntry(QString const &title, QString const &user, QString const &password, QString const &url, QString const &notes, bool pinned, QString const &ID) {
@@ -85,7 +77,7 @@ bool Entries::Encrypt(QWidget* parentWindow, QStatusBar *statusBar, QSettings *s
 				m_EntryArray = QJsonArray();
 			}
 
-			QString fullDataPath = dataPath + m_encryptedBlobFile;
+			QString fullDataPath = dataPath + Entries::encryptedBlobFile();
 
 			QFile file(fullDataPath);
 			if (file.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -116,7 +108,7 @@ bool Entries::Decrypt(QString& master_passphrase, QString &dataPath) {
 
 	bool keyOk;
 	int ret = -1;
-	QFile file(dataPath + m_encryptedBlobFile);
+	QFile file(dataPath + Entries::encryptedBlobFile());
 
 	if (!file.open(QFile::ReadOnly)) {
 		return false;

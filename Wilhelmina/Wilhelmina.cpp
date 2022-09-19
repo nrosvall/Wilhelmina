@@ -521,7 +521,6 @@ void Wilhelmina::showPreferences() {
         
         //Check if we changed the datapath and encrypt all existing data to the old path.
         if (m_DataPath != dlg.dataFileLocation()) {
-            //m_cryptoState.setState(false);
             applyNewProfile(dlg.dataFileLocation());
         }
 
@@ -557,7 +556,7 @@ void Wilhelmina::showPreferences() {
             }
         }
 
-        if (dlg.profilesAdded())
+        if (dlg.profilesAdded() || dlg.localProfileAdded_exist_remote())
             populateProfileMenu();
     }
 }

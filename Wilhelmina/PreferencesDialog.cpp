@@ -21,6 +21,8 @@
 #include <qstandardpaths.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
+#include "SSHsync.h"
+#include "Entries.h"
 
 PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDialog(parent) {
 	ui.setupUi(this);
@@ -28,6 +30,7 @@ PreferencesDialog::PreferencesDialog(QSettings* settings, QWidget* parent) : QDi
 	m_Parent = parent;
 	m_Settings = settings;
 	m_profilesAdded = false;
+	m_localProfileAdded_exist_remote = false;
 
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
@@ -56,6 +59,10 @@ bool PreferencesDialog::profilesAdded() {
 	return m_profilesAdded;
 }
 
+bool PreferencesDialog::localProfileAdded_exist_remote() {
+	return m_localProfileAdded_exist_remote;
+}
+
 void PreferencesDialog::accept() {
 
 	QString dataPath = ui.lineEditDataLocation->text();
@@ -68,9 +75,22 @@ void PreferencesDialog::accept() {
 
 	QList<QString> profiles = m_Settings->value("Profiles").value<QList<QString>>();
 	if (!profiles.contains(dataPath)) {
+		//If the profile is locally new, but exists in the remote server set profilesAdded to false.
+		//So we know to sync after adding the profile locally again
 		profiles.append(dataPath);
 		m_Settings->setValue("Profiles", QVariant::fromValue(profiles));
-		m_profilesAdded = true;
+		if (m_Settings->value("SSHenabled").toBool()) {
+			SSHsync sync(m_Settings, this);
+			if (!sync.remoteFileExists(dataPath + Entries::encryptedBlobFile()))
+				m_profilesAdded = true;
+			else {
+				m_profilesAdded = false;
+				m_localProfileAdded_exist_remote = true;
+			}
+		}
+		else {
+			m_profilesAdded = true;
+		}
 	}
 
 	m_Settings->setValue("DatafileLocation", dataPath);

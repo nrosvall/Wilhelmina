@@ -32,6 +32,7 @@ public:
 	QString dataFileLocation();
 	int intervalInMilliseconds();
 	bool profilesAdded();
+	bool localProfileAdded_exist_remote();
 
 private:
 	Ui::PreferencesDialog ui;
@@ -39,7 +40,7 @@ private:
 	void checkFieldStatuses();
 	QWidget* m_Parent;
 	bool m_profilesAdded;
-
+	bool m_localProfileAdded_exist_remote;
 protected:
 	void accept() override;
 

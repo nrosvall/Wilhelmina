@@ -32,20 +32,17 @@ private:
 	QJsonDocument m_EntriesDoc;
 	QJsonObject m_rootEntry;
 	QJsonArray m_EntryArray;
-	QString m_encryptedBlobFile;
 
 public:
 	void AddEntry(QString const & title, QString const & user, QString const & password, QString const & url, QString const & notes, bool pinned, QString const & ID);
 	bool Encrypt(QWidget* parentWindow, QStatusBar* statusBar, QSettings* settings, QString &master_passphrase, QString& dataPath, bool dataClearing);
 	bool Decrypt(QString &master_passphrase, QString& dataPath);
 	QJsonObject GetJObject(QString ID);
-	QString encryptedBlobFile();
+	static QString encryptedBlobFile();
 	QJsonArray& entryArray();
 	void deleteEntry(QString ID);
 	QString getJson();
 	void setDocumentFromImportData(QJsonDocument& doc);
-	Entries();
-	~Entries();
 
 };
 

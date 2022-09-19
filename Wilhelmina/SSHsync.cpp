@@ -224,6 +224,45 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 	return true;
 }
 
+bool SSHsync::remoteFileExists(const QString& fullDataFilepath) {
+
+	sftp_session sftp;
+	ssh_session session = nullptr;
+
+	int access_type = O_RDONLY;
+	sftp_file file;
+	int rc;
+
+	session = initSession();
+
+	if (session == nullptr)
+		return false;
+
+	sftp = sftp_new(session);
+	rc = sftp_init(sftp);
+
+	if (rc != SSH_OK) {
+		m_LastErrorMessage = "SFTP initialization failed.";
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		return false;
+	}
+
+	QString remoteFilename = getRemoteFilename(fullDataFilepath);
+	file = sftp_open(sftp, remoteFilename.toUtf8(), access_type, 0);
+
+	if (file == nullptr) {
+		sftp_free(sftp);
+		ssh_disconnect(session);
+		ssh_free(session);
+		m_LastErrorMessage = "Remote file " + remoteFilename + " does not exist.";
+		return false;
+	}
+
+	return true;
+}
+
 bool SSHsync::fromRemote(const QString &fullDataFilepath) {
 
 	sftp_session sftp;

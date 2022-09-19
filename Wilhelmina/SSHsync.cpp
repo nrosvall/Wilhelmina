@@ -260,6 +260,8 @@ bool SSHsync::remoteFileExists(const QString& fullDataFilepath) {
 		return false;
 	}
 
+	sftp_close(file);
+
 	return true;
 }
 

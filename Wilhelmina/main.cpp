@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(idleFilter, SIGNAL(userInactive()),
         &w, nullptr);
-
+                                     
     w.show();
 
     return a.exec();

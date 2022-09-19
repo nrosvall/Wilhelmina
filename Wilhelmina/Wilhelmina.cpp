@@ -225,7 +225,7 @@ bool Wilhelmina::eventFilter(QObject* target, QEvent* ev) {
     return QObject::eventFilter(target, ev);
 }
 
-void Wilhelmina::sync(QString& fullDataPath) {
+void Wilhelmina::syncFromRemote(const QString& fullDataPath) {
     if (Settings.value("SSHenabled").toBool()) {
         SSHsync sync(&Settings, this);
         QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -250,7 +250,7 @@ void Wilhelmina::PostActivate()
     }
 
     QString fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
-    sync(fullDataPath);
+    syncFromRemote(fullDataPath);
 
     //We have our data path, do we have any encrypted data?
     if (QFile::exists(fullDataPath)) {
@@ -264,7 +264,7 @@ void Wilhelmina::PostActivate()
                 Settings.setValue("DatafileLocation", m_DataPath);
                 this->setWindowTitle("Wilhelmina - " + m_DataPath);
                 fullDataPath = m_DataPath + m_Entries.encryptedBlobFile();
-                sync(fullDataPath);
+                syncFromRemote(fullDataPath);
             }
 
             if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
@@ -338,6 +338,8 @@ void Wilhelmina::encryptAndLock() {
 void Wilhelmina::populateViewFromEntries() {
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    ui.listWidget->clear();
 
     for (auto oneEntry : m_Entries.entryArray()) {
         QJsonObject entry = oneEntry.toObject();
@@ -486,13 +488,12 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
             QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + profilePath + ".\n Abort.",
                 QMessageBox::Ok);
 
-        return;
+        syncFromRemote(profilePath + m_Entries.encryptedBlobFile());
     }
 
     m_DataPath = profilePath;
     Settings.setValue("DatafileLocation", m_DataPath);
     this->setWindowTitle("Wilhelmina - " + m_DataPath);
-
 
     if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
         if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
@@ -527,6 +528,29 @@ void Wilhelmina::showPreferences() {
         //Update interval timer, check the interval value changed and restart timer with the new interval
         if (m_IdleFilter->Interval() != dlg.intervalInMilliseconds()) {
             m_IdleFilter->setInterval(dlg.intervalInMilliseconds());
+        }
+
+        if (Settings.value("SSHenabled").toBool()) {
+            if (QDir().mkpath(m_DataPath)) {
+                syncFromRemote(m_DataPath + m_Entries.encryptedBlobFile());
+                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                    populateViewFromEntries();
+                }
+                else {
+                    QMessageBox msgBox(this);
+                    msgBox.setIcon(QMessageBox::Information);
+                    msgBox.setText("Found remote profile, but unable to decrypt it.");
+                    msgBox.setInformativeText("Try changing the master password for this profile to match the remote one and try enabling SSH again.");
+                    msgBox.setStandardButtons(QMessageBox::Ok);
+                    msgBox.setDefaultButton(QMessageBox::Ok);
+                    msgBox.exec();
+                    Settings.setValue("SSHenabled", false);
+                }
+            }
+            else {
+                QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".",
+                    QMessageBox::Ok);
+            }
         }
 
         if (dlg.profilesAdded())

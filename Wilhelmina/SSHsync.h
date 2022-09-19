@@ -28,14 +28,14 @@ class SSHsync
 public:
 	SSHsync(QSettings* settings, QWidget* parentWindow);
 	bool toRemote(QString& FullDataFilepath);
-	bool fromRemote(QString& fullDataFilepath);
+	bool fromRemote(const QString& fullDataFilepath);
 	QString lastErrorMessage();
 private:
 	QString m_LastErrorMessage;
 	ssh_session initSession();
 	bool verifySession(ssh_session session);
 	QWidget* m_parentWindow;
-	QString getRemoteFilename(QString& fullDataFilePath);
+	QString getRemoteFilename(const QString& fullDataFilePath);
 
 private:
 	QSettings* m_Settings;

@@ -147,7 +147,7 @@ ssh_session SSHsync::initSession() {
 	return session;
 }
 
-QString SSHsync::getRemoteFilename(QString& fullDataFilePath) {
+QString SSHsync::getRemoteFilename(const QString& fullDataFilePath) {
 	QFileInfo fInfo(fullDataFilePath);
 	QString identifier = fInfo.dir().dirName();
 
@@ -224,7 +224,7 @@ bool SSHsync::toRemote(QString& fullDataFilepath) {
 	return true;
 }
 
-bool SSHsync::fromRemote(QString &fullDataFilepath) {
+bool SSHsync::fromRemote(const QString &fullDataFilepath) {
 
 	sftp_session sftp;
 	ssh_session session = nullptr;

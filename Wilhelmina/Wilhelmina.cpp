@@ -531,25 +531,29 @@ void Wilhelmina::showPreferences() {
         }
 
         if (Settings.value("SSHenabled").toBool()) {
-            if (QDir().mkpath(m_DataPath)) {
-                syncFromRemote(m_DataPath + m_Entries.encryptedBlobFile());
-                if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
-                    populateViewFromEntries();
+            //We do not want to sync from remote with newly created profile.
+            if (!dlg.profilesAdded()) {
+
+                if (QDir().mkpath(m_DataPath)) {
+                    syncFromRemote(m_DataPath + m_Entries.encryptedBlobFile());
+                    if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                        populateViewFromEntries();
+                    }
+                    else {
+                        QMessageBox msgBox(this);
+                        msgBox.setIcon(QMessageBox::Information);
+                        msgBox.setText("Found remote profile, but unable to decrypt it.");
+                        msgBox.setInformativeText("Try changing the master password for this profile to match the remote one and try enabling SSH again.");
+                        msgBox.setStandardButtons(QMessageBox::Ok);
+                        msgBox.setDefaultButton(QMessageBox::Ok);
+                        msgBox.exec();
+                        Settings.setValue("SSHenabled", false);
+                    }
                 }
                 else {
-                    QMessageBox msgBox(this);
-                    msgBox.setIcon(QMessageBox::Information);
-                    msgBox.setText("Found remote profile, but unable to decrypt it.");
-                    msgBox.setInformativeText("Try changing the master password for this profile to match the remote one and try enabling SSH again.");
-                    msgBox.setStandardButtons(QMessageBox::Ok);
-                    msgBox.setDefaultButton(QMessageBox::Ok);
-                    msgBox.exec();
-                    Settings.setValue("SSHenabled", false);
+                    QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".",
+                        QMessageBox::Ok);
                 }
-            }
-            else {
-                QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".",
-                    QMessageBox::Ok);
             }
         }
 

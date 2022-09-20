@@ -1,8 +1,7 @@
 # Wilhelmina - Offline Password Manager
 
 Wilhelmina is a free software (GPLv3+) password manager written in C++. Wilhelmina is meant to be easy
-to use, yet very secure. At the moment it's still under heavy development and there are no official releases 
-available. First release (1.0) will follow on early October 2022.
+to use, yet very secure. 
 
 Wilhelmina is developed on and for Windows but should be easily portable for other operating systems. Android version
 will follow later this year.
@@ -18,3 +17,7 @@ Decrypted data never touches the hard drive.
 
 Wilhelmina has support for data synchronization using SFTP. Only encrypted data is synchronized so remote servers
 will not know anything about the data.
+
+## Homepage
+
+For more information, documentation and downloads see <https://www.byteptr.com/wilhelmina>.

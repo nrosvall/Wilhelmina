@@ -3,8 +3,7 @@
 Wilhelmina is a free software (GPLv3+) password manager written in C++. Wilhelmina is meant to be easy
 to use, yet very secure. 
 
-Wilhelmina is developed on and for Windows but should be easily portable for other operating systems. Android version
-will follow later this year.
+Wilhelmina is developed on and for Windows but should be easily portable for other operating systems.
 
 ## Encryption
 

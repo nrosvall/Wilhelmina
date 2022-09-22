@@ -18,9 +18,9 @@ PBKDF2 algorithm with 200 000 iterations.
 
 Decrypted data never touches the hard drive.
 
-## SFTP support
+## SSH support
 
-Wilhelmina has support for data synchronization using SFTP. Only encrypted data is synchronized so remote servers
+Wilhelmina has support for data synchronization using SSH. Only encrypted data is synchronized so remote servers
 will not know anything about the data.
 
 ## Homepage

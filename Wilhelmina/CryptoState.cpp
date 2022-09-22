@@ -4,7 +4,7 @@
 * Copyright (C) 2022  Niko Rosvall
 *
 * This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
+* it under the terms of the GNU General Public License as published by //-V1042
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *

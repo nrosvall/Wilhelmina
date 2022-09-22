@@ -148,11 +148,22 @@ void Wilhelmina::setIdleFilter(IdleFilter* filter) {
 }
 
 void Wilhelmina::ProtectMasterPassphrase() {
-    //CryptProtectMemory(&m_MasterPassword, m_MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
+    CryptProtectMemory(&_MasterPassword.data_ptr(), _MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
 }
 
 void Wilhelmina::UnProtectMasterPassphrase() {
-    //CryptUnprotectMemory(&m_MasterPassword, m_MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
+    CryptUnprotectMemory(&_MasterPassword.data_ptr(), _MasterPassword.length(), CRYPTPROTECTMEMORY_SAME_PROCESS);
+}
+
+void Wilhelmina::SetMasterPassphrase(QString p) {
+    UnProtectMasterPassphrase();
+    _MasterPassword = p;
+    ProtectMasterPassphrase();
+}
+
+QString& Wilhelmina::GetMasterpassphrase() {
+    UnProtectMasterPassphrase();
+    return _MasterPassword;
 }
 
 void Wilhelmina::showEvent(QShowEvent* ev)
@@ -167,10 +178,11 @@ void Wilhelmina::exitWilhelmina() {
 
 void Wilhelmina::encryptOnWindowStateEvent() {
     if (!m_cryptoState.getState()) {            
-        if (m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
-            m_MasterPassword.clear();
+        if (m_Entries.Encrypt(this, ui.statusBar, &Settings, GetMasterpassphrase(), m_DataPath, true)) {
+            GetMasterpassphrase().clear();
             ui.listWidget->clear();
             m_cryptoState.setState(true);
+            ProtectMasterPassphrase();
         }
         else {
             QMessageBox::critical(this, "Wilhelmina", 
@@ -185,9 +197,12 @@ void Wilhelmina::closeEvent(QCloseEvent* ev) {
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if(!m_MasterPassword.isEmpty())
+    if (!GetMasterpassphrase().isEmpty()) {
         encryptOnWindowStateEvent();
+    }
     
+    ProtectMasterPassphrase();
+
     Settings.setValue("geometry", this->saveGeometry());
     Settings.setValue("DatafileLocation", m_DataPath);
     QApplication::restoreOverrideCursor();
@@ -257,7 +272,7 @@ void Wilhelmina::PostActivate()
         MasterPasswordDialog dlg(m_DataPath, &Settings, false, true, this);
         dlg.SetCanReject(false);
         if (dlg.exec() == QDialog::Accepted) {
-            m_MasterPassword = dlg.GetPassphrase();
+            SetMasterPassphrase(dlg.GetPassphrase());
 
             if (m_DataPath != dlg.GetProfilePath()) {
                 m_DataPath = dlg.GetProfilePath();
@@ -267,14 +282,16 @@ void Wilhelmina::PostActivate()
                 syncFromRemote(fullDataPath);
             }
 
-            if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+            if (m_Entries.Decrypt(GetMasterpassphrase(), m_DataPath)) {
                 m_cryptoState.setState(false);
                 populateViewFromEntries();
             }
             else {
-                m_MasterPassword.clear();
+                GetMasterpassphrase().clear();
                 PostActivate();
             }
+
+            ProtectMasterPassphrase();
         }
     }
     else {
@@ -282,7 +299,7 @@ void Wilhelmina::PostActivate()
         m_cryptoState.setState(false);
         MasterPasswordDialog dlg(m_DataPath, &Settings, true, false, this);
         if (dlg.exec() == QDialog::Accepted)
-            m_MasterPassword = dlg.GetPassphrase();
+            SetMasterPassphrase(dlg.GetPassphrase());
         else
             QApplication::quit();
     }
@@ -380,12 +397,14 @@ void Wilhelmina::encryptCurrentData() {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (!m_cryptoState.getState()) {
-        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, false)) {
+        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, GetMasterpassphrase(), m_DataPath, false)) {
             QApplication::restoreOverrideCursor();
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                 QMessageBox::Ok);
         }
+
+        ProtectMasterPassphrase();
     }
     else {
         m_cryptoState.setState(true);
@@ -470,14 +489,15 @@ void Wilhelmina::openInBrowser() {
 void Wilhelmina::applyNewProfile(QString profilePath) {
     
     if (!m_cryptoState.getState()) {
-        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, m_MasterPassword, m_DataPath, true)) {
+        if (!m_Entries.Encrypt(this, ui.statusBar, &Settings, GetMasterpassphrase(), m_DataPath, true)) {
             QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
                 QMessageBox::Ok);
-
+            ProtectMasterPassphrase();
             return;
         }
         else {
+            ProtectMasterPassphrase();
             m_cryptoState.setState(true);
             ui.listWidget->clear();
         }
@@ -496,7 +516,7 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
     this->setWindowTitle("Wilhelmina - " + m_DataPath);
 
     if (QFile::exists(m_DataPath + m_Entries.encryptedBlobFile())) {
-        if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+        if (m_Entries.Decrypt(GetMasterpassphrase(), m_DataPath)) {
             m_cryptoState.setState(false);
             populateViewFromEntries();
         }
@@ -505,9 +525,11 @@ void Wilhelmina::applyNewProfile(QString profilePath) {
             //to make user experience nicer.
             QApplication::restoreOverrideCursor();
 
-            m_MasterPassword.clear();
+            GetMasterpassphrase().clear();
             PostActivate();
         }
+
+        ProtectMasterPassphrase();
     }
     else {
         m_cryptoState.setState(false);
@@ -535,7 +557,7 @@ void Wilhelmina::showPreferences() {
 
                 if (QDir().mkpath(m_DataPath)) {
                     syncFromRemote(m_DataPath + m_Entries.encryptedBlobFile());
-                    if (m_Entries.Decrypt(m_MasterPassword, m_DataPath)) {
+                    if (m_Entries.Decrypt(GetMasterpassphrase(), m_DataPath)) {
                         populateViewFromEntries();
                     }
                     else {
@@ -548,6 +570,8 @@ void Wilhelmina::showPreferences() {
                         msgBox.exec();
                         Settings.setValue("SSHenabled", false);
                     }
+
+                    ProtectMasterPassphrase();
                 }
                 else {
                     QMessageBox::critical(this, "Wilhelmina", "Unable to create path " + m_DataPath + ".",
@@ -564,7 +588,7 @@ void Wilhelmina::showPreferences() {
 void Wilhelmina::changeMasterPassphrase() {
     MasterPasswordDialog dlg(m_DataPath, &Settings, true, false, this);
     if (dlg.exec() == QDialog::Accepted) {
-        m_MasterPassword = dlg.GetPassphrase();
+        SetMasterPassphrase(dlg.GetPassphrase());
     }
 }
 

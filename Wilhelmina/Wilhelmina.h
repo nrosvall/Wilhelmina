@@ -40,6 +40,8 @@ public:
     void setIdleFilter(IdleFilter* filter);
     void populateProfileMenu();
     CryptoState* cryptoState();
+    void SetMasterPassphrase(QString p);
+    QString & GetMasterpassphrase();
 
 protected:
     void showEvent(QShowEvent* ev);
@@ -49,7 +51,7 @@ protected:
     
 private:
     void encryptOnWindowStateEvent();
-    QString m_MasterPassword;
+    QString _MasterPassword;
     Ui::WilhelminaClass ui;
     QString m_DataPath;
     Entries m_Entries;

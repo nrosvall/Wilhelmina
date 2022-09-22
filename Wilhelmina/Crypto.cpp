@@ -4,7 +4,7 @@
 * Copyright (C) 2022  Niko Rosvall
 *
 * This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
+* it under the terms of the GNU General Public License as published by //-V1042
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
 *
@@ -52,7 +52,7 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
     int iterations = 200000;
     Key key = { {0} };
     int success;
-    char* resultbytes[KEY_SIZE];
+    char* resultbytes[KEY_SIZE]{};
 
     if (old_salt == NULL) {
         salt = (unsigned char*)malloc(SALT_SIZE * sizeof(char));
@@ -76,7 +76,7 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
         memmove(salt, old_salt, SALT_SIZE);
     }
 
-    if (!salt)
+    if (!salt) //-V547
     {
         *ok = false;
         return key;
@@ -93,7 +93,7 @@ Key Crypto::generate_key(const char* passphrase, char* old_salt, bool* ok) {
         return key;
     }
 
-    memmove(key.data, resultbytes, KEY_SIZE);
+    memmove(key.data, resultbytes, KEY_SIZE); //-V575
     memmove(key.salt, salt, SALT_SIZE);
 
     free(salt);

@@ -41,7 +41,7 @@ public:
     void populateProfileMenu();
     CryptoState* cryptoState();
     void SetMasterPassphrase(QString p);
-    QString & GetMasterpassphrase();
+    wchar_t* GetMasterpassphrase();
 
 protected:
     void showEvent(QShowEvent* ev);
@@ -50,8 +50,9 @@ protected:
     bool eventFilter(QObject* target, QEvent* ev);
     
 private:
-    void encryptOnWindowStateEvent();
-    QString _MasterPassword;
+    void encryptOnWindowStateEvent(wchar_t* p = nullptr);
+    //QString _MasterPassword;
+    LPWSTR _MasterPassword = NULL;
     Ui::WilhelminaClass ui;
     QString m_DataPath;
     Entries m_Entries;
@@ -67,6 +68,7 @@ private:
     void addProfileAction(QString title);
     CryptoState m_cryptoState;
     void syncFromRemote(const QString& fullDataPath);
+    DWORD _dwMasterPassphraseLength = 0;
 
 public slots:
     void addNewEntry();

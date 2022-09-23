@@ -626,6 +626,7 @@ void Wilhelmina::showPreferences() {
 
 void Wilhelmina::changeMasterPassphrase() {
     MasterPasswordDialog dlg(m_DataPath, &Settings, true, false, this);
+    dlg.DisableExitButton();
     if (dlg.exec() == QDialog::Accepted) {
         SetMasterPassphrase(dlg.GetPassphrase());
     }

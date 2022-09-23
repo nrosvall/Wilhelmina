@@ -131,3 +131,6 @@ void MasterPasswordDialog::showVirtualKeyboard() {
 	osk.startDetached();
 }
 
+void MasterPasswordDialog::DisableExitButton() {
+	ui.pushButtonExit->setEnabled(false);
+}

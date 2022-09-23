@@ -34,6 +34,7 @@ public:
 	void SetCanReject(bool status);
 	QString GetPassphrase();
 	QString GetProfilePath();
+	void DisableExitButton();
 	
 private:
 	Ui::DialogMasterPassword ui;

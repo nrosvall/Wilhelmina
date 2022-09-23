@@ -79,7 +79,9 @@ Wilhelmina::Wilhelmina(QWidget *parent)
     ui.actionEdit->setEnabled(false);
     ui.actionClone->setEnabled(false);
 
-    WTSRegisterSessionNotification((HWND)winId(), NOTIFY_FOR_THIS_SESSION);    
+    WTSRegisterSessionNotification((HWND)winId(), NOTIFY_FOR_THIS_SESSION);
+
+    m_cryptoState.setState(true);
 }
 
 Wilhelmina::~Wilhelmina()
@@ -208,19 +210,21 @@ void Wilhelmina::exitWilhelmina() {
 void Wilhelmina::encryptOnWindowStateEvent(wchar_t *p) {
 
     if (!m_cryptoState.getState()) { 
+
         if (p == nullptr) {
             p = GetMasterpassphrase();
         }
+
         if (m_Entries.Encrypt(this, ui.statusBar, &Settings, p, m_DataPath, true)) {
             ui.listWidget->clear();
             m_cryptoState.setState(true);
         }
         else {
-            QMessageBox::critical(this, "Wilhelmina", 
+            QMessageBox::critical(this, "Wilhelmina",
                 "Encryption failed.\nDo you have permission to write into the data location:\n" + m_DataPath + " ?",
-                                  QMessageBox::Ok);
+                QMessageBox::Ok);
         }
-
+        
         ProtectMasterPassphrase();
 
         ui.statusBar->showMessage("Ready");

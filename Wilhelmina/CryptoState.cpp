@@ -20,7 +20,7 @@
 #include "CryptoState.h"
 
 CryptoState::CryptoState() {
-	m_isEncrypted = false;
+	m_isEncrypted = true;
 }
 
 void CryptoState::setState(bool value) {

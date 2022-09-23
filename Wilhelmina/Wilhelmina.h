@@ -51,7 +51,6 @@ protected:
     
 private:
     void encryptOnWindowStateEvent(wchar_t* p = nullptr);
-    //QString _MasterPassword;
     LPWSTR _MasterPassword = NULL;
     Ui::WilhelminaClass ui;
     QString m_DataPath;

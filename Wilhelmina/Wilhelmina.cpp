@@ -206,16 +206,14 @@ void Wilhelmina::exitWilhelmina() {
 }
 
 void Wilhelmina::encryptOnWindowStateEvent(wchar_t *p) {
+
     if (!m_cryptoState.getState()) { 
-        //bool needToProtect = true; //TODO: Probably always
         if (p == nullptr) {
             p = GetMasterpassphrase();
-          //  needToProtect = true;
         }
         if (m_Entries.Encrypt(this, ui.statusBar, &Settings, p, m_DataPath, true)) {
             ui.listWidget->clear();
             m_cryptoState.setState(true);
-            
         }
         else {
             QMessageBox::critical(this, "Wilhelmina", 
@@ -223,8 +221,7 @@ void Wilhelmina::encryptOnWindowStateEvent(wchar_t *p) {
                                   QMessageBox::Ok);
         }
 
-        //if(needToProtect)
-            ProtectMasterPassphrase();
+        ProtectMasterPassphrase();
 
         ui.statusBar->showMessage("Ready");
     }

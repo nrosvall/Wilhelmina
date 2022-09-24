@@ -12,11 +12,12 @@ LIBS += -L"." \
     -lCrypt32 \
     -l"/"C:/Program \
     -lFiles/OpenSSL-Win64/lib/libcrypto/"" \
-    -l/"C:/src/vcpkg/packages/libssh_x64-windows/debug/lib/ssh/"
+    -l/"C:/src/vcpkg/packages/libssh_x64-windows/debug/lib/ssh/" \
+    -lwtsapi32
 DEPENDPATH += .
-MOC_DIR += GeneratedFiles/$(ConfigurationName)
+MOC_DIR += .
 OBJECTS_DIR += debug
-UI_DIR += GeneratedFiles
-RCC_DIR += GeneratedFiles
+UI_DIR += .
+RCC_DIR += .
 include(Wilhelmina.pri)
 win32:RC_FILE = Wilhelmina.rc

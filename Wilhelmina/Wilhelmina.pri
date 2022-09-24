@@ -8,35 +8,43 @@ message("You are running qmake on a generated .pro file. This may not work!")
 
 
 HEADERS += ./Crypto.h \
+    ./CryptoState.h \
     ./CustomListWidgetItem.h \
+    ./CustomQTableWidgetItem.h \
+    ./DuplicateEntry.h \
     ./Entries.h \
+    ./MyNativeEventFilter.h \
     ./SSHsync.h \
-    ./IdleFilter.h \
     ./PasswordGenerator.h \
     ./resource.h \
     ./Wilhelmina.h \
     ./AddNewEntry.h \
-    ./MasterPasswordDialog.h \
-    ./PreferencesDialog.h \
+    ./AboutDialog.h \
     ./DuplicateDialog.h \
-    ./AboutDialog.h
+    ./IdleFilter.h \
+    ./PreferencesDialog.h \
+    ./MasterPasswordDialog.h
 SOURCES += ./AboutDialog.cpp \
     ./AddNewEntry.cpp \
     ./Crypto.cpp \
+    ./CryptoState.cpp \
     ./CustomListWidgetItem.cpp \
+    ./CustomQTableWidgetItem.cpp \
     ./DuplicateDialog.cpp \
+    ./DuplicateEntry.cpp \
     ./Entries.cpp \
     ./IdleFilter.cpp \
     ./MasterPasswordDialog.cpp \
+    ./MyNativeEventFilter.cpp \
     ./PasswordGenerator.cpp \
     ./PreferencesDialog.cpp \
     ./SSHsync.cpp \
     ./Wilhelmina.cpp \
     ./main.cpp
-FORMS += ./Wilhelmina.ui \
-    ./AddNewEntry.ui \
+FORMS += ./AddNewEntry.ui \
+    ./DialogAbout.ui \
+    ./DuplicatesDialog.ui \
     ./MasterPasswordDialog.ui \
     ./Preferences.ui \
-    ./DuplicatesDialog.ui \
-    ./DialogAbout.ui
+    ./Wilhelmina.ui
 RESOURCES += Wilhelmina.qrc

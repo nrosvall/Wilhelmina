@@ -41,7 +41,6 @@
 #include "DuplicateDialog.h"
 #include "AboutDialog.h"
 #include <WtsApi32.h>
-#include "DuplicateEntry.h"
 
 Wilhelmina::Wilhelmina(QWidget *parent)
     : QMainWindow(parent)
@@ -286,10 +285,10 @@ void Wilhelmina::syncFromRemote(const QString& fullDataPath) {
         SSHsync sync(&Settings, this);
         QApplication::setOverrideCursor(Qt::WaitCursor);
         ui.statusBar->showMessage("Please wait...Syncing...");
-        if (!sync.fromRemote(fullDataPath)) {
-            QApplication::restoreOverrideCursor(); //Stupid, but we want the wait cursor to go away even if there's an error.
-            QMessageBox::critical(this, "Wilhelmina", sync.lastErrorMessage(), QMessageBox::Ok);
-        }
+
+        if (!sync.fromRemote(fullDataPath))
+            qWarning() << sync.lastErrorMessage();
+
         ui.statusBar->showMessage("Sync Ready");
         QApplication::restoreOverrideCursor();
     }

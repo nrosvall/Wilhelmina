@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Niko Rosvall");
     QCoreApplication::setOrganizationDomain("byteptr.com");
     QCoreApplication::setApplicationName("Wilhelmina");
-    QCoreApplication::setApplicationVersion("1.0");
+    QCoreApplication::setApplicationVersion("1.1");
 
     Wilhelmina w;
 

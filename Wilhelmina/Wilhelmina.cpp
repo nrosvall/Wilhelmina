@@ -238,9 +238,8 @@ void Wilhelmina::closeEvent(QCloseEvent* ev) {
         encryptOnWindowStateEvent(p);
     }
     else {
-        QMessageBox::critical(this, "Wilhelmina",
-            "Master passphrase is null. Cannot encrypt. Fatal failure.",
-            QMessageBox::Ok);
+        //Fail silently, this should not happen except if
+        //user wants to close the application before typing the password.
     }
     
     Settings.setValue("geometry", this->saveGeometry());

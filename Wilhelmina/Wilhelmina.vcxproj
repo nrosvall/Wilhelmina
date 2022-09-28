@@ -114,7 +114,6 @@
     <ClCompile Include="DuplicateDialog.cpp" />
     <ClCompile Include="DuplicateEntry.cpp" />
     <ClCompile Include="Entries.cpp" />
-    <ClCompile Include="EntryProtection.cpp" />
     <ClCompile Include="IdleFilter.cpp" />
     <ClCompile Include="MasterPasswordDialog.cpp" />
     <ClCompile Include="MyNativeEventFilter.cpp" />
@@ -136,7 +135,6 @@
     <ClInclude Include="CustomQTableWidgetItem.h" />
     <ClInclude Include="DuplicateEntry.h" />
     <ClInclude Include="Entries.h" />
-    <ClInclude Include="EntryProtection.h" />
     <ClInclude Include="MyNativeEventFilter.h" />
     <ClInclude Include="SSHsync.h" />
     <QtMoc Include="IdleFilter.h" />

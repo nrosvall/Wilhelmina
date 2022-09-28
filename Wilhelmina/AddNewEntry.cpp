@@ -20,7 +20,6 @@
 #include "AddNewEntry.h"
 #include <qdialogbuttonbox.h>
 #include "PasswordGenerator.h"
-#include "EntryProtection.h"
 
 AddNewEntry::AddNewEntry(QString title, bool isEdit,
 						QJsonObject *obj, QSettings *settings,

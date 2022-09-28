@@ -24,7 +24,6 @@
 #include <qmessagebox.h>
 #include <quuid.h>
 #include "SSHsync.h"
-#include "EntryProtection.h"
 
 QString Entries::encryptedBlobFile() {
 	return "entries.wil";

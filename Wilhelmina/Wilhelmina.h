@@ -55,7 +55,7 @@ private:
     Ui::WilhelminaClass ui;
     QString m_DataPath;
     Entries m_Entries;
-    void AddNewEntryToMemory(QString title, QString user, QString password, QString url, bool pinned, QString notes);
+    void AddNewEntryToMemory(QString title, QString user, QString& password, QString url, bool pinned, QString notes);
     void ProtectMasterPassphrase();
     void UnProtectMasterPassphrase();
     void populateViewFromEntries();

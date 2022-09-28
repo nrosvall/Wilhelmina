@@ -24,12 +24,13 @@
 #include <qmessagebox.h>
 #include <quuid.h>
 #include "SSHsync.h"
+#include "EntryProtection.h"
 
 QString Entries::encryptedBlobFile() {
 	return "entries.wil";
 }
 
-void Entries::AddEntry(QString const &title, QString const &user, QString const &password, QString const &url, QString const &notes, bool pinned, QString const &ID) {
+void Entries::AddEntry(QString const &title, QString const &user, QString& password, QString const &url, QString const &notes, bool pinned, QString const &ID) {
     QJsonObject jObj;
 	jObj.insert("title", title);
 	jObj.insert("user", user);
@@ -52,6 +53,7 @@ bool Entries::Encrypt(QWidget* parentWindow, QStatusBar *statusBar, QSettings *s
 	int ret = -1;
 
 	if (keyOk) {
+
 		m_EntriesDoc.setArray(m_EntryArray);
 		QByteArray plainBytes = m_EntriesDoc.toJson();
 
@@ -97,7 +99,7 @@ bool Entries::Encrypt(QWidget* parentWindow, QStatusBar *statusBar, QSettings *s
 				}
 			}
 			else {
-				return false;
+				ret = -1;
 			}
 		}
 	}
@@ -131,14 +133,13 @@ bool Entries::Decrypt(wchar_t* master_passphrase, QString &dataPath) {
 	if (!keyOk)
 		return false;
 	
-	QByteArray plainData(cipher.length(), 'p');
+	QByteArray pld(cipher.length(), '0');
 
 	ret = crypto.decryptData((unsigned char*)cipher.data(), cipher.length(), (unsigned char*)tag.data(), (unsigned char*)key.data,
-		               (unsigned char*)iv.data(), crypto.ivSize(), (unsigned char*)plainData.data());
+		               (unsigned char*)iv.data(), crypto.ivSize(), (unsigned char*)pld.data());
 
 	if (ret > 0) {
-		m_EntriesDoc = QJsonDocument::fromJson(plainData);
-		m_EntryArray = m_EntriesDoc.array();
+		m_EntryArray = QJsonDocument::fromJson(pld).array();
 	}
 
 	return ret > 0;

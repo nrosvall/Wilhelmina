@@ -34,7 +34,7 @@ private:
 	QJsonArray m_EntryArray;
 
 public:
-	void AddEntry(QString const & title, QString const & user, QString const & password, QString const & url, QString const & notes, bool pinned, QString const & ID);
+	void AddEntry(QString const & title, QString const & user, QString& password, QString const & url, QString const & notes, bool pinned, QString const & ID);
 	bool Encrypt(QWidget* parentWindow, QStatusBar* statusBar, QSettings* settings, wchar_t *master_passphrase, QString& dataPath, bool dataClearing);
 	bool Decrypt(wchar_t* master_passphrase, QString& dataPath);
 	QJsonObject GetJObject(QString ID);

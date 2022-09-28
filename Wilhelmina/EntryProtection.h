@@ -24,6 +24,7 @@
 class EntryProtection
 {
 public:
-	bool protectString(QString& str);
+	static bool protectStringAes(wchar_t *master);
+	static bool UnprotectStringAes(wchar_t* master);
 };
 

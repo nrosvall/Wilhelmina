@@ -373,7 +373,8 @@ void Wilhelmina::editEntry() {
         m_Entries.deleteEntry(ci->getID());
         ui.listWidget->removeItemWidget(ci);
         delete ci;
-        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
+        QString p = dlg.GetPassword();
+        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), p, dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
     }
 }
 
@@ -381,8 +382,9 @@ void Wilhelmina::cloneEntry() {
     CustomListWidgetItem* ci = static_cast<CustomListWidgetItem*>(ui.listWidget->selectedItems()[0]);
     QString id = ci->getID();
     QJsonObject obj = m_Entries.GetJObject(id);
+    QString p = obj.value("password").toString();
     AddNewEntryToMemory(obj.value("title").toString(), obj.value("user").toString(), 
-                        obj.value("password").toString(), obj.value("url").toString(),
+                        p, obj.value("url").toString(),
                         obj.value("pinned").toBool(),
                         obj.value("notes").toString());
 }
@@ -422,7 +424,7 @@ void Wilhelmina::AddEntryToView(QString title, QString ID, bool pinned) {
     m_statusLabel->setText(QString::number(ui.listWidget->count()) + " entries ");
 }
 
-void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString password, QString url, bool pinned, QString notes) {
+void Wilhelmina::AddNewEntryToMemory(QString title, QString user, QString& password, QString url, bool pinned, QString notes) {
 
     QString ID = QUuid::createUuid().toString();
     m_Entries.AddEntry(title, user, password, url, notes, pinned, ID);
@@ -456,7 +458,8 @@ void Wilhelmina::addNewEntry() {
     AddNewEntry dlg("Add New Entry", false, nullptr, &Settings, this);
 
     if (dlg.exec() == QDialog::Accepted) {
-        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
+        QString p = dlg.GetPassword();
+        AddNewEntryToMemory(dlg.GetTitle(), dlg.GetUsername(),p, dlg.GetUrl(), dlg.Pinned(), dlg.GetNotes());
     }
 }
 

@@ -20,7 +20,7 @@
 #include "AddNewEntry.h"
 #include <qdialogbuttonbox.h>
 #include "PasswordGenerator.h"
-
+#include "EntryProtection.h"
 
 AddNewEntry::AddNewEntry(QString title, bool isEdit,
 						QJsonObject *obj, QSettings *settings,
@@ -110,8 +110,10 @@ void AddNewEntry::PasswordFieldChanged() {
 }
 
 void AddNewEntry::ShowPassword() {
-	if (ui.checkBoxShowPassword->isChecked())
+	if (ui.checkBoxShowPassword->isChecked()) {
 		ui.lineEdit_Password->setEchoMode(QLineEdit::Normal);
-	else
+	}
+	else {
 		ui.lineEdit_Password->setEchoMode(QLineEdit::Password);
+	}
 }

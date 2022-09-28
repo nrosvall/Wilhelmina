@@ -66,7 +66,8 @@ void DuplicateDialog::cellDoubleClicked(QTableWidgetItem* item) {
 
 	if (dlg.exec() == QDialog::Accepted) {
 		m_entries->deleteEntry(ci->ID());
-		m_entries->AddEntry(dlg.GetTitle(), dlg.GetUsername(), dlg.GetPassword(), dlg.GetUrl(),  dlg.GetNotes(), dlg.Pinned(), id);
+		QString p = dlg.GetPassword();
+		m_entries->AddEntry(dlg.GetTitle(), dlg.GetUsername(), p, dlg.GetUrl(),  dlg.GetNotes(), dlg.Pinned(), id);
 		m_edited = true;
 
 		freeTableWidgetMemory();

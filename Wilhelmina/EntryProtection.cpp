@@ -22,8 +22,12 @@
 #include <WtsApi32.h>
 #include "EntryProtection.h"
 
-bool EntryProtection::protectString(QString& str) {
+bool protectStringAes(wchar_t* master) {
 
+	return true;
+}
+
+bool UnprotectStringAes(wchar_t* master) {
 
 	return true;
 }

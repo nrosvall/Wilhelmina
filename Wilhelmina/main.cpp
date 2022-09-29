@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
     QObject::connect(idleFilter, SIGNAL(userInactive()),
         &w, nullptr);
 
-
     if (isDarkTheme) {
         QFile f(":/wilhelmina/darktheme/style.css");
         if (!f.exists()) {

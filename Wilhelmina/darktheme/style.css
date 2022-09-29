@@ -217,7 +217,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qgroupbox
 QGroupBox {
   font-weight: bold;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   margin-top: 6px;
   margin-bottom: 4px;
@@ -515,7 +515,7 @@ QAbstractItemView {
   alternate-background-color: #19232D;
   color: #E0E1E3;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QAbstractItemView QLineEdit {
@@ -530,7 +530,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qabstractscrollarea
 QAbstractScrollArea {
   background-color: #19232D;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   /* fix #159 */
   padding: 2px;
   /* remove min-height to fix #244 */
@@ -557,7 +557,7 @@ QScrollBar:horizontal {
   height: 16px;
   margin: 2px 16px 2px 16px;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   background-color: #19232D;
 }
 
@@ -566,20 +566,20 @@ QScrollBar:vertical {
   width: 16px;
   margin: 16px 2px 16px 2px;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QScrollBar::handle:horizontal {
   background-color: #60798B;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   min-width: 8px;
 }
 
 QScrollBar::handle:horizontal:hover {
   background-color: #346792;
   border: #346792;
-  border-radius: 4px;
+  border-radius: 0px;
   min-width: 8px;
 }
 
@@ -591,13 +591,13 @@ QScrollBar::handle:vertical {
   background-color: #60798B;
   border: 1px solid #455364;
   min-height: 8px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QScrollBar::handle:vertical:hover {
   background-color: #346792;
   border: #346792;
-  border-radius: 4px;
+  border-radius: 0px;
   min-height: 8px;
 }
 
@@ -697,7 +697,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-specific-widgets
 QTextEdit {
   background-color: #19232D;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #455364;
 }
 
@@ -716,7 +716,7 @@ QTextEdit:selected {
 QPlainTextEdit {
   background-color: #19232D;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #455364;
 }
 
@@ -808,7 +808,7 @@ QAbstractSpinBox {
   padding-bottom: 2px;
   padding-left: 4px;
   padding-right: 4px;
-  border-radius: 4px;
+  border-radius: 0px;
   /* min-width: 5px; removed to fix 109 */
 }
 
@@ -903,14 +903,14 @@ QTextBrowser {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QTextBrowser:disabled {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QTextBrowser:hover, QTextBrowser:!hover, QTextBrowser:selected, QTextBrowser:pressed {
@@ -924,14 +924,14 @@ QGraphicsView {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QGraphicsView:disabled {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QGraphicsView:hover, QGraphicsView:!hover, QGraphicsView:selected, QGraphicsView:pressed {
@@ -943,7 +943,7 @@ QGraphicsView:hover, QGraphicsView:!hover, QGraphicsView:selected, QGraphicsView
 --------------------------------------------------------------------------- */
 QCalendarWidget {
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QCalendarWidget:disabled {
@@ -973,7 +973,7 @@ QProgressBar {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   text-align: center;
 }
 
@@ -981,20 +981,20 @@ QProgressBar:disabled {
   background-color: #19232D;
   border: 1px solid #455364;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
   text-align: center;
 }
 
 QProgressBar::chunk {
   background-color: #346792;
   color: #19232D;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QProgressBar::chunk:disabled {
   background-color: #26486B;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 /* ------------------------------------------------------------------------ */
@@ -1008,22 +1008,23 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qpushbutton
 QPushButton {
   background-color: #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
   border: none;
+  min-width: 80px;
 }
 
 QPushButton:disabled {
   background-color: #455364;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
 }
 
 QPushButton:checked {
   background-color: #60798B;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
 }
@@ -1031,7 +1032,7 @@ QPushButton:checked {
 QPushButton:checked:disabled {
   background-color: #60798B;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
 }
@@ -1073,7 +1074,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtoolbutton
 QToolButton {
   background-color: #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
   border: none;
@@ -1085,13 +1086,13 @@ QToolButton {
 QToolButton:disabled {
   background-color: #455364;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
 }
 
 QToolButton:checked {
   background-color: #60798B;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
 }
@@ -1099,7 +1100,7 @@ QToolButton:checked {
 QToolButton:checked:disabled {
   background-color: #60798B;
   color: #9DA9B5;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 2px;
   outline: none;
 }
@@ -1159,7 +1160,7 @@ QToolButton[popupMode="2"] {
 
 QToolButton::menu-button {
   padding: 2px;
-  border-radius: 4px;
+  border-radius: 0px;
   width: 12px;
   border: none;
   outline: none;
@@ -1200,7 +1201,7 @@ QCommandLinkButton {
   background-color: transparent;
   border: 1px solid #455364;
   color: #E0E1E3;
-  border-radius: 4px;
+  border-radius: 0px;
   padding: 0px;
   margin: 0px;
 }
@@ -1220,7 +1221,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qcombobox
 --------------------------------------------------------------------------- */
 QComboBox {
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   selection-background-color: #346792;
   padding-left: 4px;
   padding-right: 4px;
@@ -1333,7 +1334,7 @@ QSlider::groove:horizontal {
   border: 1px solid #455364;
   height: 4px;
   margin: 0px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::groove:vertical {
@@ -1341,7 +1342,7 @@ QSlider::groove:vertical {
   border: 1px solid #455364;
   width: 4px;
   margin: 0px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::add-page:vertical {
@@ -1349,7 +1350,7 @@ QSlider::add-page:vertical {
   border: 1px solid #455364;
   width: 4px;
   margin: 0px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::add-page:vertical :disabled {
@@ -1361,7 +1362,7 @@ QSlider::sub-page:horizontal {
   border: 1px solid #455364;
   height: 4px;
   margin: 0px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::sub-page:horizontal:disabled {
@@ -1374,7 +1375,7 @@ QSlider::handle:horizontal {
   width: 8px;
   height: 8px;
   margin: -8px 0px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::handle:horizontal:hover {
@@ -1392,7 +1393,7 @@ QSlider::handle:vertical {
   width: 8px;
   height: 8px;
   margin: 0 -8px;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QSlider::handle:vertical:hover {
@@ -1419,7 +1420,7 @@ QLineEdit {
   padding-right: 4px;
   border-style: solid;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   color: #E0E1E3;
 }
 
@@ -1454,12 +1455,12 @@ QTabWidget {
 
 QTabWidget QWidget {
   /* Fixes #189 */
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QTabWidget::pane {
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   margin: 0px;
   /* Fixes double border inside pane with pyqt5 */
   padding: 0px;
@@ -1477,7 +1478,7 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qtabwidget-and-qtabb
 --------------------------------------------------------------------------- */
 QTabBar, QDockWidget QTabBar {
   qproperty-drawBase: 0;
-  border-radius: 4px;
+  border-radius: 0px;
   margin: 0px;
   padding: 2px;
   border: 0;
@@ -1716,7 +1717,7 @@ QDockWidget {
   outline: 1px solid #455364;
   background-color: #19232D;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   titlebar-close-icon: url(":/wilhelmina/darktheme/icons/transparent.png");
   titlebar-normal-icon: url(":/wilhelmina/darktheme/icons/transparent.png");
 }
@@ -1876,7 +1877,7 @@ QColumnView {
   border: 1px solid #455364;
   color: #E0E1E3;
   gridline-color: #455364;
-  border-radius: 4px;
+  border-radius: 0px;
 }
 
 QTreeView:disabled,
@@ -2087,7 +2088,7 @@ https://stackoverflow.com/questions/14581498/qt-stylesheet-for-hline-vline-color
 --------------------------------------------------------------------------- */
 /* (dot) .QFrame  fix #141, #126, #123 */
 .QFrame {
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #455364;
   /* No frame */
   /* HLine */
@@ -2095,7 +2096,7 @@ https://stackoverflow.com/questions/14581498/qt-stylesheet-for-hline-vline-color
 }
 
 .QFrame[frameShape="0"] {
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px transparent #455364;
 }
 
@@ -2152,7 +2153,7 @@ QDateEdit, QDateTimeEdit {
   selection-background-color: #346792;
   border-style: solid;
   border: 1px solid #455364;
-  border-radius: 4px;
+  border-radius: 0px;
   /* This fixes 103, 111 */
   padding-top: 2px;
   /* This fixes 103, 111 */
@@ -2185,7 +2186,7 @@ QDateEdit::down-arrow:on, QDateEdit::down-arrow:hover, QDateEdit::down-arrow:foc
 
 QDateEdit QAbstractItemView, QDateTimeEdit QAbstractItemView {
   background-color: #19232D;
-  border-radius: 4px;
+  border-radius: 0px;
   border: 1px solid #455364;
   selection-background-color: #346792;
 }

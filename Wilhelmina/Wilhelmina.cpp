@@ -42,10 +42,20 @@
 #include "AboutDialog.h"
 #include <WtsApi32.h>
 
-Wilhelmina::Wilhelmina(QWidget *parent)
+Wilhelmina::Wilhelmina(bool darkTheme, QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+
+    if (darkTheme) {
+        ui.actionNew->setIcon(QIcon(":/wilhelmina/icons/dark/new.png"));
+        ui.actionEdit->setIcon(QIcon(":/wilhelmina/icons/dark/edit.png"));
+        ui.actionClone->setIcon(QIcon(":/wilhelmina/icons/dark/clone.png"));
+        ui.actionCopyPassword->setIcon(QIcon(":/wilhelmina/icons/dark/password-copy.png"));
+        ui.actionCopyUsername->setIcon(QIcon(":/wilhelmina/icons/dark/username-copy.png"));
+        ui.actionEncrypt->setIcon(QIcon(":/wilhelmina/icons/dark/protect.png"));
+    }
+
     ui.lineEditSearch->setPlaceholderText("Type to search");
    
     this->restoreGeometry(Settings.value("geometry").toByteArray());

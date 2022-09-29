@@ -34,7 +34,7 @@ class Wilhelmina : public QMainWindow
     Q_OBJECT
 
 public:
-    Wilhelmina(QWidget *parent = nullptr);
+    Wilhelmina(bool darkTheme, QWidget *parent = nullptr);
     ~Wilhelmina();
     QSettings Settings;
     void setIdleFilter(IdleFilter* filter);

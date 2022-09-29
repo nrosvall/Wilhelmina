@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Wilhelmina");
     QCoreApplication::setApplicationVersion("1.1");
 
-    Wilhelmina w;
+    bool isDarkTheme = windowsIsInDarkTheme();
+
+    Wilhelmina w(isDarkTheme);
 
     IdleFilter* idleFilter = new IdleFilter(&a, w.Settings.value("LockInterval", 5).toInt() * 60000);
     idleFilter->setClient(&w);
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
         &w, nullptr);
 
 
-    if (windowsIsInDarkTheme()) {
+    if (isDarkTheme) {
         QFile f(":/wilhelmina/darktheme/style.css");
         if (!f.exists()) {
             qWarning() << "Unable to set dark stylesheet, file not found.";

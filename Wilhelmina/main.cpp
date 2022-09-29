@@ -25,6 +25,11 @@
 
 Q_DECLARE_METATYPE(QList<QString>)
 
+bool windowsIsInDarkTheme() {
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+    return settings.value("AppsUseLightTheme", 1).toInt() == 0;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -46,6 +51,20 @@ int main(int argc, char *argv[])
 
     QObject::connect(idleFilter, SIGNAL(userInactive()),
         &w, nullptr);
+
+
+    if (windowsIsInDarkTheme()) {
+        QFile f(":/wilhelmina/darktheme/style.css");
+        if (!f.exists()) {
+            qWarning() << "Unable to set dark stylesheet, file not found.";
+        }
+        else {
+            f.open(QFile::ReadOnly | QFile::Text);
+            QTextStream ts(&f);
+            a.setStyleSheet(ts.readAll());
+            f.close();
+        }
+    }
                                      
     w.show();
 

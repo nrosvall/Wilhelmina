@@ -22,5 +22,6 @@
         <file>icons/pin@2x.png</file>
         <file>icons/nopin.png</file>
         <file>icons/nopin@2x.png</file>
+        <file>darktheme/style.css</file>
     </qresource>
 </RCC>

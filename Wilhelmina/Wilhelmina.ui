@@ -61,7 +61,7 @@
          <enum>Qt::ClickFocus</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">QListWidget::item { margin: 4px; }</string>
+         <string notr="true"/>
         </property>
         <property name="tabKeyNavigation">
          <bool>false</bool>

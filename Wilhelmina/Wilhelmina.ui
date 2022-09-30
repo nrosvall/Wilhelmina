@@ -61,7 +61,10 @@
          <enum>Qt::ClickFocus</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">QListWidget:item {
+padding-top: 6px;
+padding-bottom: 6px;
+}</string>
         </property>
         <property name="tabKeyNavigation">
          <bool>false</bool>

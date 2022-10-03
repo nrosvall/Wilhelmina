@@ -246,5 +246,6 @@
         <file>icons/dark/protect@2x.png</file>
         <file>icons/dark/username-copy.png</file>
         <file>icons/dark/username-copy@2x.png</file>
+        <file>icons/wilhelmina_small.png</file>
     </qresource>
 </RCC>

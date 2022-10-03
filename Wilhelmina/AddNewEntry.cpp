@@ -22,8 +22,8 @@
 #include "PasswordGenerator.h"
 
 AddNewEntry::AddNewEntry(QString title, bool isEdit,
-						QJsonObject *obj, QSettings *settings,
-						QWidget* parent)
+	QJsonObject* obj, QSettings* settings,
+	QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -89,11 +89,43 @@ bool AddNewEntry::Pinned() {
 	return this->ui.checkBoxPinned->isChecked();
 }
 
+void AddNewEntry::HandleCustomPlaceholderTextColor() {
+
+	if (m_Settings->value("DarkThemeEnabled").toBool()) {
+
+		QString qssOrig = "QLineEdit[text = \"\"]{ color:#E0E1E3; }";
+		QString qssNew = "QLineEdit[text = \"\"]{ color:gray; }";
+		
+		if (ui.lineEdit_Title->text().length() == 0)
+			ui.lineEdit_Title->setStyleSheet(qssNew);
+		else
+			ui.lineEdit_Title->setStyleSheet(qssOrig);
+
+		if (ui.lineEdit_Username->text().length() == 0)
+			ui.lineEdit_Username->setStyleSheet(qssNew);
+		else
+			ui.lineEdit_Username->setStyleSheet(qssOrig);
+
+		if (ui.lineEdit_Password->text().length() == 0)
+			ui.lineEdit_Password->setStyleSheet(qssNew);
+		else
+			ui.lineEdit_Password->setStyleSheet(qssOrig);
+
+		if (ui.lineEdit_Url->text().length() == 0)
+			ui.lineEdit_Url->setStyleSheet(qssNew);
+		else
+			ui.lineEdit_Url->setStyleSheet(qssOrig);
+
+	}
+}
+
 void AddNewEntry::CheckFieldStatuses() {
 	if (ui.lineEdit_Title->text().length() == 0 || ui.lineEdit_Username->text().length() == 0 || ui.lineEdit_Password->text().length() == 0)
 		ui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
 	else
 		ui.buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
+
+	HandleCustomPlaceholderTextColor();
 }
 
 void AddNewEntry::UserFieldChanged() {
@@ -105,6 +137,10 @@ void AddNewEntry::TitleFieldChanged() {
 }
 
 void AddNewEntry::PasswordFieldChanged() {
+	CheckFieldStatuses();
+}
+
+void AddNewEntry::UrlFieldChanged() {
 	CheckFieldStatuses();
 }
 

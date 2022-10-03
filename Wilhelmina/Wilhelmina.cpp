@@ -56,6 +56,8 @@ Wilhelmina::Wilhelmina(bool darkTheme, QWidget *parent)
         ui.actionEncrypt->setIcon(QIcon(":/wilhelmina/icons/dark/protect.png"));
     }
 
+    Settings.setValue("DarkThemeEnabled", darkTheme);
+
     ui.lineEditSearch->setPlaceholderText("Type to search");
    
     this->restoreGeometry(Settings.value("geometry").toByteArray());

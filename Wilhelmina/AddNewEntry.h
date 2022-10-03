@@ -44,6 +44,7 @@ private:
 	Ui::AddNewEntryClass ui;
 	void CheckFieldStatuses();
 	QSettings* m_Settings;
+	void HandleCustomPlaceholderTextColor();
 
 public slots:
 	void GenerateNewPassword();
@@ -51,4 +52,5 @@ public slots:
 	void TitleFieldChanged();
 	void PasswordFieldChanged();
 	void ShowPassword();
+	void UrlFieldChanged();
 };

@@ -40,6 +40,7 @@ private:
 	Ui::DialogMasterPassword ui;
 	bool m_setNewPassphrase;
 	bool m_canReject;
+	QSettings* m_settings;
 	
 public slots:
 	void PassphraseFieldChanged();

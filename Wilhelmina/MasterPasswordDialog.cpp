@@ -27,6 +27,8 @@ MasterPasswordDialog::MasterPasswordDialog(QString &dataPath, QSettings* setting
 {
 	ui.setupUi(this);
 	
+	m_settings = settings;
+
 	//Hide the dialog icon
 	setWindowFlag(Qt::CustomizeWindowHint, true);
 	setWindowFlag(Qt::WindowTitleHint, true);
@@ -96,6 +98,21 @@ void MasterPasswordDialog::PassphraseFieldChanged() {
 			ui.okButton->setEnabled(false);
 		else
 			ui.okButton->setEnabled(true);
+	}
+
+	if (m_settings->value("DarkThemeEnabled").toBool()) {
+		QString qssOrig = "QLineEdit[text = \"\"]{ color:#E0E1E3; }";
+		QString qssNew = "QLineEdit[text = \"\"]{ color:gray; }";
+
+		if (ui.lineEditMasterPassphrase->text().length() == 0)
+			ui.lineEditMasterPassphrase->setStyleSheet(qssNew);
+		else
+			ui.lineEditMasterPassphrase->setStyleSheet(qssOrig);
+
+		if (ui.lineEditMasterPassphraseAgain->text().length() == 0)
+			ui.lineEditMasterPassphraseAgain->setStyleSheet(qssNew);
+		else
+			ui.lineEditMasterPassphraseAgain->setStyleSheet(qssOrig);
 	}
 }
 

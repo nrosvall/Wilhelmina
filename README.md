@@ -1,4 +1,4 @@
-# Wilhelmina - Offline Password Manager
+# Wilhelmina - Password Manager for Windows
 
 Wilhelmina is a free software (GPLv3+) password manager written in C++. Wilhelmina is meant to be easy
 to use, yet very secure. 

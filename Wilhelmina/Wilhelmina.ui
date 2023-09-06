@@ -102,6 +102,7 @@ padding-bottom: 6px;
     </property>
     <addaction name="actionExport"/>
     <addaction name="actionImport"/>
+    <addaction name="actionImport_From_Chromium_Based_Browsers"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
     <addaction name="separator"/>
@@ -385,6 +386,11 @@ padding-bottom: 6px;
     <string>Profiles</string>
    </property>
   </action>
+  <action name="actionImport_From_Chromium_Based_Browsers">
+   <property name="text">
+    <string>Import From Chromium-Based Browsers...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -663,6 +669,22 @@ padding-bottom: 6px;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionImport_From_Chromium_Based_Browsers</sender>
+   <signal>triggered()</signal>
+   <receiver>WilhelminaClass</receiver>
+   <slot>importFromChromium()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>25</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>560</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addNewEntry()</slot>
@@ -684,5 +706,6 @@ padding-bottom: 6px;
   <slot>findDuplicates()</slot>
   <slot>showAbout()</slot>
   <slot>openHomepage()</slot>
+  <slot>importFromChromium()</slot>
  </slots>
 </ui>

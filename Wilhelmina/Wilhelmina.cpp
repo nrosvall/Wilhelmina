@@ -751,6 +751,12 @@ void Wilhelmina::importEntries() {
     }
 }
 
+void Wilhelmina::importFromChromium() {
+    QMessageBox::critical(this, "Wilhelmina",
+        "Protecting master passphrase failed.",
+        QMessageBox::Ok);
+}
+
 CryptoState* Wilhelmina::cryptoState() {
     return &m_cryptoState;
 }

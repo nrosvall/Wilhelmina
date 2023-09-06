@@ -89,6 +89,7 @@ public slots:
     void searchChanged();
     void exportEntries();
     void importEntries();
+    void importFromChromium();
     void findDuplicates();
     void showAbout();
     void openHomepage();
